@@ -37,6 +37,8 @@ typedef NS_ENUM(NSInteger, PKCollectionViewLayoutDirection) {
 @property (nonatomic) CGFloat zoomScale;
 @property (nonatomic) id <PKCollectionViewFlowLayoutDelegate> delegate;
 
+- (CGSize)calculateSize;
+
 @end
 
 

@@ -197,32 +197,18 @@
 - (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset withScrollingVelocity:(CGPoint)velocity
 {
     
-    NSIndexPath *previousIndexPath = [self.collectionView indexPathForItemAtPoint:CGPointMake(proposedContentOffset.x - self.itemSize.width, proposedContentOffset.y)];
-    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:proposedContentOffset];
-    NSIndexPath *nextIndexPath = [self.collectionView indexPathForItemAtPoint:CGPointMake(proposedContentOffset.x + self.itemSize.width, proposedContentOffset.y)];
+    NSIndexPath *indexPath = self.selectedIndexPath;
+    NSIndexPath *previousIndexPath = [NSIndexPath indexPathForItem:(indexPath.item == 0) ? 0 : indexPath.item - 1 inSection:indexPath.section];
+    NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:(indexPath.item == [self.collectionView numberOfItemsInSection:indexPath.section] -1 ) ? indexPath.item : indexPath.item + 1 inSection:indexPath.section];
     
-    if (!previousIndexPath) {
-        previousIndexPath = indexPath;
-    }
-    
-    if (!nextIndexPath) {
-        nextIndexPath = indexPath;
-    }
-    
-    
-    CGFloat thresholdX = fabs(velocity.x);
-    
-    if (100 < thresholdX) {
-        if (velocity.x < 0) {
-            indexPath = nextIndexPath;
-        } else {
-            indexPath = previousIndexPath;
-        }
+    if (velocity.x < 0) {
+        indexPath = previousIndexPath;
+    } else if (0 < velocity.x) {
+        indexPath = nextIndexPath;
     }
     
     UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
-    
-    return CGPointMake(-cell.frame.origin.x, -cell.frame.origin.y);
+    return CGPointMake(cell.frame.origin.x, cell.frame.origin.y);
 }
 
 - (void)prepareForCollectionViewUpdates:(NSArray *)updateItems

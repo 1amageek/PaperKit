@@ -1,5 +1,5 @@
 //
-//  PKViewController.h
+//  SampleViewController.h
 //  PaperKit
 //
 //  Created by Norikazu on 2015/06/13.
@@ -7,10 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PKPanGestureRecognizer.h"
 
-@interface PKViewController : UIViewController
-
-
+@interface SampleViewController : UIViewController
 
 @end

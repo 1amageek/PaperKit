@@ -1,5 +1,5 @@
 //
-//  PKViewController.h
+//  PKCollectionViewCell.h
 //  PaperKit
 //
 //  Created by Norikazu on 2015/06/13.
@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PKPanGestureRecognizer.h"
 
-@interface PKViewController : UIViewController
+@interface PKCollectionViewCell : UICollectionViewCell
 
-
+@property (nonatomic) CGFloat transtionProgress;
 
 @end

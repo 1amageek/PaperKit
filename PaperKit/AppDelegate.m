@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "PKViewController.h"
+#import "PKCollectionViewController.h"
 
 @interface AppDelegate ()
 
@@ -20,7 +21,7 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 
-    PKViewController *viewController = [PKViewController new];
+    PKCollectionViewController *viewController = [PKCollectionViewController new];
     self.window.rootViewController = viewController;
      [self.window makeKeyAndVisible];
     
