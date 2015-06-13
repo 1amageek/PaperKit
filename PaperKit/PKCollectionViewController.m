@@ -12,10 +12,14 @@
 @interface PKCollectionViewController () <PKCollectionViewFlowLayoutDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate>
 {
     CGPoint _initialTouchLocaiton;
+    CGPoint _initialTouchLocationInCollectionView;
     CGFloat _initialTouchScale;
+    CGFloat _previousScale;
+    CGPoint _initialTouchContentOffset;
 }
 
-
+@property (nonatomic) CGFloat minimumZoomScale;
+@property (nonatomic) CGFloat maximumZoomScale;
 
 @end
 
@@ -26,6 +30,8 @@
     if (self = [super init]) {
         
         self.automaticallyAdjustsScrollViewInsets = NO;
+        _maximumZoomScale = 1.0f;
+        _minimumZoomScale = 0.45f;
         _transtionProgress = 0.0f;
         _pagingEnabled = NO;
         _collectionView = [[PKCollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:self.layout];
@@ -33,10 +39,9 @@
         _collectionView.dataSource = self;
         _collectionView.pagingEnabled = YES;
         _collectionView.layer.anchorPoint = CGPointMake(0, 1);
-        //_collectionView.userInteractionEnabled = NO;
         _scrollView = [[PKScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        _scrollView.minimumZoomScale = 0.45;
-        _scrollView.maximumZoomScale = 1;
+        _scrollView.minimumZoomScale = 0.3f;
+        _scrollView.maximumZoomScale = 1.5f;
         _scrollView.bouncesZoom = YES;
         _scrollView.delegate = self;
         
@@ -96,7 +101,7 @@
 - (void)viewDidLayoutSubviews
 {
     _collectionView.layer.position = CGPointMake(_collectionView.layer.position.x, [UIScreen mainScreen].bounds.size.height * (1 - self.scrollView.minimumZoomScale));
-    [self setZoomScale:self.scrollView.minimumZoomScale];
+    [self setZoomScale:self.minimumZoomScale];
     
 }
 
@@ -189,12 +194,19 @@
         case UIGestureRecognizerStateBegan:
         {
             self.pagingEnabled = NO;
-            
+            self.scrollView.panGestureRecognizer.state = UIGestureRecognizerStateFailed;
             [self pop_removeAnimationForKey:@"inc.stamp.pk.scrollView.zoom"];
             
             _initialTouchLocaiton = location;
+            _initialTouchLocationInCollectionView = [recognizer locationInView:self.collectionView];
             _initialTouchScale = self.zoomScale;
+            _previousScale = _initialTouchScale;
+            _initialTouchContentOffset = self.scrollView.contentOffset;
+            
+            
             self.selectedIndexPath = [_collectionView indexPathForItemAtPoint:[recognizer locationInView:self.collectionView]];
+            
+            
             break;
         }
             
@@ -205,7 +217,21 @@
         
             CGFloat scale = (currentDistance / initialDistance) * _initialTouchScale;
             
+            if (scale < self.minimumZoomScale) {
+                CGFloat deltaZoomScale = self.minimumZoomScale - scale;
+                scale = self.minimumZoomScale - deltaZoomScale / 4;
+            }
+            if (self.maximumZoomScale < scale) {
+                CGFloat deltaZoomScale = scale - self.maximumZoomScale;
+                scale = self.maximumZoomScale + deltaZoomScale / 4;
+            }
+            
+            CGFloat diff = _initialTouchLocationInCollectionView.x * scale - _initialTouchLocationInCollectionView.x * _previousScale;
+            CGPoint contentOffset = self.scrollView.contentOffset;
             [self setZoomScale:scale];
+            self.scrollView.contentOffset = CGPointMake(contentOffset.x - translation.x + diff, contentOffset.y);
+            [recognizer setTranslation:CGPointZero inView:self.scrollView];
+            _previousScale = self.zoomScale;
             
             break;
         }
@@ -216,16 +242,21 @@
                 self.pagingEnabled = YES;
                 CGPoint contentOffset = [self.layout targetContentOffsetForProposedContentOffset:CGPointZero];
                 
-                [self animationZoomScale:self.scrollView.maximumZoomScale velocity:velocity.y];
+                [self animationZoomScale:self.maximumZoomScale velocity:velocity.y];
                 [self animationContentOffset:contentOffset velocity:velocity.x];
-                //self.scrollView.pagingEnabled = YES;
-                
                 self.scrollView.decelerationRate = UIScrollViewDecelerationRateFast;
                 
             } else {
                 self.pagingEnabled = NO;
-                [self animationZoomScale:self.scrollView.minimumZoomScale velocity:velocity.y];
-                //self.scrollView.pagingEnabled = NO;
+                [self animationZoomScale:self.minimumZoomScale velocity:velocity.y];
+                if (self.scrollView.contentOffset.x < 0) {
+                    [self animationContentOffset:CGPointZero velocity:velocity.x];
+                }
+                
+                if ((self.scrollView.contentSize.width - self.scrollView.bounds.size.width) < self.scrollView.contentOffset.x) {
+                    CGFloat offsetX = self.collectionView.bounds.size.width * self.minimumZoomScale - self.scrollView.bounds.size.width;
+                    [self animationContentOffset:CGPointMake(-offsetX, 0) velocity:velocity.x];
+                }
                 
                 self.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal;
             }
@@ -290,6 +321,7 @@
     }];
     
     animation.property = propX;
+    //animation.toValue = (self.pagingEnabled) ? @(-contentOffset.x) : @(-contentOffset.x * self.minimumZoomScale);
     animation.toValue = @(-contentOffset.x);
     animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
         
