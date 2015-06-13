@@ -1,22 +1,22 @@
 //
-//  ViewController.m
+//  PKViewController.m
 //  PaperKit
 //
 //  Created by Norikazu on 2015/06/13.
 //  Copyright (c) 2015年 Stamp inc. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "PKViewController.h"
 
-@interface ViewController ()
+@interface PKViewController ()
 
 @end
 
-@implementation ViewController
+@implementation PKViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
 }
 
 - (void)didReceiveMemoryWarning {
