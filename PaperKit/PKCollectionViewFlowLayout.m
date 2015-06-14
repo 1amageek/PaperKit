@@ -32,6 +32,7 @@
     self = [super init];
     if (self) {
         _attributes = [NSMutableDictionary dictionary];
+        _rengeRect = [UIScreen mainScreen].bounds;
     }
     return self;
 }
@@ -76,6 +77,10 @@
     _myCollectionViewSize = CGSizeMake(contentSizeWidth, contentSizeHeight);
     _zoomScale = [self.delegate layoutZoomScale];
     
+    CGRect rengeRect = [UIScreen mainScreen].bounds;
+    rengeRect.origin.x -= self.itemSize.width;
+    rengeRect.size.width += (self.itemSize.width * 2);
+    self.rengeRect = rengeRect;
     //self.collectionView.frame = (CGRect){self.collectionView.frame.origin, CGSizeMake(ceilf(_myCollectionViewSize.width * _zoomScale), _myCollectionViewSize.height)};
 }
 
@@ -90,8 +95,6 @@
     NSMutableArray *attributes = [NSMutableArray array];
     NSInteger sections = [self.collectionView numberOfSections];
     
-    UIView *scrollView = self.collectionView.superview;
-    
     for (NSInteger section = 0; section < sections; section ++) {
         
         NSInteger items = [self.collectionView numberOfItemsInSection:section];
@@ -99,24 +102,12 @@
         for (NSInteger item = 0; item < items; item ++) {
             
             UICollectionViewLayoutAttributes *attribute = [self layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section]];
-            
-            
-            //CollectionViewが重い場合はVisibleCellの最適化が必要。
-            //今のところここをいじるScrollViewにあるVisibleCellの処理でフレームオチを回避している
-            
-            CGRect frameOnScrollView = [self.collectionView convertRect:attribute.frame toView:scrollView];
-            CGRect frame = [scrollView convertRect:frameOnScrollView fromView:scrollView.superview];
-            CGRect rengeRect = [UIScreen mainScreen].bounds;
-            //rengeRect.origin.x -= [UIScreen mainScreen].bounds.size.width;
-            //rengeRect.size.width += ([UIScreen mainScreen].bounds.size.width * 2);
-            
-            BOOL intersetsRect = CGRectIntersectsRect(rengeRect, frame);
+            CGRect frame = [self.collectionView convertRect:attribute.frame toView:nil];
+            BOOL intersetsRect = CGRectIntersectsRect(self.rengeRect, frame);
             if (intersetsRect) {
                 [attributes addObject:attribute];
             }
-            
-            //[attributes addObject:attribute];
-            
+                        
         }
         
     }
@@ -226,6 +217,64 @@
         }
     }
     
+}
+
+- (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)itemIndexPath
+{
+    PKCollectionViewLayoutAttributes *attributes = (PKCollectionViewLayoutAttributes *)[super initialLayoutAttributesForAppearingItemAtIndexPath:itemIndexPath];
+    
+    if ([self.insertPaths containsObject:itemIndexPath]) {
+        
+        UICollectionViewLayoutAttributes *layoutAttributes = [self layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:self.insertPaths.count -1 inSection:itemIndexPath.section]];
+        CGFloat translationX = -layoutAttributes.frame.origin.x - layoutAttributes.frame.size.width;
+        
+        POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerTranslationX];
+        animation.beginTime = CACurrentMediaTime() + 0.13 * (self.insertPaths.count - itemIndexPath.item);
+        animation.fromValue = @(translationX);
+        animation.toValue = @(0);
+        attributes.animation = animation;
+        attributes.transform3D = CATransform3DMakeTranslation(translationX, 0, 0);
+    }
+    return attributes;
+}
+
+- (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)itemIndexPath
+{
+    UICollectionViewLayoutAttributes * attributes = [super finalLayoutAttributesForDisappearingItemAtIndexPath:itemIndexPath];
+    
+    if ([self.deletePaths containsObject:itemIndexPath]) {
+        
+        CGPoint endPoint;
+        
+        switch (self.direction) {
+            case PKCollectionViewLayoutDirectionCreate:
+                endPoint = CGPointMake(attributes.center.x, attributes.center.y + [UIScreen mainScreen].bounds.size.height);
+                break;
+            case PKCollectionViewLayoutDirectionNext:
+                endPoint = CGPointMake(-attributes.size.width/2, attributes.center.y);
+                break;
+            case PKCollectionViewLayoutDirectionPrevious:
+            default:
+                endPoint = CGPointMake(self.collectionViewContentSize.width + attributes.size.width/2, attributes.center.y);
+                break;
+        }
+        
+        attributes.center = endPoint;
+    }
+    return attributes;
+}
+
+- (void)finalizeCollectionViewUpdates
+{
+    
+    for (NSIndexPath *indexPath in self.insertPaths) {
+        UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+        cell.alpha = 0;
+    }
+    
+    self.insertPaths = nil;
+    self.deletePaths = nil;
+    [super finalizeCollectionViewUpdates];
 }
 
 

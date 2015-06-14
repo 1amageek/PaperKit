@@ -39,6 +39,8 @@
         _collectionView.dataSource = self;
         _collectionView.pagingEnabled = YES;
         _collectionView.layer.anchorPoint = CGPointMake(0, 1);
+        _collectionView.backgroundColor = [UIColor clearColor];
+        _collectionView.opaque = NO;
         _scrollView = [[PKScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         _scrollView.minimumZoomScale = 0.3f;
         _scrollView.maximumZoomScale = 1.5f;
@@ -81,9 +83,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self.collectionView registerClass:[PKCollectionViewCell class] forCellWithReuseIdentifier:@"PKCollectionViewCell"];
+    
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.collectionView];
+    
     _collectionView.frame = (CGRect){CGPointZero, [self.layout calculateSize]};
     
     _panGestureRecognizer = [[PKPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
@@ -116,6 +121,46 @@
     CGFloat height = [UIScreen mainScreen].bounds.size.height;
     _collectionView.layer.position = CGPointMake(0, height);
 }
+
+
+- (NSArray *)visibleCells
+{
+    
+    NSArray *allCells = [self.collectionView visibleCells];
+    NSMutableArray *cells = [NSMutableArray array];
+    [allCells enumerateObjectsUsingBlock:^(PKCollectionViewCell *cell, NSUInteger idx, BOOL *stop) {
+        CGRect frame = [self.collectionView convertRect:cell.frame toView:nil];
+        BOOL intersetsRect = CGRectIntersectsRect([UIScreen mainScreen].bounds, frame);
+        if (intersetsRect) {
+            [cells addObject:cell];
+        }
+    }];
+    
+    return cells;
+}
+
+- (NSArray *)indexPathsForVisibleItems
+{
+    NSArray *allCells = [self.collectionView visibleCells];
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    
+    [allCells enumerateObjectsUsingBlock:^(PKCollectionViewCell *cell, NSUInteger idx, BOOL *stop) {
+        CGRect frame = [cell.superview convertRect:cell.frame toView:self.view];
+        BOOL intersetsRect = CGRectIntersectsRect([UIScreen mainScreen].bounds, frame);
+        if (intersetsRect) {
+            NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:cell.center];
+            [indexPaths addObject:indexPath];
+        }
+    }];
+    
+    return indexPaths;
+}
+
+- (UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self.collectionView cellForItemAtIndexPath:indexPath];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -150,6 +195,49 @@
     if (self.pagingEnabled) {
         self.selectedIndexPath = [self.collectionView indexPathForItemAtPoint:[self.scrollView.panGestureRecognizer locationInView:self.collectionView]];
     }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    
+    NSArray *visibleCells = [self visibleCells];
+    
+    [visibleCells enumerateObjectsUsingBlock:^(PKCollectionViewCell *cell, NSUInteger idx, BOOL *stop) {
+        if (cell.transtionProgress != self.transtionProgress) {
+            cell.transtionProgress = self.transtionProgress;
+        }
+    }];
+    
+    NSArray *rengeCells = [self.collectionView visibleCells];
+    
+    PKCollectionViewCell *visibleFirstCell = [visibleCells firstObject];
+    PKCollectionViewCell *visibleLastCell = [visibleCells lastObject];
+    
+    
+    PKCollectionViewCell *rengeFirstCell = [rengeCells firstObject];
+    PKCollectionViewCell *rengeLastCell = [rengeCells lastObject];
+    
+    
+    if (visibleFirstCell == rengeFirstCell) {
+        if ([self.collectionView indexPathForCell:visibleFirstCell].item != 0) {
+            [self.collectionView.collectionViewLayout invalidateLayout];
+        }
+    }
+    if (visibleLastCell == rengeLastCell) {
+        if ([self.collectionView indexPathForCell:visibleLastCell].item != [self.collectionView numberOfItemsInSection:0] - 1) {
+            [self.collectionView.collectionViewLayout invalidateLayout];
+        }
+    }
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView
+{
+    NSArray *rengeCells = [self.collectionView visibleCells];
+    
+    if (rengeCells.count < 2) {
+        [self.collectionView.collectionViewLayout invalidateLayout];
+    }
+
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -233,6 +321,8 @@
             [recognizer setTranslation:CGPointZero inView:self.scrollView];
             _previousScale = self.zoomScale;
             
+            [self scrollViewDidZoom:self.scrollView];
+            
             break;
         }
             
@@ -274,8 +364,9 @@
 {
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan && otherGestureRecognizer.state == UIGestureRecognizerStateBegan) {
         gestureRecognizer.state = UIGestureRecognizerStateFailed;
+        return YES;
     }
-    return YES;
+    return NO;
 }
 
 #pragma mark - Animation
@@ -295,7 +386,6 @@
     
     animation.property = propX;
     animation.springSpeed = 8;
-    //animation.velocity = @(velocity);
     animation.toValue = @(targetScale);
     animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
         
@@ -321,7 +411,6 @@
     }];
     
     animation.property = propX;
-    //animation.toValue = (self.pagingEnabled) ? @(-contentOffset.x) : @(-contentOffset.x * self.minimumZoomScale);
     animation.toValue = @(-contentOffset.x);
     animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
         

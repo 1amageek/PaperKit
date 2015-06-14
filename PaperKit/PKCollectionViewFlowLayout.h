@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
-
+#import <POP.h>
 
 @interface PKCollectionViewLayoutAttributes : UICollectionViewLayoutAttributes
 
+@property (nonatomic) POPAnimation *animation;
 
 @end
 
@@ -35,6 +35,7 @@ typedef NS_ENUM(NSInteger, PKCollectionViewLayoutDirection) {
 @property (nonatomic, weak) NSIndexPath *selectedIndexPath;
 @property (nonatomic) PKCollectionViewLayoutDirection direction;
 @property (nonatomic) CGFloat zoomScale;
+@property (nonatomic) CGRect rengeRect;
 @property (nonatomic) id <PKCollectionViewFlowLayoutDelegate> delegate;
 
 - (CGSize)calculateSize;

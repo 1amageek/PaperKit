@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PKContentViewController.h"
+#import "PKCollectionViewController.h"
 #import "PKPanGestureRecognizer.h"
 
 @interface PKViewController : UIViewController
 
-
+@property (nonatomic) UICollectionView *collectionView;
 
 @end

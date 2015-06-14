@@ -21,7 +21,7 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 
-    PKCollectionViewController *viewController = [PKCollectionViewController new];
+    PKViewController *viewController = [PKViewController new];
     self.window.rootViewController = viewController;
      [self.window makeKeyAndVisible];
     
