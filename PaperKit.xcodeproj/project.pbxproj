@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		023066691B5185A61F1B3BA8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC63CE84E0C6B70E54C88966 /* libPods.a */; };
+		8C6B350B1B2EFD5E00AE2D10 /* PKCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6B350A1B2EFD5E00AE2D10 /* PKCollectionViewLayout.m */; };
 		8C837A311B2BF1CC00B169FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A301B2BF1CC00B169FD /* main.m */; };
 		8C837A341B2BF1CC00B169FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A331B2BF1CC00B169FD /* AppDelegate.m */; };
 		8C837A3C1B2BF1CC00B169FD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C837A3B1B2BF1CC00B169FD /* Images.xcassets */; };
@@ -36,6 +37,8 @@
 
 /* Begin PBXFileReference section */
 		26356A34CDED90DE68B8436B /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		8C6B35091B2EFD5E00AE2D10 /* PKCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKCollectionViewLayout.h; sourceTree = "<group>"; };
+		8C6B350A1B2EFD5E00AE2D10 /* PKCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCollectionViewLayout.m; sourceTree = "<group>"; };
 		8C837A2B1B2BF1CC00B169FD /* PaperKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C837A2F1B2BF1CC00B169FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C837A301B2BF1CC00B169FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -125,8 +128,6 @@
 				8C837A551B2BF1E800B169FD /* PKViewController.m */,
 				8C837A6C1B2C10F200B169FD /* SampleViewController.h */,
 				8C837A6D1B2C10F200B169FD /* SampleViewController.m */,
-				8C837B1C1B2C9D8100B169FD /* PKContentViewController.h */,
-				8C837B1D1B2C9D8100B169FD /* PKContentViewController.m */,
 				8C837B1F1B2CA6B400B169FD /* PKCollectionViewController */,
 				8C837A571B2BF25400B169FD /* PKPanGestureRecognizer.h */,
 				8C837A581B2BF25400B169FD /* PKPanGestureRecognizer.m */,
@@ -172,10 +173,14 @@
 				8C837A5E1B2BF2CF00B169FD /* PKCollectionView.m */,
 				8C837A601B2BF42D00B169FD /* PKCollectionViewFlowLayout.h */,
 				8C837A611B2BF42D00B169FD /* PKCollectionViewFlowLayout.m */,
+				8C6B35091B2EFD5E00AE2D10 /* PKCollectionViewLayout.h */,
+				8C6B350A1B2EFD5E00AE2D10 /* PKCollectionViewLayout.m */,
 				8C837A5A1B2BF29A00B169FD /* PKScrollView.h */,
 				8C837A5B1B2BF29A00B169FD /* PKScrollView.m */,
 				8C837A661B2BFECB00B169FD /* PKCollectionViewCell.h */,
 				8C837A671B2BFECB00B169FD /* PKCollectionViewCell.m */,
+				8C837B1C1B2C9D8100B169FD /* PKContentViewController.h */,
+				8C837B1D1B2C9D8100B169FD /* PKContentViewController.m */,
 			);
 			name = PKCollectionViewController;
 			sourceTree = "<group>";
@@ -325,6 +330,7 @@
 				8C837A6E1B2C10F200B169FD /* SampleViewController.m in Sources */,
 				8C837A5F1B2BF2CF00B169FD /* PKCollectionView.m in Sources */,
 				8C837A341B2BF1CC00B169FD /* AppDelegate.m in Sources */,
+				8C6B350B1B2EFD5E00AE2D10 /* PKCollectionViewLayout.m in Sources */,
 				8C837A5C1B2BF29A00B169FD /* PKScrollView.m in Sources */,
 				8C837A311B2BF1CC00B169FD /* main.m in Sources */,
 				8C837A561B2BF1E800B169FD /* PKViewController.m in Sources */,

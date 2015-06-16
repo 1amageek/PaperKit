@@ -10,28 +10,29 @@
 
 @interface PKContentViewController ()
 
+@property (nonatomic) UIScrollView *scrollView;
+@property (nonatomic) UIView *contentView;
+
 @end
 
 @implementation PKContentViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    _scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    _contentView = [[UIView alloc] initWithFrame:self.view.bounds];
+    
+    _scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 900);
+    _scrollView.bounces = NO;
+    _scrollView.alwaysBounceVertical = NO;
+    _scrollView.alwaysBounceHorizontal = NO;
+    [self.view addSubview:_scrollView];
+    [_scrollView addSubview:_contentView];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -8,7 +8,6 @@
 
 #import "PKCollectionViewController.h"
 
-
 @interface PKCollectionViewController () <PKCollectionViewFlowLayoutDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate>
 {
     CGPoint _initialTouchLocaiton;
@@ -70,8 +69,15 @@
 }
 
 - (void)setTranstionProgress:(CGFloat)transtionProgress {
+    
+    if (transtionProgress == _transtionProgress) {
+        return;
+    }
+    
     _transtionProgress = transtionProgress;
     self.collectionView.transtionProgress = transtionProgress;
+    CGFloat scale = POPTransition(transtionProgress, self.minimumZoomScale, self.maximumZoomScale);
+    [self setZoomScale:scale];
 }
 
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath
@@ -120,6 +126,7 @@
     [_scrollView setZoomScale:scale animated:NO];
     CGFloat height = [UIScreen mainScreen].bounds.size.height;
     _collectionView.layer.position = CGPointMake(0, height);
+    [self scrollViewDidZoom:self.scrollView];
 }
 
 
@@ -161,6 +168,17 @@
     return [self.collectionView cellForItemAtIndexPath:indexPath];
 }
 
+- (PKContentViewController *)viewControllerAtIndex:(NSInteger)index
+{
+    
+    PKCollectionViewCell *cell = (PKCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0]];
+    if (cell.viewController) {
+        return (PKContentViewController *)cell.viewController;
+    }
+    
+    PKContentViewController *viewController = [PKContentViewController new];
+    return viewController;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -240,6 +258,19 @@
 
 }
 
+- (CGRect)zoomRectForScrollView:(UIView *)scrollView withScale:(CGFloat)scale withCenter:(CGPoint)center {
+    
+    CGRect zoomRect;
+    
+    zoomRect.size.height = scrollView.frame.size.height / scale;
+    zoomRect.size.width  = scrollView.frame.size.width  / scale;
+    
+    zoomRect.origin.x = center.x - (zoomRect.size.width  / 2.0);
+    zoomRect.origin.y = center.y - (zoomRect.size.height / 2.0);
+    
+    return zoomRect;
+}
+
 #pragma mark - <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -249,28 +280,61 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 3;
+    return 30;
 }
 
 #pragma mark - <UICollectionViewDelegate>
 
+
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ((PKCollectionViewCell *)cell).transtionProgress = self.transtionProgress;
+    
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    PKContentViewController *viewController = (PKContentViewController *)((PKCollectionViewCell *)cell).viewController;
+    [viewController willMoveToParentViewController:self];
+    [viewController.view removeFromSuperview];
+    [viewController removeFromParentViewController];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
     PKCollectionViewCell *cell = (PKCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"PKCollectionViewCell" forIndexPath:indexPath];
+    PKContentViewController *viewController = [self viewControllerAtIndex:indexPath.item];
+    [self addChildViewController:viewController];
+    [cell addSubview:viewController.view];
+    [viewController didMoveToParentViewController:self];
+    ((PKCollectionViewCell *)cell).viewController = viewController;
+    
+    
     NSInteger i = [self collectionView:collectionView numberOfItemsInSection:indexPath.section];
     UIColor *color = [UIColor colorWithHue:(floorf(indexPath.row)/i) saturation:0.8 brightness:0.75 alpha:1.0];
-    cell.backgroundColor = color;
+    //cell.backgroundColor = color;
+    cell.viewController.view.backgroundColor = color;
+    
+    
+    
     return cell;
     
 }
 
 #pragma mark - PanGestureRecognizer
+
+- (void)_view:(UIView *)view convertAnchorPoint:(CGPoint)anchorPoint
+{
+    CGPoint _anchorPoint = view.layer.anchorPoint;
+    CGFloat _pointXFromZero = view.bounds.size.width * _anchorPoint.x;
+    CGFloat pointXFromZero = view.bounds.size.width * anchorPoint.x;
+    CGFloat delta = pointXFromZero - _pointXFromZero;
+    
+    view.layer.anchorPoint = anchorPoint;
+    view.layer.position = CGPointMake(view.layer.position.x - pointXFromZero, 1);
+    
+}
 
 - (void)panGesture:(UIPanGestureRecognizer *)recognizer {
     
@@ -281,8 +345,10 @@
     switch (recognizer.state) {
         case UIGestureRecognizerStateBegan:
         {
+            
+            self.scrollView.panGestureRecognizer.state = UIGestureRecognizerStateCancelled;
             self.pagingEnabled = NO;
-            self.scrollView.panGestureRecognizer.state = UIGestureRecognizerStateFailed;
+            self.scrollView.bounces = NO;
             [self pop_removeAnimationForKey:@"inc.stamp.pk.scrollView.zoom"];
             
             _initialTouchLocaiton = location;
@@ -294,7 +360,7 @@
             
             self.selectedIndexPath = [_collectionView indexPathForItemAtPoint:[recognizer locationInView:self.collectionView]];
             
-            
+
             break;
         }
             
@@ -314,31 +380,50 @@
                 scale = self.maximumZoomScale + deltaZoomScale / 4;
             }
             
+            CGFloat progress = (scale - self.minimumZoomScale) / (self.maximumZoomScale - self.minimumZoomScale);
+            
             CGFloat diff = _initialTouchLocationInCollectionView.x * scale - _initialTouchLocationInCollectionView.x * _previousScale;
-            CGPoint contentOffset = self.scrollView.contentOffset;
-            [self setZoomScale:scale];
-            self.scrollView.contentOffset = CGPointMake(contentOffset.x - translation.x + diff, contentOffset.y);
+            
+            if (self.scrollView.maximumZoomScale <= scale) {
+                diff = 0;
+            }
+            
+            CGFloat width = [recognizer locationInView:self.collectionView].x * _previousScale;
+            CGFloat offsetX = width * (scale/_previousScale) - location.x;
+            NSLog(@"ss %f %f %f %f %f", width, scale ,_previousScale, scale/_previousScale, offsetX);
+            [self setTranstionProgress:progress];
+            
+            //self.scrollView.contentOffset = CGPointMake(contentOffset.x - translation.x + diff, contentOffset.y);
+            //self.scrollView.contentOffset = contentOffset;
+            
+            if (self.scrollView.contentOffset.x <= 0) {
+                CGPoint position = self.collectionView.layer.position;
+                position.x += translation.x;
+                CGAffineTransform transform = self.collectionView.transform;
+                self.collectionView.transform = CGAffineTransformConcat(transform, CGAffineTransformMakeTranslation(translation.x, 0));
+            } else {
+                [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x - translation.x, 0) animated:NO];
+            }
             [recognizer setTranslation:CGPointZero inView:self.scrollView];
             _previousScale = self.zoomScale;
-            
-            [self scrollViewDidZoom:self.scrollView];
             
             break;
         }
             
         case UIGestureRecognizerStateEnded:
         {
+            self.scrollView.bounces = YES;
             if (velocity.y < 0) {
                 self.pagingEnabled = YES;
                 CGPoint contentOffset = [self.layout targetContentOffsetForProposedContentOffset:CGPointZero];
                 
-                [self animationZoomScale:self.maximumZoomScale velocity:velocity.y];
+                [self animationTransitionProgress:1 velocity:velocity.y];
                 [self animationContentOffset:contentOffset velocity:velocity.x];
                 self.scrollView.decelerationRate = UIScrollViewDecelerationRateFast;
                 
             } else {
                 self.pagingEnabled = NO;
-                [self animationZoomScale:self.minimumZoomScale velocity:velocity.y];
+                [self animationTransitionProgress:0 velocity:velocity.y];
                 if (self.scrollView.contentOffset.x < 0) {
                     [self animationContentOffset:CGPointZero velocity:velocity.x];
                 }
@@ -362,60 +447,132 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan && otherGestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        gestureRecognizer.state = UIGestureRecognizerStateFailed;
+    
+    if (otherGestureRecognizer.view == self.scrollView) {
+        if (gestureRecognizer.state == UIGestureRecognizerStateBegan && otherGestureRecognizer.state == UIGestureRecognizerStateBegan) {
+            gestureRecognizer.state = UIGestureRecognizerStateFailed;
+            return YES;
+        }
         return YES;
+    } else {
+        if ([otherGestureRecognizer isKindOfClass:NSClassFromString(@"UIScrollViewPanGestureRecognizer")]) {
+            //NSLog(@" stat %ld  %ld", (long)gestureRecognizer.state, (long)otherGestureRecognizer.state);
+            //NSLog(@" scroll %@", otherGestureRecognizer.view);
+            //NSLog(@"a a%f", [((UIPanGestureRecognizer *)gestureRecognizer) translationInView:gestureRecognizer.view].x);
+            if ([otherGestureRecognizer.view isKindOfClass:[UIScrollView class]]) {
+                UIScrollView *scrollView = (UIScrollView *)otherGestureRecognizer.view;
+                if (scrollView.contentOffset.y == 0) {
+                    //otherGestureRecognizer.state = UIGestureRecognizerStateFailed;
+                    return YES;
+                }
+            }
+        }
     }
+    
     return NO;
 }
 
 #pragma mark - Animation
 
+- (void)animationTransitionProgress:(CGFloat)progress contentOffset:(CGPoint)contentOffset velocity:(CGFloat)velocity
+{
+    
+}
+
+- (void)setTranstionProgress:(CGFloat)transtionProgress contentOffset:(CGPoint)contentOffset
+{
+    
+    if (transtionProgress == _transtionProgress) {
+        return;
+    }
+    
+    _transtionProgress = transtionProgress;
+    self.collectionView.transtionProgress = transtionProgress;
+    CGFloat scale = POPTransition(transtionProgress, self.minimumZoomScale, self.maximumZoomScale);
+    [self setZoomScale:scale];
+
+}
+
+- (void)animationTransitionProgress:(CGFloat)progress velocity:(CGFloat)velocity
+{
+    POPSpringAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.scrollView.progress"];
+    if (!animation) {
+        animation = [POPSpringAnimation animation];
+        POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.property.scrollView.progress" initializer:^(POPMutableAnimatableProperty *prop) {
+            prop.readBlock = ^(id obj, CGFloat values[]) {
+                values[0] = [obj transtionProgress];
+            };
+            prop.writeBlock = ^(id obj, const CGFloat values[]) {
+                [obj setTranstionProgress:values[0]];
+            };
+            prop.threshold = 0.01;
+        }];
+        
+        animation.property = propX;
+        animation.springSpeed = 8;
+        animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
+            
+        };
+        [self pop_addAnimation:animation forKey:@"inc.stamp.pk.scrollView.progress"];
+    }
+    animation.toValue = @(progress);
+}
+
 - (void)animationZoomScale:(CGFloat)targetScale velocity:(CGFloat)velocity
 {
-    POPSpringAnimation *animation = [POPSpringAnimation animation];
-    POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.property.scrollView.zoom" initializer:^(POPMutableAnimatableProperty *prop) {
-        prop.readBlock = ^(id obj, CGFloat values[]) {
-            values[0] = [obj zoomScale];
-        };
-        prop.writeBlock = ^(id obj, const CGFloat values[]) {
-            [obj setZoomScale:values[0]];
-        };
-        prop.threshold = 0.01;
-    }];
-    
-    animation.property = propX;
-    animation.springSpeed = 8;
-    animation.toValue = @(targetScale);
-    animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
+    POPSpringAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.scrollView.zoom"];
+    if (!animation) {
+        animation = [POPSpringAnimation animation];
+        POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.property.scrollView.zoom" initializer:^(POPMutableAnimatableProperty *prop) {
+            prop.readBlock = ^(id obj, CGFloat values[]) {
+                values[0] = [obj zoomScale];
+            };
+            prop.writeBlock = ^(id obj, const CGFloat values[]) {
+                [obj setZoomScale:values[0]];
+            };
+            prop.threshold = 0.01;
+        }];
         
-    };
-    [self pop_addAnimation:animation forKey:@"inc.stamp.pk.scrollView.zoom"];
+        animation.property = propX;
+        animation.springSpeed = 8;
+        animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
+            
+        };
+        [self pop_addAnimation:animation forKey:@"inc.stamp.pk.scrollView.zoom"];
+    }
+    animation.toValue = @(targetScale);
 }
 
 - (void)animationContentOffset:(CGPoint)contentOffset velocity:(CGFloat)velocity
 {
-    POPBasicAnimation *animation = [POPBasicAnimation animation];
-    POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.property.scrollView.offset" initializer:^(POPMutableAnimatableProperty *prop) {
-        prop.readBlock = ^(id obj, CGFloat values[]) {
-            values[0] = [obj contentOffset].x;
-        };
-        prop.writeBlock = ^(id obj, const CGFloat values[]) {
+    POPBasicAnimation *animation = [self.scrollView pop_animationForKey:@"inc.stamp.pk.scrollView.offset"];
+    if (!animation) {
+        animation = [POPBasicAnimation animation];
+        POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.property.scrollView.offset" initializer:^(POPMutableAnimatableProperty *prop) {
+            prop.readBlock = ^(id obj, CGFloat values[]) {
+                values[0] = [obj contentOffset].x;
+            };
+            prop.writeBlock = ^(id obj, const CGFloat values[]) {
+                
+                CGPoint contentOffset = [obj contentOffset];
+                contentOffset.x = values[0];
+                [obj setContentOffset:contentOffset];
+            };
             
-            CGPoint contentOffset = [obj contentOffset];
-            contentOffset.x = values[0];
-            [obj setContentOffset:contentOffset];
+            prop.threshold = 0.01;
+        }];
+        
+        animation.property = propX;
+        animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
+            
         };
-        
-        prop.threshold = 0.01;
-    }];
-    
-    animation.property = propX;
+        [self.scrollView pop_addAnimation:animation forKey:@"inc.stamp.pk.scrollView.offset"];
+    }
     animation.toValue = @(-contentOffset.x);
-    animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
-        
-    };
-    [self.scrollView pop_addAnimation:animation forKey:@"inc.stamp.pk.scrollView.offset"];
+}
+
+static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloat endValue) {
+    return startValue + (progress * (endValue - startValue));
 }
 
 @end
