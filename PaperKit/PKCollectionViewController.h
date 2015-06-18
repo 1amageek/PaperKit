@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <POP.h>
+#import <POP/POPLayerExtras.h>
 #import "PKScrollView.h"
 #import "PKCollectionView.h"
 #import "PKCollectionViewCell.h"
 #import "PKCollectionViewFlowLayout.h"
 #import "PKPanGestureRecognizer.h"
+#import "PKContentViewController.h"
 
 
 @interface PKCollectionViewController : UIViewController

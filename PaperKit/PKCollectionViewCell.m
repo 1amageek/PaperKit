@@ -10,4 +10,23 @@
 
 @implementation PKCollectionViewCell
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.transtionProgress = 0;
+    }
+    return self;
+}
+
+- (void)setTranstionProgress:(CGFloat)transtionProgress
+{
+    _transtionProgress = transtionProgress;
+    if (transtionProgress == 1) {
+        self.userInteractionEnabled = YES;
+    } else {
+        self.userInteractionEnabled = NO;
+    }
+}
+
 @end
