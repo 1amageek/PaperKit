@@ -10,12 +10,22 @@
 
 @implementation PKScrollView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSLog(@"began");
+    if (!self.dragging) {
+        [self.nextResponder touchesBegan:touches withEvent:event];
+    }
+    [super touchesBegan:touches withEvent:event];
 }
-*/
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSLog(@"end");
+    if (!self.dragging) {
+        [self.nextResponder touchesEnded: touches withEvent:event];
+    }
+    [super touchesEnded: touches withEvent: event];
+}
+
 
 @end

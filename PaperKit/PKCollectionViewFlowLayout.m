@@ -174,10 +174,10 @@
         CGFloat width = [UIScreen mainScreen].bounds.size.width + self.minimumInteritemSpacing;
         CGFloat horizontal = 0;
         for (NSUInteger section = 0; section < self.selectedIndexPath.section; section++) {
-            horizontal -= (width * [self.collectionView numberOfItemsInSection:section]);
+            horizontal += (width * [self.collectionView numberOfItemsInSection:section]);
         }
         
-        horizontal -= (self.selectedIndexPath.item * width) + self.sectionInset.left;
+        horizontal += (self.selectedIndexPath.item * width) + self.sectionInset.left;
         
         return CGPointMake(horizontal, point.y);
     }
