@@ -96,6 +96,7 @@
     _foregroundCollectionView.delegate = self;
     _foregroundCollectionView.dataSource = self;
     _foregroundCollectionView.showsHorizontalScrollIndicator = NO;
+    _foregroundCollectionView.showsVerticalScrollIndicator = NO;
     _foregroundCollectionView.alwaysBounceHorizontal = NO;
     _foregroundCollectionView.alwaysBounceVertical = NO;
     _foregroundCollectionView.backgroundColor = [UIColor clearColor];

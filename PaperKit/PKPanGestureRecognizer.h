@@ -9,6 +9,15 @@
 #import <UIKit/UIKit.h>
 #import <UIKit/UIGestureRecognizerSubclass.h>
 
+typedef NS_ENUM(NSInteger, PKPanGestureRecognizerDirection)
+{
+    PKPanGestureRecognizerDirectionEvery,
+    PKPanGestureRecognizerDirectionVertical,
+    PKPanGestureRecognizerDirectionHorizontal
+};
+
 @interface PKPanGestureRecognizer : UIPanGestureRecognizer
+
+@property (nonatomic) PKPanGestureRecognizerDirection scrollDirection; //default PKPanGestureRecognizerDirectionEvery
 
 @end
