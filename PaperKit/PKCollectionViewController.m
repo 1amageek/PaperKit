@@ -106,9 +106,10 @@
         prgress = isnan(prgress) ? 0 : prgress;
         prgress = isinf(prgress) ? 1 : prgress;
     }
-
     
     CGFloat fromContentOffsetX = _fromContentOffset.x;
+    //CGFloat fromContentOffsetY = _fromContentOffset.y;
+    
     if (self.scrollView.contentOffset.x <= 0) {
         targetContentOffsetX = 0;
         CGFloat contentOffsetX = POPTransition(prgress, fromContentOffsetX, targetContentOffsetX);
@@ -118,6 +119,7 @@
 
     if (expand) {
         CGFloat contentOffsetX = POPTransition(prgress, fromContentOffsetX, targetContentOffsetX);
+        //CGFloat contentOffsetY = POPTransition(prgress, fromContentOffsetY, 0);
         [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
     } else {
 
@@ -193,6 +195,7 @@
 {
     [_scrollView setZoomScale:scale animated:NO];
     CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    height = MAX(0, height);
     _collectionView.layer.position = CGPointMake(self.collectionView.frame.origin.x, height);
 }
 
@@ -308,9 +311,33 @@
     if (rengeCells.count < 2) {
         [self.collectionView.collectionViewLayout invalidateLayout];
     }
-    
     _transtionProgress = (self.scrollView.zoomScale - self.minimumZoomScale) / (self.maximumZoomScale - self.minimumZoomScale);
 
+}
+
+- (void)scrollViewWillBeginZooming:(nonnull UIScrollView *)scrollView withView:(nullable UIView *)view
+{
+    self.selectedIndexPath = [self.collectionView indexPathForItemAtPoint:[self.scrollView.pinchGestureRecognizer locationInView:self.collectionView]];
+}
+
+- (void)scrollViewDidEndZooming:(nonnull UIScrollView *)scrollView withView:(nullable UIView *)view atScale:(CGFloat)scale
+{
+    CGFloat threshold = (self.maximumZoomScale + self.minimumZoomScale) / 2;
+    
+    if (threshold < scale) {
+        self.pagingEnabled = YES;
+        _fromProgress = self.transtionProgress;
+        _fromContentOffset = self.scrollView.contentOffset;
+        [self animationTransitionExpand:YES velocity:0];
+        
+    } else {
+        self.pagingEnabled = NO;
+        _fromProgress = self.transtionProgress;
+        _fromContentOffset = self.scrollView.contentOffset;
+        [self animationTransitionExpand:NO velocity:0];
+        
+    }
+    
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -351,17 +378,15 @@
 #pragma mark - TapGestureRecognizer
 
 - (void)tapGesture:(UITapGestureRecognizer *)recognizer {
-    /*
+    
     if (!self.pagingEnabled) {
         self.selectedIndexPath = [self.collectionView indexPathForItemAtPoint:[recognizer locationInView:self.collectionView]];
         _fromProgress = self.transtionProgress;
         _fromContentOffset = self.scrollView.contentOffset;
         self.scrollView.decelerationRate = UIScrollViewDecelerationRateFast;
         self.pagingEnabled = YES;
-        [self animationTransitionProgress:1 velocity:0];
-    }*/
-    
-    
+        [self animationTransitionExpand:YES velocity:0];
+    }
 }
 
 #pragma mark - PanGestureRecognizer
@@ -395,7 +420,6 @@
             
             CGFloat initialDistance = self.view.bounds.size.height - _initialTouchLocaiton.y;
             CGFloat currentDistance = self.view.bounds.size.height - location.y;
-        
             CGFloat scale = (currentDistance / initialDistance) * _initialTouchScale;
             
             if (scale < self.minimumZoomScale) {
@@ -406,13 +430,16 @@
                 CGFloat deltaZoomScale = scale - self.maximumZoomScale;
                 scale = self.maximumZoomScale + deltaZoomScale / 4;
             }
+
+            scale = MIN(self.scrollView.maximumZoomScale, scale);
+            scale = MAX(self.scrollView.minimumZoomScale, scale);
             
-     
             CGFloat offsetX = (_initialTouchContentOffset.x + self.scrollView.bounds.size.width/2) * (scale/_initialTouchScale) - self.scrollView.bounds.size.width/2;
             CGFloat progress = (scale - self.minimumZoomScale) / (self.maximumZoomScale - self.minimumZoomScale);
+     
             [self setTranstionProgress:progress];
-            [self.scrollView setContentOffset:CGPointMake(offsetX - translation.x, self.scrollView.contentOffset.y) animated:NO];
-            [self.scrollView.pinchGestureRecognizer setScale:scale];
+            [self.scrollView setContentOffset:CGPointMake(offsetX - translation.x, 0) animated:NO];
+
             break;
         }
             
