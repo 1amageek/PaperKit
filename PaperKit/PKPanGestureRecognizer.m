@@ -64,14 +64,5 @@
     if (self.state == UIGestureRecognizerStateFailed) return;
 }
 
-- (BOOL)canPreventGestureRecognizer:(nonnull UIGestureRecognizer *)preventedGestureRecognizer
-{
-    if ([preventedGestureRecognizer isKindOfClass:[UIPinchGestureRecognizer class]]) {
-        return NO;
-    }
-    
-    return YES;
-}
-
 
 @end

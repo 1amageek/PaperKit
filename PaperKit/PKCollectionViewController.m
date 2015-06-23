@@ -106,7 +106,7 @@
         prgress = isnan(prgress) ? 0 : prgress;
         prgress = isinf(prgress) ? 1 : prgress;
     }
-    
+
     
     CGFloat fromContentOffsetX = _fromContentOffset.x;
     if (self.scrollView.contentOffset.x <= 0) {
@@ -115,20 +115,20 @@
         [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
         return;
     }
-    
-    if ((self.scrollView.contentSize.width - self.scrollView.bounds.size.width) <= self.scrollView.contentOffset.x) {
-        CGFloat offsetX = self.collectionView.bounds.size.width * self.minimumZoomScale - self.scrollView.bounds.size.width;
-        targetContentOffsetX = offsetX;
-        CGFloat contentOffsetX = POPTransition(prgress, fromContentOffsetX, targetContentOffsetX);
-        [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
-        return;
-    }
-    
+
     if (expand) {
         CGFloat contentOffsetX = POPTransition(prgress, fromContentOffsetX, targetContentOffsetX);
         [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
+    } else {
+
+        if ((self.collectionView.bounds.size.width * self.minimumZoomScale - self.scrollView.bounds.size.width)  <= self.scrollView.contentOffset.x) {
+            
+            CGFloat offsetX = self.collectionView.bounds.size.width * self.minimumZoomScale - self.scrollView.bounds.size.width;
+            targetContentOffsetX = offsetX;
+            CGFloat contentOffsetX = POPTransition(prgress, fromContentOffsetX, targetContentOffsetX);
+            [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
+        }
     }
-    
 }
 
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath
@@ -162,6 +162,7 @@
     _panGestureRecognizer = [[PKPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
     _panGestureRecognizer.scrollDirection = PKPanGestureRecognizerDirectionVertical;
     _panGestureRecognizer.delegate = self;
+    _panGestureRecognizer.maximumNumberOfTouches = 1;
     
     _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
     _tapGestureRecognizer.delegate = self;
@@ -257,7 +258,6 @@
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
     if (self.pagingEnabled) {
-        
         CGPoint contentOffset = [self.layout targetContentOffsetForProposedContentOffset:*targetContentOffset withScrollingVelocity:velocity];
         *targetContentOffset = CGPointMake(contentOffset.x, contentOffset.y);
     }
@@ -376,6 +376,7 @@
         case UIGestureRecognizerStateBegan:
         {
             self.pagingEnabled = NO;
+            self.scrollView.panGestureRecognizer.state = UIGestureRecognizerStateFailed;
             [self pop_removeAnimationForKey:@"inc.stamp.pk.scrollView.progress"];
             
             _initialTouchLocaiton = location;
@@ -411,7 +412,7 @@
             CGFloat progress = (scale - self.minimumZoomScale) / (self.maximumZoomScale - self.minimumZoomScale);
             [self setTranstionProgress:progress];
             [self.scrollView setContentOffset:CGPointMake(offsetX - translation.x, self.scrollView.contentOffset.y) animated:NO];
-
+            [self.scrollView.pinchGestureRecognizer setScale:scale];
             break;
         }
             
@@ -443,15 +444,7 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
-    /*
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan && otherGestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        gestureRecognizer.state = UIGestureRecognizerStateFailed;
-        return YES;
-    }
-    
-    return NO;
-     */
-    
+
     if (gestureRecognizer == self.panGestureRecognizer && otherGestureRecognizer == self.scrollView.panGestureRecognizer) {
         return YES;
     }
@@ -486,54 +479,6 @@
     animation.toValue = expand ? @(1) : @(0);
 }
 
-/*
-- (void)animationZoomScale:(CGFloat)targetScale velocity:(CGFloat)velocity
-{
-    POPSpringAnimation *animation = [POPSpringAnimation animation];
-    POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.property.scrollView.zoom" initializer:^(POPMutableAnimatableProperty *prop) {
-        prop.readBlock = ^(id obj, CGFloat values[]) {
-            values[0] = [obj zoomScale];
-        };
-        prop.writeBlock = ^(id obj, const CGFloat values[]) {
-            [obj setZoomScale:values[0]];
-        };
-        prop.threshold = 0.01;
-    }];
-    
-    animation.property = propX;
-    animation.springSpeed = 8;
-    animation.toValue = @(targetScale);
-    animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
-        
-    };
-    [self pop_addAnimation:animation forKey:@"inc.stamp.pk.scrollView.zoom"];
-}
-
-- (void)animationContentOffset:(CGPoint)contentOffset velocity:(CGFloat)velocity
-{
-    POPBasicAnimation *animation = [POPBasicAnimation animation];
-    POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.property.scrollView.offset" initializer:^(POPMutableAnimatableProperty *prop) {
-        prop.readBlock = ^(id obj, CGFloat values[]) {
-            values[0] = [obj contentOffset].x;
-        };
-        prop.writeBlock = ^(id obj, const CGFloat values[]) {
-            
-            CGPoint contentOffset = [obj contentOffset];
-            contentOffset.x = values[0];
-            [obj setContentOffset:contentOffset];
-        };
-        
-        prop.threshold = 0.01;
-    }];
-    
-    animation.property = propX;
-    animation.toValue = @(-contentOffset.x);
-    animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
-        
-    };
-    [self.scrollView pop_addAnimation:animation forKey:@"inc.stamp.pk.scrollView.offset"];
-}
-*/
 static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloat endValue) {
     return startValue + (progress * (endValue - startValue));
 }
