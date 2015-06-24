@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PKViewController.h"
 
-@interface SampleViewController : UIViewController
+@interface SampleViewController : PKViewController
 
 @end

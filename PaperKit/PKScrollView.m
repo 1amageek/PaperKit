@@ -10,22 +10,20 @@
 
 @implementation PKScrollView
 
+static CGFloat IS_CONTENTOFFSET_ZERO_THRESHOLD = 20.0f;
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"began");
-    if (!self.dragging) {
-        [self.nextResponder touchesBegan:touches withEvent:event];
+- (BOOL)gestureRecognizerShouldBegin:(nonnull UIGestureRecognizer *)gestureRecognizer
+{
+    if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+        UIPanGestureRecognizer *panGestureRecognizer = (UIPanGestureRecognizer *)gestureRecognizer;
+        //CGPoint location = [panGestureRecognizer locationInView:gestureRecognizer.view];
+        CGPoint translation = [panGestureRecognizer translationInView:gestureRecognizer.view];
+        
+        if (self.contentOffset.y < IS_CONTENTOFFSET_ZERO_THRESHOLD && translation.y > 0) {
+            return NO;
+        }
     }
-    [super touchesBegan:touches withEvent:event];
+    return YES;
 }
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"end");
-    if (!self.dragging) {
-        [self.nextResponder touchesEnded: touches withEvent:event];
-    }
-    [super touchesEnded: touches withEvent: event];
-}
-
 
 @end

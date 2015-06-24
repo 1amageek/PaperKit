@@ -38,7 +38,7 @@
         _minimumZoomScale = 0.45f;
         _transtionProgress = 0.0f;
         _pagingEnabled = NO;
-        _collectionView = [[PKCollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:self.layout];
+        _collectionView = [[PKContentCollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:self.layout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.pagingEnabled = YES;
@@ -48,7 +48,7 @@
         _collectionView.opaque = NO;
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.showsVerticalScrollIndicator = NO;
-        _scrollView = [[PKScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        _scrollView = [[UIScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         _scrollView.delaysContentTouches = NO;
         _scrollView.userInteractionEnabled = YES;
         _scrollView.minimumZoomScale = 0.3f;

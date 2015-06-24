@@ -10,6 +10,8 @@
 
 @implementation PKCollectionViewCell
 
+static CGFloat IS_CONTENTOFFSET_ZERO_THRESHOLD = 20.0f;
+
 - (void)setTranstionProgress:(CGFloat)transtionProgress
 {
     _transtionProgress = transtionProgress;

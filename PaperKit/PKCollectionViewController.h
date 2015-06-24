@@ -11,6 +11,7 @@
 #import <POP/POPLayerExtras.h>
 #import "PKScrollView.h"
 #import "PKCollectionView.h"
+#import "PKContentCollectionView.h"
 #import "PKCollectionViewCell.h"
 #import "PKCollectionViewFlowLayout.h"
 #import "PKPanGestureRecognizer.h"
@@ -18,9 +19,9 @@
 
 @interface PKCollectionViewController : UIViewController
 
-@property (nonatomic) PKCollectionView *collectionView;
+@property (nonatomic) PKContentCollectionView *collectionView;
 @property (nonatomic) PKCollectionViewFlowLayout *layout;
-@property (nonatomic) PKScrollView *scrollView;
+@property (nonatomic) UIScrollView *scrollView;
 @property (nonatomic) CGFloat transtionProgress;
 @property (nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic) PKPanGestureRecognizer *panGestureRecognizer;
