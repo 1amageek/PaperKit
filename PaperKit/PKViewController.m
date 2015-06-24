@@ -101,6 +101,7 @@
     _foregroundCollectionView.alwaysBounceVertical = NO;
     _foregroundCollectionView.backgroundColor = [UIColor clearColor];
     _foregroundCollectionView.opaque = NO;
+    _foregroundCollectionView.scrollEnabled = NO;
     
     _collectionView = [[UICollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:self.layout];
     _collectionView.pagingEnabled = YES;
@@ -150,6 +151,21 @@
     //override method
 }
 
+- (PKCollectionViewController *)parentViewControllerAtCollectionView:(UICollectionView *)collectionView
+{
+    NSArray *cells = [self.foregroundCollectionView visibleCells];
+    __block PKCollectionViewController *controller = nil;
+    [cells enumerateObjectsUsingBlock:^(PKForegroundCollectionViewCell *cell, NSUInteger idx, BOOL * __nonnull stop) {
+        PKCollectionViewController *viewController = (PKCollectionViewController *)cell.viewController;
+        if (viewController.collectionView == collectionView) {
+            controller = viewController;
+            *stop = YES;
+        }
+    }];
+    
+    return controller;
+}
+
 - (PKContentViewController *)collectionView:(PKCollectionView *)collectionView contentViewControllerAtIndexPath:(NSIndexPath *)indexPath
 {
     //override method
@@ -161,7 +177,6 @@
     PKContentViewController *viewController = [PKContentViewController new];
     return viewController;
 }
-
 
 
 #pragma mark - <UICollectionViewDataSource>
@@ -193,7 +208,7 @@
     if (self.collectionView == collectionView) {
         return;
     }
-    NSLog(@"willDisplayCell %@",indexPath);
+
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
@@ -210,10 +225,12 @@
     if (self.collectionView == collectionView) {
         return;
     }
-    NSLog(@"didEndDisplayingCell %@",indexPath);
+
     PKContentViewController *viewController = (PKContentViewController *)((PKCollectionViewCell *)cell).viewController;
     if ([self.childViewControllers containsObject:viewController]) {
-        [viewController willMoveToParentViewController:self];
+        PKForegroundCollectionViewCell *foregroundCell = (PKForegroundCollectionViewCell *)[self.foregroundCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.selectedCategory inSection:0]];
+        
+        [viewController willMoveToParentViewController:foregroundCell.viewController];
         [viewController.view removeFromSuperview];
         [viewController removeFromParentViewController];
     }
@@ -230,21 +247,25 @@
         return cell;
     }
     
+    // foreground
     if (self.foregroundCollectionView == collectionView) {
         PKForegroundCollectionViewCell *cell = (PKForegroundCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"PKForegroundCollectionViewCell" forIndexPath:indexPath];
         return cell;
     }
     
-    
     // Content
     PKCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PKCollectionViewCell" forIndexPath:indexPath];
-    /*
+    //PKForegroundCollectionViewCell *foregroundCell = (PKForegroundCollectionViewCell *)[self.foregroundCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.selectedCategory inSection:0]];
+    PKCollectionViewController *parentViewController = [self parentViewControllerAtCollectionView:collectionView];
     PKContentViewController *viewController = [self collectionView:(PKCollectionView *)collectionView contentViewControllerAtIndexPath:indexPath];
-    [self addChildViewController:viewController];
-    [cell addSubview:viewController.view];
-    [viewController didMoveToParentViewController:self];
-    ((PKCollectionViewCell *)cell).viewController = viewController;
-    */
+    
+    if (![parentViewController.childViewControllers containsObject:viewController]) {
+        [parentViewController addChildViewController:viewController];
+        [cell addSubview:viewController.view];
+        [parentViewController didMoveToParentViewController:self];
+        ((PKCollectionViewCell *)cell).viewController = viewController;
+    }
+    
     return cell;
     
     
