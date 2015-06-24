@@ -11,5 +11,6 @@
 @interface PKCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic) CGFloat transtionProgress;
+@property (nonatomic) UIViewController *viewController;
 
 @end

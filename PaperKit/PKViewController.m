@@ -75,7 +75,7 @@
         _layout.minimumInteritemSpacing = 0;
         _layout.minimumLineSpacing = 0;
         _layout.sectionInset = UIEdgeInsetsZero;
-
+        _selectedCategory = 0;
         
     }
     return self;
@@ -131,7 +131,6 @@
 
 - (PKCollectionViewController *)viewControllerAtIndex:(NSInteger)index
 {
-    
     PKForegroundCollectionViewCell *cell = (PKForegroundCollectionViewCell *)[self.foregroundCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0]];
     if (cell.viewController) {
         return (PKCollectionViewController *)cell.viewController;
@@ -139,8 +138,6 @@
     
     
     PKCollectionViewController *viewController = [PKCollectionViewController new];
-    //viewController.dataSource = [(NSArray *)self.dataSource objectAtIndex:index];
-    //viewController.delegate = self;
     viewController.collectionView.delegate = self;
     viewController.collectionView.dataSource = self;
     [self regisiterCellToCollectionView:(PKCollectionView *)viewController.collectionView];
@@ -150,7 +147,19 @@
 
 - (void)regisiterCellToCollectionView:(PKCollectionView *)collectionView
 {
+    //override method
+}
+
+- (PKContentViewController *)collectionView:(PKCollectionView *)collectionView contentViewControllerAtIndexPath:(NSIndexPath *)indexPath
+{
+    //override method
+    PKCollectionViewCell *cell = (PKCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    if (cell.viewController) {
+        return (PKContentViewController *)cell.viewController;
+    }
     
+    PKContentViewController *viewController = [PKContentViewController new];
+    return viewController;
 }
 
 
@@ -172,19 +181,38 @@
 {
     if (self.foregroundCollectionView == collectionView) {
         PKCollectionViewController *viewController = [self viewControllerAtIndex:indexPath.item];
-        [self addChildViewController:viewController];
-        [cell addSubview:viewController.view];
-        [viewController didMoveToParentViewController:self];
-        ((PKForegroundCollectionViewCell *)cell).viewController = viewController;
+        if (![self.childViewControllers containsObject:viewController]) {
+            [self addChildViewController:viewController];
+            [cell addSubview:viewController.view];
+            [viewController didMoveToParentViewController:self];
+            ((PKForegroundCollectionViewCell *)cell).viewController = viewController;
+        }
         return;
     }
     
+    if (self.collectionView == collectionView) {
+        return;
+    }
+    NSLog(@"willDisplayCell %@",indexPath);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.foregroundCollectionView == collectionView) {
         PKCollectionViewController *viewController = (PKCollectionViewController *)((PKForegroundCollectionViewCell *)cell).viewController;
+        if ([self.childViewControllers containsObject:viewController]) {
+            [viewController willMoveToParentViewController:self];
+            [viewController.view removeFromSuperview];
+            [viewController removeFromParentViewController];
+        }
+    }
+    
+    if (self.collectionView == collectionView) {
+        return;
+    }
+    NSLog(@"didEndDisplayingCell %@",indexPath);
+    PKContentViewController *viewController = (PKContentViewController *)((PKCollectionViewCell *)cell).viewController;
+    if ([self.childViewControllers containsObject:viewController]) {
         [viewController willMoveToParentViewController:self];
         [viewController.view removeFromSuperview];
         [viewController removeFromParentViewController];
@@ -207,10 +235,16 @@
         return cell;
     }
     
+    
+    // Content
     PKCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PKCollectionViewCell" forIndexPath:indexPath];
-    NSInteger i = [self collectionView:collectionView numberOfItemsInSection:indexPath.section];
-    UIColor *color = [UIColor colorWithHue:(floorf(indexPath.row)/i) saturation:0.3 brightness:0.75 alpha:1.0];
-    cell.backgroundColor = color;
+    /*
+    PKContentViewController *viewController = [self collectionView:(PKCollectionView *)collectionView contentViewControllerAtIndexPath:indexPath];
+    [self addChildViewController:viewController];
+    [cell addSubview:viewController.view];
+    [viewController didMoveToParentViewController:self];
+    ((PKCollectionViewCell *)cell).viewController = viewController;
+    */
     return cell;
     
     

@@ -14,5 +14,6 @@
 @interface PKViewController : UIViewController
 
 @property (nonatomic) UICollectionView *collectionView;
+@property (nonatomic) NSUInteger selectedCategory;
 
 @end
