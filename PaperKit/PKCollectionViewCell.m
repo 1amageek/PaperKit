@@ -10,4 +10,16 @@
 
 @implementation PKCollectionViewCell
 
+- (void)setTranstionProgress:(CGFloat)transtionProgress
+{
+    _transtionProgress = transtionProgress;
+    self.viewController.transtionProgress = transtionProgress;
+    
+    if (1 <= transtionProgress) {
+        self.viewController.view.userInteractionEnabled = YES;
+    } else {
+        self.viewController.view.userInteractionEnabled = NO;
+    }
+}
+
 @end

@@ -119,6 +119,15 @@
     
 }
 
+- (void)setSelectedCategory:(NSUInteger)selectedCategory
+{
+    _selectedCategory = selectedCategory;
+    
+    if (self.foregroundCollectionView) {
+        [self.foregroundCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:selectedCategory inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+    }
+}
+
 - (void)viewWillLayoutSubviews
 {
     _collectionView.contentInset = UIEdgeInsetsZero;
@@ -178,6 +187,17 @@
     return viewController;
 }
 
+- (void)scrollViewWillEndDragging:(nonnull UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout nonnull CGPoint *)targetContentOffset
+{
+    if (scrollView == self.collectionView) {
+        CGFloat x = targetContentOffset->x;
+        CGFloat y = targetContentOffset->y;
+        NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:CGPointMake(x, y)];
+        if (self.selectedCategory != indexPath.item) {
+            self.selectedCategory = indexPath.item;
+        }
+    }
+}
 
 #pragma mark - <UICollectionViewDataSource>
 
@@ -265,7 +285,7 @@
         [parentViewController didMoveToParentViewController:self];
         ((PKCollectionViewCell *)cell).viewController = viewController;
     }
-    
+    cell.transtionProgress = parentViewController.transtionProgress;
     return cell;
     
     

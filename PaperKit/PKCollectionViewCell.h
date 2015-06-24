@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PKContentViewController.h"
 
 @interface PKCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic) CGFloat transtionProgress;
-@property (nonatomic) UIViewController *viewController;
+@property (nonatomic) PKContentViewController *viewController;
 
 @end

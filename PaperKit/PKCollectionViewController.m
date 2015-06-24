@@ -80,10 +80,6 @@
 
 - (void)setTranstionProgress:(CGFloat)transtionProgress {
     
-    if (transtionProgress == _transtionProgress) {
-        return;
-    }
-    
     _transtionProgress = transtionProgress;
     self.collectionView.transtionProgress = transtionProgress;
     CGFloat scale = POPTransition(transtionProgress, self.minimumZoomScale, self.maximumZoomScale);
@@ -182,8 +178,8 @@
 - (void)viewDidLayoutSubviews
 {
     _collectionView.layer.position = CGPointMake(_collectionView.layer.position.x, [UIScreen mainScreen].bounds.size.height * (1 - self.scrollView.minimumZoomScale));
-    [self setZoomScale:self.minimumZoomScale];
-    
+    //[self setZoomScale:self.minimumZoomScale];
+    [self setTranstionProgress:0];
 }
 
 - (CGFloat)zoomScale
@@ -471,9 +467,12 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
-
     if (gestureRecognizer == self.panGestureRecognizer && otherGestureRecognizer == self.scrollView.panGestureRecognizer) {
         return YES;
+    }
+    
+    if ([otherGestureRecognizer isKindOfClass:NSClassFromString(@"UIScrollViewPanGestureRecognizer")]) {
+        //return YES;
     }
     
     return NO;

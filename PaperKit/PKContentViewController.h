@@ -10,4 +10,6 @@
 
 @interface PKContentViewController : UIViewController
 
+@property (nonatomic) CGFloat transtionProgress;
+
 @end
