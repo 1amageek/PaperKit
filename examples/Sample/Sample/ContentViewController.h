@@ -10,4 +10,7 @@
 
 @interface ContentViewController : PKContentViewController
 
+@property (nonatomic) PKCollectionView *collectionView;
+@property (nonatomic) UIImageView *imageView;
+
 @end
