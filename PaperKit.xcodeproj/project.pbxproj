@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		023066691B5185A61F1B3BA8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC63CE84E0C6B70E54C88966 /* libPods.a */; };
 		8C837A311B2BF1CC00B169FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A301B2BF1CC00B169FD /* main.m */; };
-		8C837A341B2BF1CC00B169FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A331B2BF1CC00B169FD /* AppDelegate.m */; };
 		8C837A3C1B2BF1CC00B169FD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C837A3B1B2BF1CC00B169FD /* Images.xcassets */; };
 		8C837A3F1B2BF1CC00B169FD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C837A3D1B2BF1CC00B169FD /* LaunchScreen.xib */; };
 		8C837A4B1B2BF1CC00B169FD /* PaperKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A4A1B2BF1CC00B169FD /* PaperKitTests.m */; };
@@ -20,7 +19,6 @@
 		8C837A621B2BF42D00B169FD /* PKCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A611B2BF42D00B169FD /* PKCollectionViewFlowLayout.m */; };
 		8C837A651B2BF93F00B169FD /* PKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A641B2BF93F00B169FD /* PKCollectionViewController.m */; };
 		8C837A681B2BFECB00B169FD /* PKCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A671B2BFECB00B169FD /* PKCollectionViewCell.m */; };
-		8C837A6E1B2C10F200B169FD /* SampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A6D1B2C10F200B169FD /* SampleViewController.m */; };
 		8C837B1E1B2C9D8100B169FD /* PKContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837B1D1B2C9D8100B169FD /* PKContentViewController.m */; };
 		8CB0027C1B3B09DC00967B23 /* PKContentCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0027B1B3B09DC00967B23 /* PKContentCollectionView.m */; };
 /* End PBXBuildFile section */
@@ -40,8 +38,6 @@
 		8C837A2B1B2BF1CC00B169FD /* PaperKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C837A2F1B2BF1CC00B169FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C837A301B2BF1CC00B169FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		8C837A321B2BF1CC00B169FD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		8C837A331B2BF1CC00B169FD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		8C837A3B1B2BF1CC00B169FD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		8C837A3E1B2BF1CC00B169FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		8C837A441B2BF1CC00B169FD /* PaperKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaperKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,8 +57,6 @@
 		8C837A641B2BF93F00B169FD /* PKCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCollectionViewController.m; sourceTree = "<group>"; };
 		8C837A661B2BFECB00B169FD /* PKCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKCollectionViewCell.h; sourceTree = "<group>"; };
 		8C837A671B2BFECB00B169FD /* PKCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCollectionViewCell.m; sourceTree = "<group>"; };
-		8C837A6C1B2C10F200B169FD /* SampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleViewController.h; sourceTree = "<group>"; };
-		8C837A6D1B2C10F200B169FD /* SampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleViewController.m; sourceTree = "<group>"; };
 		8C837B1C1B2C9D8100B169FD /* PKContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKContentViewController.h; sourceTree = "<group>"; };
 		8C837B1D1B2C9D8100B169FD /* PKContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKContentViewController.m; sourceTree = "<group>"; };
 		8CB0027A1B3B09DC00967B23 /* PKContentCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKContentCollectionView.h; sourceTree = "<group>"; };
@@ -123,10 +117,6 @@
 		8C837A2D1B2BF1CC00B169FD /* PaperKit */ = {
 			isa = PBXGroup;
 			children = (
-				8C837A321B2BF1CC00B169FD /* AppDelegate.h */,
-				8C837A331B2BF1CC00B169FD /* AppDelegate.m */,
-				8C837A6C1B2C10F200B169FD /* SampleViewController.h */,
-				8C837A6D1B2C10F200B169FD /* SampleViewController.m */,
 				8CB002771B3B08A900967B23 /* PaperKit */,
 				8C837A3B1B2BF1CC00B169FD /* Images.xcassets */,
 				8C837A3D1B2BF1CC00B169FD /* LaunchScreen.xib */,
@@ -337,10 +327,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C837A6E1B2C10F200B169FD /* SampleViewController.m in Sources */,
 				8CB0027C1B3B09DC00967B23 /* PKContentCollectionView.m in Sources */,
 				8C837A5F1B2BF2CF00B169FD /* PKCollectionView.m in Sources */,
-				8C837A341B2BF1CC00B169FD /* AppDelegate.m in Sources */,
 				8C837A5C1B2BF29A00B169FD /* PKScrollView.m in Sources */,
 				8C837A311B2BF1CC00B169FD /* main.m in Sources */,
 				8C837A561B2BF1E800B169FD /* PKViewController.m in Sources */,

@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.summary      = "Paper like user interface for iOS"
   s.homepage     = "https://github.com/1amageek/PaperKit"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
-  s.license      = { :type => "BSD", :file => "LICENSE" }
+  s.license      = { :type => "BSD" }
   s.author    = "1amageek"
   s.social_media_url   = "https://twitter.com/1_am_a_geek"
   s.platform     = :ios, "8.0"
