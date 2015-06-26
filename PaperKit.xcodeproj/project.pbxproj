@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		023066691B5185A61F1B3BA8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC63CE84E0C6B70E54C88966 /* libPods.a */; };
 		8C837A311B2BF1CC00B169FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A301B2BF1CC00B169FD /* main.m */; };
-		8C837A3C1B2BF1CC00B169FD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C837A3B1B2BF1CC00B169FD /* Images.xcassets */; };
-		8C837A3F1B2BF1CC00B169FD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C837A3D1B2BF1CC00B169FD /* LaunchScreen.xib */; };
 		8C837A4B1B2BF1CC00B169FD /* PaperKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A4A1B2BF1CC00B169FD /* PaperKitTests.m */; };
 		8C837A561B2BF1E800B169FD /* PKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A551B2BF1E800B169FD /* PKViewController.m */; };
 		8C837A591B2BF25400B169FD /* PKPanGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A581B2BF25400B169FD /* PKPanGestureRecognizer.m */; };
@@ -38,8 +36,6 @@
 		8C837A2B1B2BF1CC00B169FD /* PaperKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C837A2F1B2BF1CC00B169FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C837A301B2BF1CC00B169FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		8C837A3B1B2BF1CC00B169FD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		8C837A3E1B2BF1CC00B169FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		8C837A441B2BF1CC00B169FD /* PaperKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaperKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C837A491B2BF1CC00B169FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C837A4A1B2BF1CC00B169FD /* PaperKitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaperKitTests.m; sourceTree = "<group>"; };
@@ -118,8 +114,6 @@
 			isa = PBXGroup;
 			children = (
 				8CB002771B3B08A900967B23 /* PaperKit */,
-				8C837A3B1B2BF1CC00B169FD /* Images.xcassets */,
-				8C837A3D1B2BF1CC00B169FD /* LaunchScreen.xib */,
 				8C837A2E1B2BF1CC00B169FD /* Supporting Files */,
 			);
 			path = PaperKit;
@@ -275,8 +269,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C837A3F1B2BF1CC00B169FD /* LaunchScreen.xib in Resources */,
-				8C837A3C1B2BF1CC00B169FD /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,17 +349,6 @@
 			targetProxy = 8C837A451B2BF1CC00B169FD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		8C837A3D1B2BF1CC00B169FD /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8C837A3E1B2BF1CC00B169FD /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		8C837A4C1B2BF1CC00B169FD /* Debug */ = {
