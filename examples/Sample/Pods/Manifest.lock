@@ -1,0 +1,14 @@
+PODS:
+  - PaperKit (0.1.0):
+    - pop (~> 1.0)
+  - pop (1.0.7)
+
+DEPENDENCIES:
+  - PaperKit
+  - pop (~> 1.0)
+
+SPEC CHECKSUMS:
+  PaperKit: a183d6e92511176268ba7dad38bf7b0b69803e65
+  pop: 628ffc631644601567ee8bfaaaea493ebd7d0923
+
+COCOAPODS: 0.37.2
