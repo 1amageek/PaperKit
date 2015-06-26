@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <PaperKit/PaperKit.h>
 
-@interface ViewController : PKCollectionViewController
+@interface ViewController : PKViewController
 
 
 @end

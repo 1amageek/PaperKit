@@ -16,4 +16,12 @@
 @property (nonatomic) UICollectionView *collectionView;
 @property (nonatomic) NSUInteger selectedCategory;
 
+// background Collection View
+- (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
+- (UICollectionViewCell *)backgroundCollectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath;
+
+// foreground Collection View
+- (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
+- (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath;
+
 @end

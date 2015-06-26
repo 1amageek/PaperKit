@@ -66,19 +66,50 @@
 {
     self = [super init];
     if (self) {
-        
-        self.automaticallyAdjustsScrollViewInsets = NO;
-        _layout = [UICollectionViewFlowLayout new];
-        _layout.minimumInteritemSpacing = 0;
-        _layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        _layout.itemSize = [UIScreen mainScreen].bounds.size;
-        _layout.minimumInteritemSpacing = 0;
-        _layout.minimumLineSpacing = 0;
-        _layout.sectionInset = UIEdgeInsetsZero;
-        _selectedCategory = 0;
-        
+        [self commonInit];
     }
     return self;
+}
+
+- (nonnull instancetype)initWithCoder:(nonnull NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (nonnull instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit
+{
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    _selectedCategory = 0;
+}
+
+- (UICollectionViewFlowLayout *)layout
+{
+    if (_layout) {
+        return _layout;
+    }
+    
+    _layout = [UICollectionViewFlowLayout new];
+    _layout.minimumInteritemSpacing = 0;
+    _layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    _layout.itemSize = [UIScreen mainScreen].bounds.size;
+    _layout.minimumInteritemSpacing = 0;
+    _layout.minimumLineSpacing = 0;
+    _layout.sectionInset = UIEdgeInsetsZero;
+    
+    return _layout;
 }
 
 - (void)viewDidLoad {
@@ -175,14 +206,21 @@
     return controller;
 }
 
-- (PKContentViewController *)collectionView:(PKCollectionView *)collectionView contentViewControllerAtIndexPath:(NSIndexPath *)indexPath
+- (PKContentViewController *)_collectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath
 {
-    //override method
+    
     PKCollectionViewCell *cell = (PKCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     if (cell.viewController) {
         return (PKContentViewController *)cell.viewController;
     }
-    
+    PKContentViewController *viewController = [self foregroundCollectionView:collectionView contentViewControllerForAtIndexPath:indexPath];
+    NSAssert(viewController != nil, @"require foreground cell ViewController at %@", indexPath);
+    return viewController;
+}
+
+- (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath
+{
+    //override method
     PKContentViewController *viewController = [PKContentViewController new];
     return viewController;
 }
@@ -204,10 +242,22 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (self.collectionView == collectionView || self.foregroundCollectionView == collectionView) {
-        return 10;
+        return [self backgroundCollectionView:collectionView numberOfItemsInSection:section];
     }
     
-    return 6;
+    return [self foregroundCollectionVew:collectionView numberOfItemsInSection:section];
+}
+
+- (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    // override method
+    return 10;
+}
+
+- (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    // override method
+    return 10;
 }
 
 #pragma mark - <UICollectionViewDelegate>
@@ -228,7 +278,7 @@
     if (self.collectionView == collectionView) {
         return;
     }
-
+    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
@@ -245,7 +295,7 @@
     if (self.collectionView == collectionView) {
         return;
     }
-
+    
     PKContentViewController *viewController = (PKContentViewController *)((PKCollectionViewCell *)cell).viewController;
     if ([self.childViewControllers containsObject:viewController]) {
         PKForegroundCollectionViewCell *foregroundCell = (PKForegroundCollectionViewCell *)[self.foregroundCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.selectedCategory inSection:0]];
@@ -260,11 +310,7 @@
 {
     
     if (self.collectionView == collectionView) {
-        UICollectionViewCell *cell = (UICollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"UICollectionViewCell" forIndexPath:indexPath];
-        NSInteger i = [self collectionView:collectionView numberOfItemsInSection:indexPath.section];
-        UIColor *color = [UIColor colorWithHue:(floorf(indexPath.row)/i) saturation:0.8 brightness:0.75 alpha:1.0];
-        cell.backgroundColor = color;
-        return cell;
+        return [self backgroundCollectionView:collectionView cellForItemAtIndexPath:indexPath];
     }
     
     // foreground
@@ -277,7 +323,7 @@
     PKCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PKCollectionViewCell" forIndexPath:indexPath];
     //PKForegroundCollectionViewCell *foregroundCell = (PKForegroundCollectionViewCell *)[self.foregroundCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.selectedCategory inSection:0]];
     PKCollectionViewController *parentViewController = [self parentViewControllerAtCollectionView:collectionView];
-    PKContentViewController *viewController = [self collectionView:(PKCollectionView *)collectionView contentViewControllerAtIndexPath:indexPath];
+    PKContentViewController *viewController = [self _collectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:indexPath];
     
     if (![parentViewController.childViewControllers containsObject:viewController]) {
         [parentViewController addChildViewController:viewController];
@@ -290,6 +336,13 @@
     
     
     return nil;
+}
+
+- (UICollectionViewCell *)backgroundCollectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    // override
+    UICollectionViewCell *cell = (UICollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"UICollectionViewCell" forIndexPath:indexPath];
+    return cell;
 }
 
 
