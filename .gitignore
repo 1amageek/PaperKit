@@ -18,6 +18,8 @@ DerivedData
 # CocoaPod
 Pods/*
 Podfile.lock
+examples/Sample/Pods/*
+
 
 # others
 *.swp

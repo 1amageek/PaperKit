@@ -1,1 +1,0 @@
-../../../PaperKit/PaperKit/PKPanGestureRecognizer.h
