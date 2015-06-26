@@ -16,3 +16,7 @@ if you're using Swift:
 ```objective-c
 #import <PaperKit/PaperKit.h>
 ```
+
+### Learn more
+
+* Read the [Design Details: Paper by Facebook](http://blog.brianlovin.com/design-details-paper-by-facebook/)
