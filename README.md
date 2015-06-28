@@ -17,6 +17,43 @@ if you're using Swift:
 #import <PaperKit/PaperKit.h>
 ```
 
+Inherit the PKViewController
+
+```objective-c
+@interface ViewController : PKViewController
+```
+
+
+
+```objective-c
+- (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return 8;
+}
+
+- (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return 15;
+}
+```
+
+
+```objective-c
+- (UICollectionViewCell *)backgroundCollectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
+    CGFloat color = floorf(indexPath.item)/[self backgroundCollectionView:collectionView numberOfItemsInSection:indexPath.section];
+    cell.backgroundColor = [UIColor colorWithHue:color saturation:1 brightness:1 alpha:1];
+    return cell;
+}
+
+- (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath onCategory:(NSUInteger)category
+{
+    NSLog(@"indexPaht %@ cateogry %lu",indexPath, (unsigned long)category);
+    return [ContentViewController new];
+}
+```
+
 ### Learn more
 
 * Read the [Design Details: Paper by Facebook](http://blog.brianlovin.com/design-details-paper-by-facebook/)
