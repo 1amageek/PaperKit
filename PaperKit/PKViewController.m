@@ -152,11 +152,24 @@
 
 - (void)setSelectedCategory:(NSUInteger)selectedCategory
 {
+    
+    [self categoryWillSet:_selectedCategory nextCategory:selectedCategory];
     _selectedCategory = selectedCategory;
     
     if (self.foregroundCollectionView) {
         [self.foregroundCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:selectedCategory inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     }
+    [self categoryDidSet:selectedCategory];
+}
+
+- (void)categoryWillSet:(NSUInteger)currentCategory nextCategory:(NSUInteger)nextCategory
+{
+    // override method
+}
+
+- (void)categoryDidSet:(NSUInteger)category
+{
+    // override method
 }
 
 - (void)viewWillLayoutSubviews
@@ -206,19 +219,33 @@
     return controller;
 }
 
-- (PKContentViewController *)_collectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath
+- (NSUInteger)indexAtCollectionView:(UICollectionView *)collectionView
 {
+    NSArray *cells = [self.foregroundCollectionView visibleCells];
+    __block NSUInteger index = 0;
+    [cells enumerateObjectsUsingBlock:^(PKForegroundCollectionViewCell *cell, NSUInteger idx, BOOL * __nonnull stop) {
+        PKCollectionViewController *viewController = (PKCollectionViewController *)cell.viewController;
+        if (viewController.collectionView == collectionView) {
+            index = [self.foregroundCollectionView indexPathForCell:cell].item;
+            *stop = YES;
+        }
+    }];
+    return index;
+}
+
+- (PKContentViewController *)_collectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath
+                                  onCategory:(NSUInteger)category {
     
     PKCollectionViewCell *cell = (PKCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     if (cell.viewController) {
         return (PKContentViewController *)cell.viewController;
     }
-    PKContentViewController *viewController = [self foregroundCollectionView:collectionView contentViewControllerForAtIndexPath:indexPath];
+    PKContentViewController *viewController = [self foregroundCollectionView:collectionView contentViewControllerForAtIndexPath:indexPath onCategory:category];
     NSAssert(viewController != nil, @"require foreground cell ViewController at %@", indexPath);
     return viewController;
 }
 
-- (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath
+- (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath onCategory:(NSUInteger)category
 {
     //override method
     PKContentViewController *viewController = [PKContentViewController new];
@@ -323,7 +350,8 @@
     PKCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PKCollectionViewCell" forIndexPath:indexPath];
     //PKForegroundCollectionViewCell *foregroundCell = (PKForegroundCollectionViewCell *)[self.foregroundCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.selectedCategory inSection:0]];
     PKCollectionViewController *parentViewController = [self parentViewControllerAtCollectionView:collectionView];
-    PKContentViewController *viewController = [self _collectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:indexPath];
+    NSUInteger index = [self indexAtCollectionView:collectionView];
+    PKContentViewController *viewController = [self _collectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:indexPath onCategory:index];
     
     if (![parentViewController.childViewControllers containsObject:viewController]) {
         [parentViewController addChildViewController:viewController];

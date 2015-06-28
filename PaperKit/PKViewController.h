@@ -14,7 +14,11 @@
 @interface PKViewController : UIViewController
 
 @property (nonatomic) UICollectionView *collectionView;
-@property (nonatomic) NSUInteger selectedCategory;
+@property (nonatomic, readonly) NSUInteger selectedCategory;
+
+
+- (void)categoryWillSet:(NSUInteger)currentCategory nextCategory:(NSUInteger)nextCategory;
+- (void)categoryDidSet:(NSUInteger)category;
 
 // background Collection View
 - (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
@@ -22,6 +26,6 @@
 
 // foreground Collection View
 - (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
-- (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath;
+- (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath onCategory:(NSUInteger)category;
 
 @end
