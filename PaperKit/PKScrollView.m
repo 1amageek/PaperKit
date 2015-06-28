@@ -16,7 +16,6 @@ static CGFloat IS_CONTENTOFFSET_ZERO_THRESHOLD = 20.0f;
 {
     if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
         UIPanGestureRecognizer *panGestureRecognizer = (UIPanGestureRecognizer *)gestureRecognizer;
-        //CGPoint location = [panGestureRecognizer locationInView:gestureRecognizer.view];
         CGPoint translation = [panGestureRecognizer translationInView:gestureRecognizer.view];
         
         if (self.contentOffset.y < IS_CONTENTOFFSET_ZERO_THRESHOLD && translation.y > 0) {

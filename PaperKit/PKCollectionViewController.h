@@ -16,7 +16,7 @@
 #import "PKCollectionViewFlowLayout.h"
 #import "PKPanGestureRecognizer.h"
 
-
+@protocol PKCollectionViewControllerDelegate;
 @interface PKCollectionViewController : UIViewController
 
 @property (nonatomic) PKContentCollectionView *collectionView;
@@ -28,10 +28,17 @@
 @property (nonatomic) CGFloat zoomScale;
 @property (nonatomic) BOOL pagingEnabled;
 @property (nonatomic) NSIndexPath *selectedIndexPath;
+@property (nonatomic, weak) id <PKCollectionViewControllerDelegate> delegate;
 
 
 - (NSArray *)visibleCells;
 - (NSArray *)indexPathsForVisibleItems;
 - (UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
+@protocol PKCollectionViewControllerDelegate <NSObject>
+@required
+- (void)viewController:(PKCollectionViewController *)viewController didChangeTranstionProgress:(CGFloat)transtionProgress;
 
 @end

@@ -18,8 +18,6 @@
     CGPoint _initialTouchContentOffset;
     CGPoint _fromContentOffset;
     CGFloat _fromProgress;
-    
-
 }
 
 @property (nonatomic) CGFloat minimumZoomScale;
@@ -84,7 +82,7 @@
     self.collectionView.transtionProgress = transtionProgress;
     CGFloat scale = POPTransition(transtionProgress, self.minimumZoomScale, self.maximumZoomScale);
     [self setZoomScale:scale];
-    
+    [self.delegate viewController:self didChangeTranstionProgress:transtionProgress];
 }
 
 - (void)animateWithProgress:(CGFloat)transtionProgress expand:(BOOL)expand
@@ -125,7 +123,15 @@
             targetContentOffsetX = offsetX;
             CGFloat contentOffsetX = POPTransition(prgress, fromContentOffsetX, targetContentOffsetX);
             [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
+            return;
         }
+        
+        // TODO
+        /*
+        targetContentOffsetX = fromContentOffsetX * self.minimumZoomScale;
+        CGFloat contentOffsetX = POPTransition(prgress, fromContentOffsetX, targetContentOffsetX);
+        [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
+        */
     }
 }
 
@@ -470,11 +476,7 @@
     if (gestureRecognizer == self.panGestureRecognizer && otherGestureRecognizer == self.scrollView.panGestureRecognizer) {
         return YES;
     }
-    
-    if ([otherGestureRecognizer isKindOfClass:NSClassFromString(@"UIScrollViewPanGestureRecognizer")]) {
-        //return YES;
-    }
-    
+        
     return NO;
 }
 
