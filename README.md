@@ -23,7 +23,8 @@ Inherit the PKViewController
 @interface ViewController : PKViewController
 ```
 
-
+The PKViewController there are multiple CollectionView.
+To control the respective CollectionViewController, override the following method.
 
 ```objective-c
 - (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -36,7 +37,6 @@ Inherit the PKViewController
     return 15;
 }
 ```
-
 
 ```objective-c
 - (UICollectionViewCell *)backgroundCollectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
