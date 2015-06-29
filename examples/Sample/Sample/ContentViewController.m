@@ -39,10 +39,10 @@
     [self.view addSubview:_imageView];
 }
 
-- (void)setTranstionProgress:(CGFloat)transtionProgress
+- (void)setTransitionProgress:(CGFloat)transitionProgress
 {
-    [super setTranstionProgress:transtionProgress];
-    _imageView.alpha = transtionProgress;
+    [super setTransitionProgress:transitionProgress];
+    _imageView.alpha = transitionProgress;
 }
 
 #pragma mark - <UICollectionViewDataSource, UICollectionViewDelegate>

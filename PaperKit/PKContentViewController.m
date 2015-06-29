@@ -32,9 +32,9 @@
     
 }
 
-- (void)setTranstionProgress:(CGFloat)transtionProgress
+- (void)setTransitionProgress:(CGFloat)transitionProgress
 {
-    _transtionProgress = transtionProgress;
+    _transitionProgress = transitionProgress;
     
 }
 

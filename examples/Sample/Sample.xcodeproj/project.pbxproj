@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8CA4570B1B417DC9005F0CA5 /* BackgroundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4570A1B417DC9005F0CA5 /* BackgroundViewController.m */; };
+		8CA457111B417E99005F0CA5 /* PKWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA457101B417E99005F0CA5 /* PKWindow.m */; };
 		8CB517F31B3DC14A00D32B5F /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB517F21B3DC14A00D32B5F /* ContentViewController.m */; };
 		8CC0854E1B3DBDB30002A2D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC0854D1B3DBDB30002A2D6 /* main.m */; };
 		8CC085511B3DBDB30002A2D6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC085501B3DBDB30002A2D6 /* AppDelegate.m */; };
@@ -31,6 +33,10 @@
 /* Begin PBXFileReference section */
 		59D3F20B9D30271B2CE81701 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A92D806594A41287919DBC0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		8CA457091B417DC9005F0CA5 /* BackgroundViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundViewController.h; sourceTree = "<group>"; };
+		8CA4570A1B417DC9005F0CA5 /* BackgroundViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundViewController.m; sourceTree = "<group>"; };
+		8CA4570F1B417E99005F0CA5 /* PKWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindow.h; sourceTree = "<group>"; };
+		8CA457101B417E99005F0CA5 /* PKWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindow.m; sourceTree = "<group>"; };
 		8CB517F11B3DC14A00D32B5F /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
 		8CB517F21B3DC14A00D32B5F /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
 		8CC085481B3DBDB30002A2D6 /* Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,10 +107,14 @@
 			children = (
 				8CC0854F1B3DBDB30002A2D6 /* AppDelegate.h */,
 				8CC085501B3DBDB30002A2D6 /* AppDelegate.m */,
+				8CA457091B417DC9005F0CA5 /* BackgroundViewController.h */,
+				8CA4570A1B417DC9005F0CA5 /* BackgroundViewController.m */,
 				8CC085521B3DBDB30002A2D6 /* ViewController.h */,
 				8CC085531B3DBDB30002A2D6 /* ViewController.m */,
 				8CB517F11B3DC14A00D32B5F /* ContentViewController.h */,
 				8CB517F21B3DC14A00D32B5F /* ContentViewController.m */,
+				8CA4570F1B417E99005F0CA5 /* PKWindow.h */,
+				8CA457101B417E99005F0CA5 /* PKWindow.m */,
 				8CC085551B3DBDB30002A2D6 /* Main.storyboard */,
 				8CC085581B3DBDB30002A2D6 /* Images.xcassets */,
 				8CC0855A1B3DBDB30002A2D6 /* LaunchScreen.xib */,
@@ -285,7 +295,9 @@
 			files = (
 				8CB517F31B3DC14A00D32B5F /* ContentViewController.m in Sources */,
 				8CC085541B3DBDB30002A2D6 /* ViewController.m in Sources */,
+				8CA457111B417E99005F0CA5 /* PKWindow.m in Sources */,
 				8CC085511B3DBDB30002A2D6 /* AppDelegate.m in Sources */,
+				8CA4570B1B417DC9005F0CA5 /* BackgroundViewController.m in Sources */,
 				8CC0854E1B3DBDB30002A2D6 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

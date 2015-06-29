@@ -377,7 +377,7 @@
         [parentViewController didMoveToParentViewController:self];
         ((PKCollectionViewCell *)cell).viewController = viewController;
     }
-    cell.transtionProgress = parentViewController.transtionProgress;
+    cell.transitionProgress = parentViewController.transitionProgress;
     return cell;
 }
 
@@ -388,15 +388,15 @@
     return cell;
 }
 
-- (void)viewController:(PKCollectionViewController *)viewController didChangeTranstionProgress:(CGFloat)transtionProgress
+- (void)viewController:(PKCollectionViewController *)viewController didChangeTransitionProgress:(CGFloat)transitionProgress
 {
     UICollectionViewCell *cell = [self.collectionView visibleCells][0];
     
     if (cell) {
-        CGFloat scale = POPTransition(transtionProgress, 1, 0.95);
+        CGFloat scale = POPTransition(transitionProgress, 1, 0.95);
         cell.transform = CGAffineTransformMakeScale(scale, scale);
         
-        CGFloat alpha = POPTransition(transtionProgress, 1, 0);
+        CGFloat alpha = POPTransition(transitionProgress, 1, 0);
         cell.alpha = alpha;
     }
     

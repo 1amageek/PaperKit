@@ -22,7 +22,7 @@
 @property (nonatomic) PKContentCollectionView *collectionView;
 @property (nonatomic) PKCollectionViewFlowLayout *layout;
 @property (nonatomic) UIScrollView *scrollView;
-@property (nonatomic) CGFloat transtionProgress;
+@property (nonatomic) CGFloat transitionProgress;
 @property (nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic) PKPanGestureRecognizer *panGestureRecognizer;
 @property (nonatomic) CGFloat zoomScale;
@@ -39,6 +39,5 @@
 
 @protocol PKCollectionViewControllerDelegate <NSObject>
 @required
-- (void)viewController:(PKCollectionViewController *)viewController didChangeTranstionProgress:(CGFloat)transtionProgress;
-
+- (void)viewController:(PKCollectionViewController *)viewController didChangeTransitionProgress:(CGFloat)transitionProgress;
 @end

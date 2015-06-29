@@ -34,7 +34,7 @@
         self.automaticallyAdjustsScrollViewInsets = NO;
         _maximumZoomScale = 1.0f;
         _minimumZoomScale = 0.45f;
-        _transtionProgress = 0.0f;
+        _transitionProgress = 0.0f;
         _pagingEnabled = NO;
         _collectionView = [[PKContentCollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:self.layout];
         _collectionView.delegate = self;
@@ -76,27 +76,27 @@
     
 }
 
-- (void)setTranstionProgress:(CGFloat)transtionProgress {
+- (void)setTransitionProgress:(CGFloat)transitionProgress {
     
-    _transtionProgress = transtionProgress;
-    self.collectionView.transtionProgress = transtionProgress;
-    CGFloat scale = POPTransition(transtionProgress, self.minimumZoomScale, self.maximumZoomScale);
+    _transitionProgress = transitionProgress;
+    self.collectionView.transitionProgress = transitionProgress;
+    CGFloat scale = POPTransition(transitionProgress, self.minimumZoomScale, self.maximumZoomScale);
     [self setZoomScale:scale];
-    [self.delegate viewController:self didChangeTranstionProgress:transtionProgress];
+    [self.delegate viewController:self didChangeTransitionProgress:transitionProgress];
 }
 
-- (void)animateWithProgress:(CGFloat)transtionProgress expand:(BOOL)expand
+- (void)animateWithProgress:(CGFloat)transitionProgress expand:(BOOL)expand
 {
-    [self setTranstionProgress:transtionProgress];
+    [self setTransitionProgress:transitionProgress];
     CGFloat targetContentOffsetX = [self.layout targetContentOffsetForProposedContentOffset:CGPointZero].x;
     //CGFloat toContentOffsetX = ((_fromContentOffset.x + self.scrollView.bounds.size.width/2)/self.minimumZoomScale) - self.scrollView.bounds.size.width/2;
     CGFloat prgress;
     if (expand) {
-        prgress = (transtionProgress - _fromProgress)/(1 - _fromProgress);
+        prgress = (transitionProgress - _fromProgress)/(1 - _fromProgress);
         prgress = isnan(prgress) ? 0 : prgress;
         prgress = isinf(prgress) ? 1 : prgress;
     } else {
-        prgress = 1 - transtionProgress/_fromProgress;
+        prgress = 1 - transitionProgress/_fromProgress;
         prgress = isnan(prgress) ? 0 : prgress;
         prgress = isinf(prgress) ? 1 : prgress;
     }
@@ -185,7 +185,7 @@
 {
     _collectionView.layer.position = CGPointMake(_collectionView.layer.position.x, [UIScreen mainScreen].bounds.size.height * (1 - self.scrollView.minimumZoomScale));
     //[self setZoomScale:self.minimumZoomScale];
-    [self setTranstionProgress:0];
+    [self setTransitionProgress:0];
 }
 
 - (CGFloat)zoomScale
@@ -281,8 +281,8 @@
     NSArray *visibleCells = [self visibleCells];
     
     [visibleCells enumerateObjectsUsingBlock:^(PKCollectionViewCell *cell, NSUInteger idx, BOOL *stop) {
-        if (cell.transtionProgress != self.transtionProgress) {
-            cell.transtionProgress = self.transtionProgress;
+        if (cell.transitionProgress != self.transitionProgress) {
+            cell.transitionProgress = self.transitionProgress;
         }
     }];
     
@@ -313,7 +313,7 @@
     if (rengeCells.count < 2) {
         [self.collectionView.collectionViewLayout invalidateLayout];
     }
-    _transtionProgress = (self.scrollView.zoomScale - self.minimumZoomScale) / (self.maximumZoomScale - self.minimumZoomScale);
+    _transitionProgress = (self.scrollView.zoomScale - self.minimumZoomScale) / (self.maximumZoomScale - self.minimumZoomScale);
 
 }
 
@@ -328,13 +328,13 @@
     
     if (threshold < scale) {
         self.pagingEnabled = YES;
-        _fromProgress = self.transtionProgress;
+        _fromProgress = self.transitionProgress;
         _fromContentOffset = self.scrollView.contentOffset;
         [self animationTransitionExpand:YES velocity:0];
         
     } else {
         self.pagingEnabled = NO;
-        _fromProgress = self.transtionProgress;
+        _fromProgress = self.transitionProgress;
         _fromContentOffset = self.scrollView.contentOffset;
         [self animationTransitionExpand:NO velocity:0];
         
@@ -358,16 +358,13 @@
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ((PKCollectionViewCell *)cell).transtionProgress = self.transtionProgress;
+    ((PKCollectionViewCell *)cell).transitionProgress = self.transitionProgress;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
     PKCollectionViewCell *cell = (PKCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"PKCollectionViewCell" forIndexPath:indexPath];
-    NSInteger i = [self collectionView:collectionView numberOfItemsInSection:indexPath.section];
-    UIColor *color = [UIColor colorWithHue:(floorf(indexPath.row)/i) saturation:0.8 brightness:0.75 alpha:1.0];
-    cell.backgroundColor = color;
     return cell;
     
 }
@@ -383,7 +380,7 @@
     
     if (!self.pagingEnabled) {
         self.selectedIndexPath = [self.collectionView indexPathForItemAtPoint:[recognizer locationInView:self.collectionView]];
-        _fromProgress = self.transtionProgress;
+        _fromProgress = self.transitionProgress;
         _fromContentOffset = self.scrollView.contentOffset;
         self.scrollView.decelerationRate = UIScrollViewDecelerationRateFast;
         self.pagingEnabled = YES;
@@ -439,7 +436,7 @@
             CGFloat offsetX = (_initialTouchContentOffset.x + self.scrollView.bounds.size.width/2) * (scale/_initialTouchScale) - self.scrollView.bounds.size.width/2;
             CGFloat progress = (scale - self.minimumZoomScale) / (self.maximumZoomScale - self.minimumZoomScale);
      
-            [self setTranstionProgress:progress];
+            [self setTransitionProgress:progress];
             [self.scrollView setContentOffset:CGPointMake(offsetX - translation.x, 0) animated:NO];
 
             break;
@@ -450,13 +447,13 @@
         {
             if (velocity.y < 0) {
                 self.pagingEnabled = YES;
-                _fromProgress = self.transtionProgress;
+                _fromProgress = self.transitionProgress;
                 _fromContentOffset = self.scrollView.contentOffset;
                 [self animationTransitionExpand:YES velocity:velocity.y];
                 
             } else {
                 self.pagingEnabled = NO;
-                _fromProgress = self.transtionProgress;
+                _fromProgress = self.transitionProgress;
                 _fromContentOffset = self.scrollView.contentOffset;
                 [self animationTransitionExpand:NO velocity:velocity.y];
 
@@ -489,7 +486,7 @@
         animation = [POPSpringAnimation animation];
         POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.property.scrollView.progress" initializer:^(POPMutableAnimatableProperty *prop) {
             prop.readBlock = ^(id obj, CGFloat values[]) {
-                values[0] = [obj transtionProgress];
+                values[0] = [obj transitionProgress];
             };
             prop.writeBlock = ^(id obj, const CGFloat values[]) {
                 [obj animateWithProgress:values[0] expand:expand];

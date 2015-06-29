@@ -49,13 +49,13 @@
 {
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
     CGFloat color = floorf(indexPath.item)/[self backgroundCollectionView:collectionView numberOfItemsInSection:indexPath.section];
-    cell.backgroundColor = [UIColor colorWithHue:color saturation:1 brightness:1 alpha:1];
+    cell.backgroundColor = [UIColor colorWithHue:color saturation:0.6 brightness:1 alpha:1];
     return cell;
 }
 
 - (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath onCategory:(NSUInteger)category
 {
-    NSLog(@"indexPaht %@ cateogry %lu",indexPath, (unsigned long)category);
+    //NSLog(@"indexPaht %@ cateogry %lu",indexPath, (unsigned long)category);
     return [ContentViewController new];
 }
 

@@ -10,7 +10,7 @@
 
 @interface PKContentCollectionView : UICollectionView
 
-@property (nonatomic) CGFloat transtionProgress;
+@property (nonatomic) CGFloat transitionProgress;
 @property (nonatomic) CGFloat collectionViewScale;
 @property (nonatomic) NSIndexPath *selectedIndexPath;
 

@@ -12,7 +12,7 @@
 
 #endif /* PaperKit_h */
 
-
+#import "PKWindow.h"
 #import "PKViewController.h"
 #import "PKCollectionView.h"
 #import "PKScrollView.h"
