@@ -7,6 +7,7 @@
 //
 
 #import "PKWindow.h"
+#import "PKPanGestureRecognizer.h"
 
 @interface PKWindow () <UIGestureRecognizerDelegate>
 
@@ -21,8 +22,6 @@
     CGPoint _initialTouchPoint;
     CGPoint _initialTouchPosition;
 }
-
-static CGFloat windowTopHeight = 60;
 
 - (nonnull instancetype)initWithCoder:(nonnull NSCoder *)aDecoder
 {
@@ -45,7 +44,9 @@ static CGFloat windowTopHeight = 60;
 - (void)commonInit
 {
     _state = PKWindowStateNormal;
-    _statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height + 5;
+    _interval = 60;
+    _statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+    _link = YES;
     
     self.backgroundColor = [UIColor whiteColor];
     self.opaque = YES;
@@ -53,10 +54,10 @@ static CGFloat windowTopHeight = 60;
     self.layer.shadowRadius = 5.0f;
     self.layer.shadowOffset = CGSizeMake(0,0);
     self.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.layer.shadowOpacity = 0.5f;
-    self.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;
-    self.layer.shouldRasterize = YES;
-    self.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    //self.layer.shadowOpacity = 0.5f;
+    //self.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;
+    //self.layer.shouldRasterize = YES;
+    //self.layer.rasterizationScale = [UIScreen mainScreen].scale;
     
     //self.alpha = 0.3;
     self.windowLevel = UIWindowLevelStatusBar + 1;
@@ -118,29 +119,49 @@ static CGFloat windowTopHeight = 60;
 - (CGFloat)progressToListState
 {
     NSInteger count = [UIApplication sharedApplication].windows.count - 2;
-    CGFloat height = _statusBarHeight + windowTopHeight * count;
+    CGFloat height = _statusBarHeight + _interval * count;
     return height / [UIScreen mainScreen].bounds.size.height;
+}
+
+- (void)setLink:(BOOL)link
+{
+    _link = link;
+    NSArray *windows = [self _windows];
+    CGFloat progress = self.transitionProgress/[self progressToListState];
+    for (NSUInteger i = 0; i < windows.count - 1; i++) {
+        UIWindow *window = windows[i];
+        NSLog(@"window %@", window);
+        POPBasicAnimation *animation = [window.layer pop_animationForKey:@"inc.stamp.pk.window.link"];
+        if (!animation) {
+            animation = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerTranslationY];
+            animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
+                
+            };
+            [window.layer pop_addAnimation:animation forKey:@"inc.stamp.pk.window.progress"];
+        }
+        CGFloat to = POPTransition(self.transitionProgress, 0, [UIScreen mainScreen].bounds.size.height) - POPTransition(progress, 0, _interval * (windows.count - 1 - i));
+        animation.toValue = link ? @(to): @(0);
+    }
 }
 
 - (void)setTransitionProgress:(CGFloat)transitionProgress
 {
     _transitionProgress = transitionProgress;
     
-    CGFloat yPosition = POPTransition(transitionProgress, 0, [UIScreen mainScreen].bounds.size.height);
-    POPLayerSetTranslationY(self.layer, yPosition);
-    
-    
     NSArray *windows = [self _windows];
+    CGFloat progress = transitionProgress/[self progressToListState];
     
-    for (NSUInteger i = 0; i < windows.count; i++) {
-        CGFloat height = _statusBarHeight + windowTopHeight * i;
-        CGFloat yPosition = POPTransition(transitionProgress, 0, height);
-        UIWindow *window = windows[i];
+    if ([self progressToListState] + 0.1 <= transitionProgress) {
+        CGFloat yPosition = POPTransition(transitionProgress, 0, [UIScreen mainScreen].bounds.size.height);
+        UIWindow *window = windows.lastObject;
         POPLayerSetTranslationY(window.layer, yPosition);
-        
-        NSLog(@"%lu %f", (unsigned long)i, height);
+    } else {
+        for (NSUInteger i = 0; i < windows.count; i++) {
+            CGFloat yPosition = POPTransition(transitionProgress, 0, [UIScreen mainScreen].bounds.size.height) - POPTransition(progress, 0, _interval * (windows.count - 1 - i));
+            UIWindow *window = windows[i];
+            POPLayerSetTranslationY(window.layer, yPosition);
+        }
     }
-    
 }
 
 #pragma mark - TapGestureRecognizer
@@ -171,17 +192,32 @@ static CGFloat windowTopHeight = 60;
         case UIGestureRecognizerStateChanged:
         {
             CGFloat yPosition = _initialTouchPosition.y + translation.y;
-            CGFloat progress = yPosition/[UIScreen mainScreen].bounds.size.height;
+            CGFloat x = yPosition/[UIScreen mainScreen].bounds.size.height;
+            CGFloat y = x;
+            CGFloat lower = [self progressToListState] + _statusBarHeight/[UIScreen mainScreen].bounds.size.height;
+            CGFloat upper = [self progressToListState] + 0.1 + _statusBarHeight/[UIScreen mainScreen].bounds.size.height;
             
-            if (progress < 0) {
-                progress = progress / 4;
-            }
-            if (1 < progress) {
-                CGFloat deltaProgress = progress - 1;
-                progress = 1 + deltaProgress / 4;
+            CGFloat k = 5;
+            
+            if (x < 0) {
+                y = x/8;
             }
             
-            [self setTransitionProgress:progress];
+            if (0 <= x && x < lower) {
+                y = x;
+            }
+            
+            if (lower <= x && x < upper) {
+                y = 1/k * x + lower * (1 - 1/k);
+            }
+            
+            if (upper <= x) {
+                y = x + (1/k - 1) * (upper - lower);
+                [self setLink:NO];
+            }
+            
+            [self setTransitionProgress:y];
+            
             
             break;
         }
@@ -189,7 +225,7 @@ static CGFloat windowTopHeight = 60;
         case UIGestureRecognizerStateEnded:
         case UIGestureRecognizerStateCancelled:
         {
-    
+            
             PKWindowState state = PKWindowStateNormal;
             if (velocity.y > 0) {
                 if ([self hasManyWindows]) {
@@ -233,12 +269,11 @@ static CGFloat windowTopHeight = 60;
     POPSpringAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.window.progress"];
     if (!animation) {
         animation = [POPSpringAnimation animation];
-        POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.property.scrollView.progress" initializer:^(POPMutableAnimatableProperty *prop) {
+        POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.property.window.progress" initializer:^(POPMutableAnimatableProperty *prop) {
             prop.readBlock = ^(id obj, CGFloat values[]) {
                 values[0] = [obj transitionProgress];
             };
             prop.writeBlock = ^(id obj, const CGFloat values[]) {
-                //[obj animateWithProgress:values[0] expand:expand];
                 [obj setTransitionProgress:values[0]];
             };
             prop.threshold = 0.01;
@@ -262,7 +297,7 @@ static CGFloat windowTopHeight = 60;
         case PKWindowStateDismiss:
             animation.toValue = @(1);
             break;
-        
+            
         case PKWindowStateNormal:
         default:
             animation.toValue = @(0);

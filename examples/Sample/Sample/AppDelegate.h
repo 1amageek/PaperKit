@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <PaperKit/PaperKit.h>
-#import "PKWindow.h"
 #import "ViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>

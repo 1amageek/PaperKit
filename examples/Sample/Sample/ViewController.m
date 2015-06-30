@@ -49,7 +49,9 @@
 {
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
     CGFloat color = floorf(indexPath.item)/[self backgroundCollectionView:collectionView numberOfItemsInSection:indexPath.section];
-    cell.backgroundColor = [UIColor colorWithHue:color saturation:0.6 brightness:1 alpha:1];
+
+    CGFloat saturation = floorf([[UIApplication sharedApplication].windows indexOfObject:(UIWindow *)self.view.superview])/[UIApplication sharedApplication].windows.count;
+    cell.backgroundColor = [UIColor colorWithHue:color saturation:saturation brightness:1 alpha:1];
     return cell;
 }
 
