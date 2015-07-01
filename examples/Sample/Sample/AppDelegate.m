@@ -29,7 +29,6 @@
     _window1.backgroundColor = [UIColor grayColor];
     [_window1 makeKeyAndVisible];
     
-    
     _window2 = [[PKWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     ViewController *viewController2 = [ViewController new];
     
@@ -37,13 +36,14 @@
     _window2.backgroundColor = [UIColor grayColor];
     [_window2 makeKeyAndVisible];
     
+    /*
     _window3 = [[PKWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     ViewController *viewController3 = [ViewController new];
     
     _window3.rootViewController = viewController3;
     _window3.backgroundColor = [UIColor grayColor];
     [_window3 makeKeyAndVisible];
-    
+    */
     return YES;
 }
 
