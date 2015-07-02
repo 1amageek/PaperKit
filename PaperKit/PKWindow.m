@@ -14,6 +14,17 @@
 @property (nonatomic) PKPanGestureRecognizer *panGestureRecognizer;
 @property (nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic) CGFloat statusBarHeight;
+@property (nonatomic) BOOL linked;
+
+@property (nonatomic) UIWindow *superWindow;
+@property (nonatomic) PKWindow *childWindow;
+
+@property (nonatomic) CGFloat upperProgress;
+@property (nonatomic) CGFloat lowerProgress;
+@property (nonatomic) CGFloat thresholdPosition;
+
+
+
 
 @end
 
@@ -44,9 +55,10 @@
 - (void)commonInit
 {
     _state = PKWindowStateNormal;
-    _interval = 60;
+    _interval = 65;
     _statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
     _link = YES;
+    _linked = YES;
     
     self.backgroundColor = [UIColor whiteColor];
     self.opaque = YES;
@@ -88,23 +100,47 @@
     return childWindows;
 }
 
+- (UIWindow *)parentWindow
+{
+    NSArray *windows = [UIApplication sharedApplication].windows;
+    NSInteger index = [windows indexOfObject:self];
+    if (index) {
+        UIWindow *parentWindow = nil;
+        while (parentWindow == nil) {
+            UIWindow *window = windows[index - 1];
+            if (window.windowLevel == UIWindowLevelNormal) {
+                parentWindow = window;
+            }
+            index --;
+        }
+        
+        return parentWindow;
+    }
+    return nil;
+}
+
 - (UIWindow *)superWindow
 {
     NSArray *windows = [UIApplication sharedApplication].windows;
     NSInteger index = [windows indexOfObject:self];
     if (index) {
-        
-        UIWindow *superWindow = nil;
-        
-        while (superWindow == nil) {
-            UIWindow *window = windows[index - 1];
-            if (window.windowLevel == UIWindowLevelNormal) {
-                superWindow = window;
-            }
-            index --;
+        PKWindow *superWindow = windows[index - 1];
+        if (superWindow) {
+            return superWindow;
         }
-        
-        return superWindow;
+    }
+    return nil;
+}
+
+- (PKWindow *)childWindow
+{
+    NSArray *windows = [UIApplication sharedApplication].windows;
+    NSInteger index = [windows indexOfObject:self];
+    if (index < windows.count - 1) {
+        PKWindow *superWindow = windows[index + 1];
+        if (superWindow) {
+            return superWindow;
+        }
     }
     return nil;
 }
@@ -123,45 +159,111 @@
     return height / [UIScreen mainScreen].bounds.size.height;
 }
 
+- (CGFloat)upperProgress
+{
+    return [self progressToListState] + 0.1 + _statusBarHeight/[UIScreen mainScreen].bounds.size.height;
+}
+
+- (CGFloat)lowerProgress
+{
+    return [self progressToListState] + _statusBarHeight/[UIScreen mainScreen].bounds.size.height;
+}
+
+- (CGFloat)thresholdPosition
+{
+    return [self positionForProgress:self.upperProgress];
+}
+
 - (void)setLink:(BOOL)link
 {
-    _link = link;
-    NSArray *windows = [self _windows];
-    CGFloat progress = self.transitionProgress/[self progressToListState];
-    for (NSUInteger i = 0; i < windows.count - 1; i++) {
-        UIWindow *window = windows[i];
-        NSLog(@"window %@", window);
-        POPBasicAnimation *animation = [window.layer pop_animationForKey:@"inc.stamp.pk.window.link"];
-        if (!animation) {
-            animation = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerTranslationY];
-            animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
-                
-            };
-            [window.layer pop_addAnimation:animation forKey:@"inc.stamp.pk.window.progress"];
+    [self setLink:link animated:NO];
+}
+
+- (void)setLink:(BOOL)link animated:(BOOL)animated
+{
+    if (_link != link) {
+        _link = link;
+        if (!link) {
+            _linked = link;
         }
-        CGFloat to = POPTransition(self.transitionProgress, 0, [UIScreen mainScreen].bounds.size.height) - POPTransition(progress, 0, _interval * (windows.count - 1 - i));
-        animation.toValue = link ? @(to): @(0);
+        if (animated) {
+            [self animationWithLink:link];
+        } else {
+            _linked = link;
+        }
     }
+}
+
+- (void)setGlobalProgress:(CGFloat)globalProgress
+{
+    _globalProgress = globalProgress;
+    if ([[self superWindow] isKindOfClass:[PKWindow class]]) {
+        ((PKWindow *)[self superWindow]).globalProgress = globalProgress;
+    }
+    
+    [self setLink:(globalProgress < self.upperProgress) animated:YES];
+    
+    if (self.linked) {
+        [self _setTransitionProgress:globalProgress];
+    }
+    
+}
+
+- (void)animationWithLink:(BOOL)link
+{
+    POPBasicAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.window.link"];
+    if (!animation) {
+        animation = [POPBasicAnimation animation];
+        POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.property.window.link" initializer:^(POPMutableAnimatableProperty *prop) {
+            prop.readBlock = ^(id obj, CGFloat values[]) {
+                values[0] = [obj transitionProgress];
+            };
+            prop.writeBlock = ^(id obj, const CGFloat values[]) {
+                [obj _setTransitionProgress:values[0]];
+            };
+            prop.threshold = 0.01;
+        }];
+        animation.property = propX;
+        animation.duration = 0.3;
+        animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
+            if (finished) {
+                _linked = link;
+            }
+        };
+        [self pop_addAnimation:animation forKey:@"inc.stamp.pk.window.link"];
+    }
+    animation.toValue = link ? @(self.globalProgress): @(0);
+}
+
+- (void)_setTransitionProgress:(CGFloat)transitionProgress
+{
+    _transitionProgress = transitionProgress;
+    
+    if (self.globalProgress <= transitionProgress) {
+        [self pop_removeAnimationForKey:@"inc.stamp.pk.window.link"];
+        self.linked = YES;
+    }
+    
+    CGFloat yPosition = [self positionForProgress:transitionProgress];
+    POPLayerSetTranslationY(self.layer, yPosition);
 }
 
 - (void)setTransitionProgress:(CGFloat)transitionProgress
 {
     _transitionProgress = transitionProgress;
-    
+    if ([[self superWindow] isKindOfClass:[PKWindow class]]) {
+        ((PKWindow *)[self superWindow]).globalProgress = transitionProgress;
+    }
+    CGFloat yPosition = [self positionForProgress:transitionProgress];
+    POPLayerSetTranslationY(self.layer, yPosition);
+}
+
+- (CGFloat)positionForProgress:(CGFloat)transitionProgress
+{
     NSArray *windows = [self _windows];
     CGFloat progress = transitionProgress/[self progressToListState];
-    
-    if ([self progressToListState] + 0.1 <= transitionProgress) {
-        CGFloat yPosition = POPTransition(transitionProgress, 0, [UIScreen mainScreen].bounds.size.height);
-        UIWindow *window = windows.lastObject;
-        POPLayerSetTranslationY(window.layer, yPosition);
-    } else {
-        for (NSUInteger i = 0; i < windows.count; i++) {
-            CGFloat yPosition = POPTransition(transitionProgress, 0, [UIScreen mainScreen].bounds.size.height) - POPTransition(progress, 0, _interval * (windows.count - 1 - i));
-            UIWindow *window = windows[i];
-            POPLayerSetTranslationY(window.layer, yPosition);
-        }
-    }
+    NSUInteger i = [windows indexOfObject:self];
+    return POPTransition(transitionProgress, 0, [UIScreen mainScreen].bounds.size.height) - POPTransition(progress, 0, _interval * (windows.count - 1 - i));
 }
 
 #pragma mark - TapGestureRecognizer
@@ -186,6 +288,7 @@
             
             _initialTouchPoint = location;
             _initialTouchPosition = self.frame.origin;
+        
             break;
         }
             
@@ -194,9 +297,9 @@
             CGFloat yPosition = _initialTouchPosition.y + translation.y;
             CGFloat x = yPosition/[UIScreen mainScreen].bounds.size.height;
             CGFloat y = x;
-            CGFloat lower = [self progressToListState] + _statusBarHeight/[UIScreen mainScreen].bounds.size.height;
-            CGFloat upper = [self progressToListState] + 0.1 + _statusBarHeight/[UIScreen mainScreen].bounds.size.height;
-            
+            CGFloat lower = self.lowerProgress;
+            CGFloat upper = self.upperProgress;
+
             CGFloat k = 5;
             
             if (x < 0) {
@@ -213,19 +316,17 @@
             
             if (upper <= x) {
                 y = x + (1/k - 1) * (upper - lower);
-                [self setLink:NO];
             }
             
             [self setTransitionProgress:y];
-            
-            
+        
             break;
         }
             
         case UIGestureRecognizerStateEnded:
         case UIGestureRecognizerStateCancelled:
         {
-            
+    
             PKWindowState state = PKWindowStateNormal;
             if (velocity.y > 0) {
                 if ([self hasManyWindows]) {
@@ -297,7 +398,7 @@
         case PKWindowStateDismiss:
             animation.toValue = @(1);
             break;
-            
+        
         case PKWindowStateNormal:
         default:
             animation.toValue = @(0);
