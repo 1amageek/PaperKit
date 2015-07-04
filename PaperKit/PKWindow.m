@@ -75,12 +75,19 @@
     self.windowLevel = UIWindowLevelStatusBar + 1;
     self.panGestureRecognizer = [[PKPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
     self.panGestureRecognizer.scrollDirection = PKPanGestureRecognizerDirectionVertical;
-    self.panGestureRecognizer.delegate = self;
     [self addGestureRecognizer:self.panGestureRecognizer];
     
     self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
     self.tapGestureRecognizer.delegate = self;
     [self addGestureRecognizer:self.tapGestureRecognizer];
+}
+
+- (void)dismissWindow:(PKWindow *)window
+{
+
+    window = nil;
+    self.childWindow = nil;
+    [self makeKeyWindow];
 }
 
 - (BOOL)hasManyWindows
@@ -202,7 +209,6 @@
     }
     
     [self setLink:(globalProgress < self.upperProgress) animated:YES];
-    
     if (self.linked) {
         [self _setTransitionProgress:globalProgress];
     }
@@ -242,6 +248,14 @@
     if (self.globalProgress <= transitionProgress) {
         [self pop_removeAnimationForKey:@"inc.stamp.pk.window.link"];
         self.linked = YES;
+    }
+    
+    if (0 == transitionProgress) {
+        self.state = PKWindowStateNormal;
+    } else if(transitionProgress < self.upperProgress) {
+        self.state = PKWindowStateList;
+    } else {
+        self.state = PKWindowStateNormal;
     }
     
     CGFloat yPosition = [self positionForProgress:transitionProgress];
@@ -383,7 +397,11 @@
         animation.property = propX;
         animation.springSpeed = 8;
         animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
-            
+            if (finished) {
+                if (state == PKWindowStateDismiss) {
+                    [(PKWindow *)self.superWindow dismissWindow:self];
+                }
+            }
         };
         [self pop_addAnimation:animation forKey:@"inc.stamp.pk.window.progress"];
     }
@@ -428,18 +446,6 @@
 
 static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloat endValue) {
     return startValue + (progress * (endValue - startValue));
-}
-
-static inline CGFloat POPDegreesToRadians(CGFloat degrees) {
-    return M_PI * (degrees / 180.0);
-}
-
-static inline CGFloat POPPixelsToPoints(CGFloat pixels) {
-    static CGFloat scale = -1;
-    if (scale < 0) {
-        scale = [UIScreen mainScreen].scale;
-    }
-    return pixels / scale;
 }
 
 @end

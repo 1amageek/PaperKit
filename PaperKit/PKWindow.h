@@ -25,4 +25,6 @@ typedef NS_ENUM(NSInteger, PKWindowState) {
 @property (nonatomic) CGFloat interval;
 @property (nonatomic) BOOL link;
 
+- (void)dismissWindow:(PKWindow *)window;
+
 @end

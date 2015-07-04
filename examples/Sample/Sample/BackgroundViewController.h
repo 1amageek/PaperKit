@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <PaperKit.h>
 
 @interface BackgroundViewController : UIViewController
 
