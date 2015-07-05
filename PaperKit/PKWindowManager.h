@@ -17,10 +17,10 @@
 
 
 + (instancetype)sharedManager;
-+ (void)setSharedManager:(PKWindow *)manager;
++ (void)setSharedManager:(PKWindowManager *)manager;
 + (PKWindowManager *)managerWithBaseWindow:(UIWindow *)window;
 
-- (PKWindow *)newWindowWithViewController:(UIViewController *)viewController;
-- (PKWindow *)newWindowWithViewController:(UIViewController *)viewController animated:(BOOL)animated;
+- (PKWindow *)showWindowWithRootViewController:(UIViewController *)rootViewController;
+- (PKWindow *)showWindowWithRootViewController:(UIViewController *)rootViewController animated:(BOOL)animated;
 
 @end

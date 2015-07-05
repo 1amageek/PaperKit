@@ -46,16 +46,16 @@ static PKWindowManager  *sharedManager = nil;
 
 #pragma mark - method
 
-- (PKWindow *)newWindowWithViewController:(UIViewController *)viewController
+- (PKWindow *)showWindowWithRootViewController:(UIViewController *)rootViewController
 {
-    return [self newWindowWithViewController:viewController animated:YES];
+    return[self showWindowWithRootViewController:rootViewController animated:YES];
 }
 
-- (PKWindow *)newWindowWithViewController:(UIViewController *)viewController animated:(BOOL)animated
+- (PKWindow *)showWindowWithRootViewController:(UIViewController *)rootViewController animated:(BOOL)animated
 {
     PKWindow *window = [[PKWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     window.windowLevel = UIWindowLevelStatusBar + self.windows.count + 1;
-    window.rootViewController = viewController;
+    window.rootViewController = rootViewController;
     window.manager = self;
     NSMutableArray *windows = [NSMutableArray arrayWithArray:self.windows];
     [windows addObject:window];
@@ -68,12 +68,12 @@ static PKWindowManager  *sharedManager = nil;
 
 - (void)windowWillAppear:(PKWindow *)window
 {
-    self.baseWindow.userInteractionEnabled = NO;
+    //self.baseWindow.userInteractionEnabled = NO;
 }
 
 - (void)windowDidAppear:(PKWindow *)window
 {
-    self.baseWindow.userInteractionEnabled = YES;
+    //self.baseWindow.userInteractionEnabled = YES;
 }
 
 - (void)windowDidDisappear:(PKWindow *)window

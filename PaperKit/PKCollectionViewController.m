@@ -18,6 +18,7 @@
     CGPoint _initialTouchContentOffset;
     CGPoint _fromContentOffset;
     CGFloat _fromProgress;
+    CGFloat _fromScale;
 }
 
 @property (nonatomic) CGFloat minimumZoomScale;
@@ -126,11 +127,11 @@
             return;
         }
         
+        
         // TODO
         /*
-        targetContentOffsetX = fromContentOffsetX * self.minimumZoomScale;
-        CGFloat contentOffsetX = POPTransition(prgress, fromContentOffsetX, targetContentOffsetX);
-        [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
+         CGFloat offsetX = (_fromContentOffset.x + self.scrollView.bounds.size.width/2) * (self.zoomScale/_fromScale) - self.scrollView.bounds.size.width/2;
+         [self.scrollView setContentOffset:CGPointMake(offsetX, self.scrollView.contentOffset.y) animated:NO];
         */
     }
 }
@@ -445,16 +446,16 @@
         case UIGestureRecognizerStateEnded:
         case UIGestureRecognizerStateCancelled:
         {
+            
+            _fromProgress = self.transitionProgress;
+            _fromContentOffset = self.scrollView.contentOffset;
+            _fromScale = self.zoomScale;
+            
             if (velocity.y < 0) {
                 self.pagingEnabled = YES;
-                _fromProgress = self.transitionProgress;
-                _fromContentOffset = self.scrollView.contentOffset;
                 [self animationTransitionExpand:YES velocity:velocity.y];
-                
             } else {
                 self.pagingEnabled = NO;
-                _fromProgress = self.transitionProgress;
-                _fromContentOffset = self.scrollView.contentOffset;
                 [self animationTransitionExpand:NO velocity:velocity.y];
 
             }

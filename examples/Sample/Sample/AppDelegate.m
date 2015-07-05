@@ -24,7 +24,7 @@
     self.window.rootViewController = backgroundViewController;
     [self.window makeKeyAndVisible];
     
-    
+    [PKWindowManager managerWithBaseWindow:self.window];
         
     return YES;
 }
