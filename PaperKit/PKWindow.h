@@ -17,14 +17,26 @@ typedef NS_ENUM(NSInteger, PKWindowState) {
     PKWindowStateDismiss
 };
 
+
+@protocol PKWindowDelegate ;
 @interface PKWindow : UIWindow
 
 @property (nonatomic) PKWindowState state;
+@property (nonatomic, weak) id <PKWindowDelegate> manager;
 @property (nonatomic) CGFloat transitionProgress;
 @property (nonatomic) CGFloat globalProgress;
 @property (nonatomic) CGFloat interval;
 @property (nonatomic) BOOL link;
 
-- (void)dismissWindow:(PKWindow *)window;
+- (void)makeKeyAndVisible:(BOOL)animated;
+- (void)dissmis;
+
+@end
+
+@protocol PKWindowDelegate <NSObject>
+
+- (void)windowWillAppear:(PKWindow *)window;
+- (void)windowDidAppear:(PKWindow *)window;
+- (void)windowDidDisappear:(PKWindow *)window;
 
 @end

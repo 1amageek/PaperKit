@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <PaperKit/PaperKit.h>
 #import "ViewController.h"
-#import "ScrollViewController.h"
 #import "BackgroundViewController.h"
+
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>

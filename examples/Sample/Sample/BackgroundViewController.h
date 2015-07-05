@@ -11,4 +11,6 @@
 
 @interface BackgroundViewController : UIViewController
 
+@property (nonatomic) PKWindow *window;
+
 @end

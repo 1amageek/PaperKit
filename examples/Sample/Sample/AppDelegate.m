@@ -11,11 +11,6 @@
 
 @interface AppDelegate ()
 
-@property (nonatomic) PKWindow *window1;
-@property (nonatomic) PKWindow *window2;
-@property (nonatomic) PKWindow *window3;
-
-
 
 @end
 
@@ -29,30 +24,8 @@
     self.window.rootViewController = backgroundViewController;
     [self.window makeKeyAndVisible];
     
-    _window1 = [[PKWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    ViewController *viewController1 = [ViewController new];
     
-    _window1.rootViewController = viewController1;
-    _window1.backgroundColor = [UIColor grayColor];
-    [_window1 makeKeyAndVisible];
-     
-    
-    _window2 = [[PKWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    ViewController *viewController2 = [ViewController new];
-    
-    _window2.rootViewController = viewController2;
-    _window2.backgroundColor = [UIColor grayColor];
-    [_window2 makeKeyAndVisible];
-    
-    
-    
-    _window3 = [[PKWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    ViewController *viewController3 = [ViewController new];
-    
-    _window3.rootViewController = viewController3;
-    _window3.backgroundColor = [UIColor grayColor];
-    [_window3 makeKeyAndVisible];
-    
+        
     return YES;
 }
 

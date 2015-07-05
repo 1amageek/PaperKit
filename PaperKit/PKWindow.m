@@ -9,6 +9,7 @@
 #import "PKWindow.h"
 #import "PKPanGestureRecognizer.h"
 
+@class PKViewController;
 @interface PKWindow () <UIGestureRecognizerDelegate>
 
 @property (nonatomic) PKPanGestureRecognizer *panGestureRecognizer;
@@ -82,13 +83,40 @@
     [self addGestureRecognizer:self.tapGestureRecognizer];
 }
 
-- (void)dismissWindow:(PKWindow *)window
+- (void)makeKeyAndVisible:(BOOL)animated
 {
 
-    window = nil;
-    self.childWindow = nil;
-    [self makeKeyWindow];
+    if ([self.manager respondsToSelector:@selector(windowWillAppear:)]) {
+        [self.manager windowWillAppear:self];
+    }
+    
+    if (animated) {
+        CGPoint point = (CGPoint){0, [UIScreen mainScreen].bounds.size.height};
+        self.frame = (CGRect){point, [UIScreen mainScreen].bounds.size};
+        [super makeKeyAndVisible];
+        
+        POPSpringAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.window.visible"];
+        if (!animation) {
+            POPSpringAnimation *animation = [POPSpringAnimation animation];
+            animation.property = [POPAnimatableProperty propertyWithName:kPOPLayerPositionY];
+            
+            animation.completionBlock = ^(POPAnimation *anim, BOOL finished){
+                if (finished) {
+                    self.linked = YES;
+                    if ([self.manager respondsToSelector:@selector(windowDidAppear:)]) {
+                        [self.manager windowDidAppear:self];
+                    }
+                }
+            };
+            [self pop_addAnimation:animation forKey:@"inc.stamp.pk.window.visible"];
+        }
+        animation.toValue = @(self.bounds.size.height/2);
+    }
+    else {
+        [super makeKeyAndVisible];
+    }
 }
+
 
 - (BOOL)hasManyWindows
 {
@@ -399,7 +427,9 @@
         animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
             if (finished) {
                 if (state == PKWindowStateDismiss) {
-                    [(PKWindow *)self.superWindow dismissWindow:self];
+                    if ([self.superWindow isKindOfClass:[PKWindow class]]) {
+                        [((PKWindow *)self.superWindow) dissmis];
+                    }
                 }
             }
         };
@@ -421,6 +451,15 @@
         default:
             animation.toValue = @(0);
             break;
+    }
+    
+}
+
+- (void)dissmis
+{
+
+    if (self.manager) {
+        [self.manager windowDidDisappear:self];
     }
     
 }
