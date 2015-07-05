@@ -1,6 +1,12 @@
 # PaperKit
 PaperKit is like Paper app of Facebook
 
+### Try Sample
+
+```bash
+$ pod try PaperKit
+```
+
 ### Quick start
 
 PaperKit is available on [CocoaPods](http://cocoapods.org).  Add the following to your Podfile:
