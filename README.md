@@ -64,6 +64,9 @@ To control the respective CollectionViewController, override the following metho
 
 #### PKWindow
 
+PKWindow can be hierarchically arranged the Window.
+PKWindow is managed by PKWindowManager.
+
 ```objective-c
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
@@ -76,6 +79,14 @@ To control the respective CollectionViewController, override the following metho
         
     return YES;
 }
+
+```
+
+Create a new Window by passing the RootViewController to PKWindowManger.
+
+```objective-c
+ViewController *nextViewController = [ViewController new];
+[[PKWindowManager sharedManager] showWindowWithRootViewController:nextViewController];
 
 ```
 
