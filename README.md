@@ -60,6 +60,26 @@ To control the respective CollectionViewController, override the following metho
 }
 ```
 
+### Usage
+
+#### PKWindow
+
+```objective-c
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    BackgroundViewController *backgroundViewController = [BackgroundViewController new];
+    self.window.rootViewController = backgroundViewController;
+    [self.window makeKeyAndVisible];
+    
+    [PKWindowManager managerWithBaseWindow:self.window];
+        
+    return YES;
+}
+
+```
+
+
 ### Learn more
 
 * Read the [Design Details: Paper by Facebook](http://blog.brianlovin.com/design-details-paper-by-facebook/)
