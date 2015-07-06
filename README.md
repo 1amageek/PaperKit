@@ -1,6 +1,8 @@
 # PaperKit
 PaperKit is like Paper app of Facebook
 
+![sample](PaperKit.mov)
+
 ### Try Sample
 
 ```bash
