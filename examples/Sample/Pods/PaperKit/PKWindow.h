@@ -40,4 +40,7 @@ typedef NS_ENUM(NSInteger, PKWindowState) {
 
 - (NSArray *)windowsOnBaseWindow;
 
+@optional
+- (NSInteger)numberOfWindows;
+
 @end

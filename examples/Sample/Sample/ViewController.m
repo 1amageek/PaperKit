@@ -18,6 +18,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
+    
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {

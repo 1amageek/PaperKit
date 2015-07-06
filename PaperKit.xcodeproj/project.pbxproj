@@ -18,9 +18,9 @@
 		8C990B731B4A30F900EB9AAC /* PKScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C990B621B4A30F900EB9AAC /* PKScrollView.m */; };
 		8C990B741B4A30F900EB9AAC /* PKTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C990B641B4A30F900EB9AAC /* PKTableView.m */; };
 		8C990B751B4A30F900EB9AAC /* PKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C990B661B4A30F900EB9AAC /* PKViewController.m */; };
-		8C990B761B4A30F900EB9AAC /* PKWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C990B681B4A30F900EB9AAC /* PKWindow.m */; };
-		8C990B771B4A30F900EB9AAC /* PKWindowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C990B6A1B4A30F900EB9AAC /* PKWindowManager.m */; };
 		8CFB1D4C1B4A5D0100CF31FC /* PKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFB1D4B1B4A5D0100CF31FC /* PKCollectionViewController.m */; };
+		8CFB1D9A1B4A9B8F00CF31FC /* PKWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFB1D971B4A9B8F00CF31FC /* PKWindow.m */; };
+		8CFB1D9B1B4A9B8F00CF31FC /* PKWindowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFB1D991B4A9B8F00CF31FC /* PKWindowManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,13 +58,13 @@
 		8C990B641B4A30F900EB9AAC /* PKTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKTableView.m; sourceTree = "<group>"; };
 		8C990B651B4A30F900EB9AAC /* PKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKViewController.h; sourceTree = "<group>"; };
 		8C990B661B4A30F900EB9AAC /* PKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKViewController.m; sourceTree = "<group>"; };
-		8C990B671B4A30F900EB9AAC /* PKWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindow.h; sourceTree = "<group>"; };
-		8C990B681B4A30F900EB9AAC /* PKWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindow.m; sourceTree = "<group>"; };
-		8C990B691B4A30F900EB9AAC /* PKWindowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindowManager.h; sourceTree = "<group>"; };
-		8C990B6A1B4A30F900EB9AAC /* PKWindowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindowManager.m; sourceTree = "<group>"; };
 		8C990B6B1B4A30F900EB9AAC /* PaperKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaperKit.h; sourceTree = "<group>"; };
 		8CFB1D4A1B4A5D0100CF31FC /* PKCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKCollectionViewController.h; sourceTree = "<group>"; };
 		8CFB1D4B1B4A5D0100CF31FC /* PKCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCollectionViewController.m; sourceTree = "<group>"; };
+		8CFB1D961B4A9B8F00CF31FC /* PKWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindow.h; sourceTree = "<group>"; };
+		8CFB1D971B4A9B8F00CF31FC /* PKWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindow.m; sourceTree = "<group>"; };
+		8CFB1D981B4A9B8F00CF31FC /* PKWindowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindowManager.h; sourceTree = "<group>"; };
+		8CFB1D991B4A9B8F00CF31FC /* PKWindowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindowManager.m; sourceTree = "<group>"; };
 		CC63CE84E0C6B70E54C88966 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D860E867AC355A559EF1B3FD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -174,10 +174,10 @@
 				8C990B641B4A30F900EB9AAC /* PKTableView.m */,
 				8C990B651B4A30F900EB9AAC /* PKViewController.h */,
 				8C990B661B4A30F900EB9AAC /* PKViewController.m */,
-				8C990B671B4A30F900EB9AAC /* PKWindow.h */,
-				8C990B681B4A30F900EB9AAC /* PKWindow.m */,
-				8C990B691B4A30F900EB9AAC /* PKWindowManager.h */,
-				8C990B6A1B4A30F900EB9AAC /* PKWindowManager.m */,
+				8CFB1D961B4A9B8F00CF31FC /* PKWindow.h */,
+				8CFB1D971B4A9B8F00CF31FC /* PKWindow.m */,
+				8CFB1D981B4A9B8F00CF31FC /* PKWindowManager.h */,
+				8CFB1D991B4A9B8F00CF31FC /* PKWindowManager.m */,
 				8C990B6B1B4A30F900EB9AAC /* PaperKit.h */,
 			);
 			name = PaperKit;
@@ -325,9 +325,9 @@
 			files = (
 				8C990B721B4A30F900EB9AAC /* PKPanGestureRecognizer.m in Sources */,
 				8C990B741B4A30F900EB9AAC /* PKTableView.m in Sources */,
-				8C990B771B4A30F900EB9AAC /* PKWindowManager.m in Sources */,
+				8CFB1D9B1B4A9B8F00CF31FC /* PKWindowManager.m in Sources */,
 				8C990B701B4A30F900EB9AAC /* PKContentCollectionView.m in Sources */,
-				8C990B761B4A30F900EB9AAC /* PKWindow.m in Sources */,
+				8CFB1D9A1B4A9B8F00CF31FC /* PKWindow.m in Sources */,
 				8C990B6C1B4A30F900EB9AAC /* PKCollectionView.m in Sources */,
 				8C990B711B4A30F900EB9AAC /* PKContentViewController.m in Sources */,
 				8C990B6D1B4A30F900EB9AAC /* PKCollectionViewCell.m in Sources */,
