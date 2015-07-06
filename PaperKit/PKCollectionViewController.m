@@ -14,11 +14,13 @@
     CGPoint _initialTouchLocaiton;
     CGPoint _initialTouchLocationInCollectionView;
     CGFloat _initialTouchScale;
+    CGPoint _initialTouchPosition;
     CGFloat _previousScale;
     CGPoint _initialTouchContentOffset;
     CGPoint _fromContentOffset;
     CGFloat _fromProgress;
     CGFloat _fromScale;
+    CGPoint _fromPosition;
 }
 
 @property (nonatomic) CGFloat minimumZoomScale;
@@ -42,7 +44,7 @@
         _collectionView.dataSource = self;
         _collectionView.pagingEnabled = YES;
         _collectionView.userInteractionEnabled = YES;
-        _collectionView.layer.anchorPoint = CGPointMake(0, 1);
+        _collectionView.layer.anchorPoint = CGPointMake(0, 0);
         _collectionView.backgroundColor = [UIColor clearColor];
         _collectionView.opaque = NO;
         _collectionView.showsHorizontalScrollIndicator = NO;
@@ -54,6 +56,7 @@
         _scrollView.maximumZoomScale = 1.5f;
         _scrollView.bouncesZoom = YES;
         _scrollView.delegate = self;
+        _scrollView.pinchGestureRecognizer.enabled = NO;
         
     }
     
@@ -91,47 +94,55 @@
     [self setTransitionProgress:transitionProgress];
     CGFloat targetContentOffsetX = [self.layout targetContentOffsetForProposedContentOffset:CGPointZero].x;
     //CGFloat toContentOffsetX = ((_fromContentOffset.x + self.scrollView.bounds.size.width/2)/self.minimumZoomScale) - self.scrollView.bounds.size.width/2;
-    CGFloat prgress;
+    CGFloat progress;
     if (expand) {
-        prgress = (transitionProgress - _fromProgress)/(1 - _fromProgress);
-        prgress = isnan(prgress) ? 0 : prgress;
-        prgress = isinf(prgress) ? 1 : prgress;
+        progress = (transitionProgress - _fromProgress)/(1 - _fromProgress);
+        progress = isnan(progress) ? 0 : progress;
+        progress = isinf(progress) ? 1 : progress;
     } else {
-        prgress = 1 - transitionProgress/_fromProgress;
-        prgress = isnan(prgress) ? 0 : prgress;
-        prgress = isinf(prgress) ? 1 : prgress;
+        progress = 1 - transitionProgress/_fromProgress;
+        progress = isnan(progress) ? 0 : progress;
+        progress = isinf(progress) ? 1 : progress;
     }
     
+    // position
+    
+    CGFloat height = POPTransition(progress, _fromPosition.y, expand ? 0 : [UIScreen mainScreen].bounds.size.height * (1 - self.minimumZoomScale));
+    _collectionView.layer.position = CGPointMake(_collectionView.layer.position.x, height);
+    
+    // contentOffset
     CGFloat fromContentOffsetX = _fromContentOffset.x;
     //CGFloat fromContentOffsetY = _fromContentOffset.y;
     
     if (self.scrollView.contentOffset.x <= 0) {
         targetContentOffsetX = 0;
-        CGFloat contentOffsetX = POPTransition(prgress, fromContentOffsetX, targetContentOffsetX);
+        CGFloat contentOffsetX = POPTransition(progress, fromContentOffsetX, targetContentOffsetX);
         [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
         return;
     }
 
     if (expand) {
-        CGFloat contentOffsetX = POPTransition(prgress, fromContentOffsetX, targetContentOffsetX);
+        CGFloat contentOffsetX = POPTransition(progress, fromContentOffsetX, targetContentOffsetX);
         //CGFloat contentOffsetY = POPTransition(prgress, fromContentOffsetY, 0);
         [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
     } else {
 
+        /*
         if ((self.collectionView.bounds.size.width * self.minimumZoomScale - self.scrollView.bounds.size.width)  <= self.scrollView.contentOffset.x) {
             
             CGFloat offsetX = self.collectionView.bounds.size.width * self.minimumZoomScale - self.scrollView.bounds.size.width;
             targetContentOffsetX = offsetX;
-            CGFloat contentOffsetX = POPTransition(prgress, fromContentOffsetX, targetContentOffsetX);
+            CGFloat contentOffsetX = POPTransition(progress, fromContentOffsetX, targetContentOffsetX);
             [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
             return;
         }
         
         
         // TODO
-        /*
-         CGFloat offsetX = (_fromContentOffset.x + self.scrollView.bounds.size.width/2) * (self.zoomScale/_fromScale) - self.scrollView.bounds.size.width/2;
-         [self.scrollView setContentOffset:CGPointMake(offsetX, self.scrollView.contentOffset.y) animated:NO];
+        
+        CGFloat scale = POPTransition(progress, _fromScale, self.minimumZoomScale);
+        CGFloat offsetX = (_fromContentOffset.x + self.scrollView.bounds.size.width/2) * scale/_fromScale - self.scrollView.bounds.size.width/2;
+        [self.scrollView setContentOffset:CGPointMake(offsetX, self.scrollView.contentOffset.y) animated:NO];
         */
     }
 }
@@ -184,8 +195,8 @@
 
 - (void)viewDidLayoutSubviews
 {
-    _collectionView.layer.position = CGPointMake(_collectionView.layer.position.x, [UIScreen mainScreen].bounds.size.height * (1 - self.scrollView.minimumZoomScale));
-    //[self setZoomScale:self.minimumZoomScale];
+    _collectionView.layer.position = CGPointMake(_collectionView.layer.position.x, [UIScreen mainScreen].bounds.size.height * (1 - self.minimumZoomScale));
+    [self setZoomScale:self.minimumZoomScale];
     [self setTransitionProgress:0];
 }
 
@@ -197,9 +208,6 @@
 - (void)setZoomScale:(CGFloat)scale
 {
     [_scrollView setZoomScale:scale animated:NO];
-    CGFloat height = [UIScreen mainScreen].bounds.size.height;
-    height = MAX(0, height);
-    _collectionView.layer.position = CGPointMake(self.collectionView.frame.origin.x, height);
 }
 
 
@@ -309,9 +317,9 @@
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
-    NSArray *rengeCells = [self.collectionView visibleCells];
     
-    if (rengeCells.count < 2) {
+    NSArray *rengeCells = [self.collectionView visibleCells];
+    if (rengeCells.count < 3) {
         [self.collectionView.collectionViewLayout invalidateLayout];
     }
     _transitionProgress = (self.scrollView.zoomScale - self.minimumZoomScale) / (self.maximumZoomScale - self.minimumZoomScale);
@@ -327,20 +335,19 @@
 {
     CGFloat threshold = (self.maximumZoomScale + self.minimumZoomScale) / 2;
     
+    _fromProgress = self.transitionProgress;
+    _fromContentOffset = self.scrollView.contentOffset;
+    _fromScale = self.zoomScale;
+    _fromPosition = self.collectionView.layer.position;
+    
     if (threshold < scale) {
         self.pagingEnabled = YES;
-        _fromProgress = self.transitionProgress;
-        _fromContentOffset = self.scrollView.contentOffset;
         [self animationTransitionExpand:YES velocity:0];
-        
     } else {
         self.pagingEnabled = NO;
-        _fromProgress = self.transitionProgress;
-        _fromContentOffset = self.scrollView.contentOffset;
         [self animationTransitionExpand:NO velocity:0];
-        
     }
-    
+    [self.collectionView.collectionViewLayout invalidateLayout];
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -383,6 +390,9 @@
         self.selectedIndexPath = [self.collectionView indexPathForItemAtPoint:[recognizer locationInView:self.collectionView]];
         _fromProgress = self.transitionProgress;
         _fromContentOffset = self.scrollView.contentOffset;
+        _fromScale = self.zoomScale;
+        _fromPosition = self.collectionView.layer.position;
+        
         self.scrollView.decelerationRate = UIScrollViewDecelerationRateFast;
         self.pagingEnabled = YES;
         [self animationTransitionExpand:YES velocity:0];
@@ -407,8 +417,10 @@
             _initialTouchLocaiton = location;
             _initialTouchLocationInCollectionView = [recognizer locationInView:self.collectionView];
             _initialTouchScale = self.zoomScale;
+            _initialTouchPosition = _collectionView.layer.position;
             _previousScale = _initialTouchScale;
             _initialTouchContentOffset = self.scrollView.contentOffset;
+
             
             self.selectedIndexPath = [_collectionView indexPathForItemAtPoint:[recognizer locationInView:self.collectionView]];
             
@@ -438,6 +450,9 @@
             CGFloat progress = (scale - self.minimumZoomScale) / (self.maximumZoomScale - self.minimumZoomScale);
      
             [self setTransitionProgress:progress];
+            
+            CGFloat height = POPTransition(progress, [UIScreen mainScreen].bounds.size.height * (1 - self.minimumZoomScale), 0);
+            _collectionView.layer.position = CGPointMake(_collectionView.layer.position.x, height);
             [self.scrollView setContentOffset:CGPointMake(offsetX - translation.x, 0) animated:NO];
 
             break;
@@ -450,6 +465,7 @@
             _fromProgress = self.transitionProgress;
             _fromContentOffset = self.scrollView.contentOffset;
             _fromScale = self.zoomScale;
+            _fromPosition = self.collectionView.layer.position;
             
             if (velocity.y < 0) {
                 self.pagingEnabled = YES;
@@ -457,7 +473,6 @@
             } else {
                 self.pagingEnabled = NO;
                 [self animationTransitionExpand:NO velocity:velocity.y];
-
             }
             
             break;
@@ -474,7 +489,6 @@
     if (gestureRecognizer == self.panGestureRecognizer && otherGestureRecognizer == self.scrollView.panGestureRecognizer) {
         return YES;
     }
-        
     return NO;
 }
 
