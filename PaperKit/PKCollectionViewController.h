@@ -34,6 +34,7 @@
 - (NSArray *)visibleCells;
 - (NSArray *)indexPathsForVisibleItems;
 - (UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion;
 
 @end
 

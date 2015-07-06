@@ -362,6 +362,13 @@
     return 3;
 }
 
+- (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion
+{
+    CGRect rect = _collectionView.frame;
+    _collectionView.frame = (CGRect){rect.origin, CGSizeMake([self.layout calculateSize].width * self.scrollView.zoomScale, rect.size.height)};
+    [self.collectionView performBatchUpdates:updates completion:completion];
+}
+
 #pragma mark - <UICollectionViewDelegate>
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath

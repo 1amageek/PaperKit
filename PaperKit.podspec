@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/1amageek/PaperKit.git", :tag => "0.3.0" }
   s.source_files  = ["PaperKit/**/*.{h,m}"]
-  s.exclude_files = ['PaperKit/AppDelegate.*', 'main.m', 'PaperKit.mov']
+  s.exclude_files = ['PaperKit/AppDelegate.*', 'main.m', 'PaperKit.mov', 'PaperKit.gif']
   s.public_header_files = "PaperKit/**/*.h"
   s.dependency "pop", "~> 1.0"
 
