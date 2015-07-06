@@ -1,6 +1,12 @@
 # PaperKit
 PaperKit is like Paper app of Facebook
 
+### Try Sample
+
+```bash
+$ pod try PaperKit
+```
+
 ### Quick start
 
 PaperKit is available on [CocoaPods](http://cocoapods.org).  Add the following to your Podfile:
@@ -53,6 +59,37 @@ To control the respective CollectionViewController, override the following metho
     return [ContentViewController new];
 }
 ```
+
+### Usage
+
+#### PKWindow
+
+PKWindow can be hierarchically arranged the Window.
+PKWindow is managed by PKWindowManager.
+
+```objective-c
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    BackgroundViewController *backgroundViewController = [BackgroundViewController new];
+    self.window.rootViewController = backgroundViewController;
+    [self.window makeKeyAndVisible];
+    
+    [PKWindowManager managerWithBaseWindow:self.window];
+        
+    return YES;
+}
+
+```
+
+Create a new Window by passing the RootViewController to PKWindowManger.
+
+```objective-c
+ViewController *nextViewController = [ViewController new];
+[[PKWindowManager sharedManager] showWindowWithRootViewController:nextViewController];
+
+```
+
 
 ### Learn more
 
