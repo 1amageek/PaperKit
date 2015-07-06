@@ -66,6 +66,11 @@ static PKWindowManager  *sharedManager = nil;
 
 #pragma mark - PKWindowDelegate
 
+- (NSArray *)windowsOnBaseWindow
+{
+    return self.windows;
+}
+
 - (void)windowWillAppear:(PKWindow *)window
 {
     //self.baseWindow.userInteractionEnabled = NO;
