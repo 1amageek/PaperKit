@@ -1,7 +1,7 @@
 # PaperKit
 PaperKit is like Paper app of Facebook
 
-![sample](PaperKit.mov)
+![sample](PaperKit.gif)
 
 ### Try Sample
 
