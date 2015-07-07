@@ -40,12 +40,14 @@ To control the respective CollectionViewController, override the following metho
 ```objective-c
 - (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 8;
+    // override method
+    return 10;
 }
 
-- (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+- (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section onCategory:(NSInteger)category
 {
-    return 15;
+    // override method
+    return 10;
 }
 ```
 
