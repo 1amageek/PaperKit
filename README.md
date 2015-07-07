@@ -1,6 +1,8 @@
 # PaperKit
 PaperKit is like Paper app of Facebook. Paper is super cool user interface. PaperKit is a library that can be reproduced easily Paper of the user interface.
 
+ [![Platform](http://img.shields.io/cocoapods/p/PaperKit.svg)]()
+
 ![sample](PaperKit.gif)
 
 ### Try Sample
