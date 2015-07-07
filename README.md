@@ -1,5 +1,5 @@
 # PaperKit
-PaperKit is like Paper app of Facebook
+PaperKit is like Paper app of Facebook. Paper is super cool user interface. PaperKit is a library that can be reproduced easily Paper of the user interface.
 
 ![sample](PaperKit.gif)
 
