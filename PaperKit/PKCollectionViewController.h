@@ -20,9 +20,11 @@
 @protocol PKCollectionViewControllerDelegate;
 @interface PKCollectionViewController : UIViewController
 
-@property (nonatomic) PKContentCollectionView *collectionView;
 @property (nonatomic) PKCollectionViewFlowLayout *layout;
+
 @property (nonatomic) PKContentScrollView *scrollView;
+@property (nonatomic) PKContentCollectionView *collectionView;
+
 @property (nonatomic) CGFloat transitionProgress;
 @property (nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic) PKPanGestureRecognizer *panGestureRecognizer;

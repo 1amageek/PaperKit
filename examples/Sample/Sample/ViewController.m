@@ -21,7 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
-    _count = 2;
+    _count = 10;
     _button = [UIButton buttonWithType:UIButtonTypeInfoLight];
     [_button addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -39,7 +39,7 @@
     //[controller willMoveToParentViewController:self];
     //[controller.view removeFromSuperview];
     //[controller removeFromParentViewController];
-    _count = 5;
+    _count = 3;
     
     [controller reloadData];
     

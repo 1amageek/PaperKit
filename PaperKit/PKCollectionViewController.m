@@ -364,16 +364,11 @@
 
 - (void)reloadData
 {
+    CGRect rect = _collectionView.frame;
+    _collectionView.frame = (CGRect){rect.origin, CGSizeMake([self.layout calculateSize].width * self.zoomScale, rect.size.height)};
+    _scrollView.contentSize = rect.size;
     [_collectionView reloadData];
-    [_collectionView.collectionViewLayout invalidateLayout];
-    self.scrollView.contentSize = CGSizeMake([self.layout calculateSize].width * self.scrollView.zoomScale, self.scrollView.contentSize.height);
-    self.collectionView.frame = (CGRect){self.collectionView.frame.origin, CGSizeMake(self.scrollView.zoomScale * self.layout.collectionViewContentSize.width, self.layout.collectionViewContentSize.height)};
-    
-    NSLog(@"collection %@", NSStringFromCGRect(_collectionView.frame));
-    NSLog(@"scroll %@", NSStringFromCGRect(_scrollView.frame));
-    
-    //[self.collectionView setNeedsLayout];
-    //[self.scrollView setNeedsLayout];
+    [self.view setNeedsLayout];
 }
 
 - (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion
