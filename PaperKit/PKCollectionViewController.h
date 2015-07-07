@@ -11,6 +11,7 @@
 #import <POP/POPLayerExtras.h>
 #import "PKScrollView.h"
 #import "PKCollectionView.h"
+#import "PKContentScrollView.h"
 #import "PKContentCollectionView.h"
 #import "PKCollectionViewCell.h"
 #import "PKCollectionViewFlowLayout.h"
@@ -21,7 +22,7 @@
 
 @property (nonatomic) PKContentCollectionView *collectionView;
 @property (nonatomic) PKCollectionViewFlowLayout *layout;
-@property (nonatomic) UIScrollView *scrollView;
+@property (nonatomic) PKContentScrollView *scrollView;
 @property (nonatomic) CGFloat transitionProgress;
 @property (nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic) PKPanGestureRecognizer *panGestureRecognizer;
@@ -34,6 +35,7 @@
 - (NSArray *)visibleCells;
 - (NSArray *)indexPathsForVisibleItems;
 - (UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (void)reloadData;
 - (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion;
 
 @end

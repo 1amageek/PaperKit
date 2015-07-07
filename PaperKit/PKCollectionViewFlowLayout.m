@@ -53,10 +53,10 @@
     originX += self.sectionInset.left;
     originY += self.sectionInset.top;
     
-    NSInteger sections = [self.collectionView numberOfSections];
+    NSInteger sections = [self.collectionView.dataSource numberOfSectionsInCollectionView:self.collectionView];
     for (NSInteger section = 0; section < sections; section ++) {
         
-        NSInteger items = [self.collectionView numberOfItemsInSection:section];
+        NSInteger items = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:section];
         
         for (NSInteger item = 0; item < items; item ++) {
             
@@ -93,11 +93,11 @@
 {
     
     NSMutableArray *attributes = [NSMutableArray array];
-    NSInteger sections = [self.collectionView numberOfSections];
+    NSInteger sections = [self.collectionView.dataSource numberOfSectionsInCollectionView:self.collectionView];
     
     for (NSInteger section = 0; section < sections; section ++) {
         
-        NSInteger items = [self.collectionView numberOfItemsInSection:section];
+        NSInteger items = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:section];
         
         for (NSInteger item = 0; item < items; item ++) {
             
@@ -135,10 +135,10 @@
     originX += self.sectionInset.left;
     originY += self.sectionInset.top;
     
-    NSInteger sections = [self.collectionView numberOfSections];
+    NSInteger sections = [self.collectionView.dataSource numberOfSectionsInCollectionView:self.collectionView];
     for (NSInteger section = 0; section < sections; section ++) {
         
-        NSInteger items = [self.collectionView numberOfItemsInSection:section];
+        NSInteger items = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:section];
         
         for (NSInteger item = 0; item < items; item ++) {
             

@@ -49,7 +49,7 @@
         _collectionView.opaque = NO;
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.showsVerticalScrollIndicator = NO;
-        _scrollView = [[UIScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        _scrollView = [[PKContentScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         _scrollView.delaysContentTouches = NO;
         _scrollView.userInteractionEnabled = YES;
         _scrollView.minimumZoomScale = 0.3f;
@@ -360,6 +360,20 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return 3;
+}
+
+- (void)reloadData
+{
+    [_collectionView reloadData];
+    [_collectionView.collectionViewLayout invalidateLayout];
+    self.scrollView.contentSize = CGSizeMake([self.layout calculateSize].width * self.scrollView.zoomScale, self.scrollView.contentSize.height);
+    self.collectionView.frame = (CGRect){self.collectionView.frame.origin, CGSizeMake(self.scrollView.zoomScale * self.layout.collectionViewContentSize.width, self.layout.collectionViewContentSize.height)};
+    
+    NSLog(@"collection %@", NSStringFromCGRect(_collectionView.frame));
+    NSLog(@"scroll %@", NSStringFromCGRect(_scrollView.frame));
+    
+    //[self.collectionView setNeedsLayout];
+    //[self.scrollView setNeedsLayout];
 }
 
 - (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion

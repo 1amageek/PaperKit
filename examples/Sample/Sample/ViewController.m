@@ -10,16 +10,38 @@
 #import "ContentViewController.h"
 
 @interface ViewController ()
-
+@property (nonatomic) UIButton *button;
 @end
 
 @implementation ViewController
+{
+    NSInteger _count;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
+    _count = 2;
+    _button = [UIButton buttonWithType:UIButtonTypeInfoLight];
+    [_button addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [_button sizeToFit];
+    _button.center = self.view.center;
+    [self.view addSubview:_button];
+    
+}
+
+- (void)tapped:(UIButton *)button
+{
+    PKCollectionViewController *controller = [self foregroundViewControllerAtIndex:self.selectedCategory];
     
     
+    //[controller willMoveToParentViewController:self];
+    //[controller.view removeFromSuperview];
+    //[controller removeFromParentViewController];
+    _count = 5;
+    
+    [controller reloadData];
     
 }
 
@@ -40,12 +62,12 @@
 
 - (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 8;
+    return 10;
 }
 
-- (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+- (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section onCategory:(NSInteger)category
 {
-    return 15;
+    return _count;
 }
 
 - (UICollectionViewCell *)backgroundCollectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath

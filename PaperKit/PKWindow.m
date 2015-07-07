@@ -113,7 +113,7 @@
 
 - (BOOL)hasManyWindows
 {
-    return 1 < [self.manager windowsOnBaseWindow].count;
+    return 2 < [self.manager windowsOnBaseWindow].count;
 }
 
 - (NSArray *)childWindows

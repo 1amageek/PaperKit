@@ -272,6 +272,26 @@
 
 #pragma mark - <UICollectionViewDataSource>
 
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    if (self.collectionView == collectionView || self.overlayCollectionView == collectionView) {
+        return [self numberOfSectionsInBackgroundCollectionView:collectionView];
+    }
+    return [self numberOfSectionsInForegroundCollectionView:collectionView onCategory:self.selectedCategory];
+}
+
+- (NSInteger)numberOfSectionsInBackgroundCollectionView:(UICollectionView *)collectionView
+{
+    // override method
+    return 1;
+}
+
+- (NSInteger)numberOfSectionsInForegroundCollectionView:(UICollectionView *)collectionView onCategory:(NSInteger)category
+{
+    // override method
+    return 1;
+}
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (self.collectionView == collectionView || self.overlayCollectionView == collectionView) {
