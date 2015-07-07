@@ -31,6 +31,9 @@ Inherit the PKViewController
 @interface ViewController : PKViewController
 ```
 
+### Usage
+#### PKViewController
+
 The PKViewController there are multiple CollectionView.
 To control the respective CollectionViewController, override the following method.
 
@@ -61,8 +64,6 @@ To control the respective CollectionViewController, override the following metho
     return [ContentViewController new];
 }
 ```
-
-### Usage
 
 #### PKWindow
 
