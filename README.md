@@ -1,5 +1,10 @@
 # PaperKit
-PaperKit is like Paper app of Facebook
+PaperKit is like Paper app of Facebook. Paper is super cool user interface. PaperKit is a library that can be reproduced easily Paper of the user interface.
+
+
+ [![Version](http://img.shields.io/cocoapods/v/PaperKit.svg)](http://cocoapods.org/?q=PaperKit)
+ [![Platform](http://img.shields.io/cocoapods/p/PaperKit.svg)]()
+ [![License](http://img.shields.io/cocoapods/l/PaperKit.svg)](https://github.com/1amageek/PaperKit/blob/master/LICENSE)
 
 ![sample](PaperKit.gif)
 
@@ -31,18 +36,23 @@ Inherit the PKViewController
 @interface ViewController : PKViewController
 ```
 
+### Usage
+#### PKViewController
+
 The PKViewController there are multiple CollectionView.
 To control the respective CollectionViewController, override the following method.
 
 ```objective-c
 - (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 8;
+    // override method
+    return 10;
 }
 
-- (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+- (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section onCategory:(NSInteger)category
 {
-    return 15;
+    // override method
+    return 10;
 }
 ```
 
@@ -61,8 +71,6 @@ To control the respective CollectionViewController, override the following metho
     return [ContentViewController new];
 }
 ```
-
-### Usage
 
 #### PKWindow
 
@@ -96,3 +104,4 @@ ViewController *nextViewController = [ViewController new];
 ### Learn more
 
 * Read the [Design Details: Paper by Facebook](http://blog.brianlovin.com/design-details-paper-by-facebook/)
+* [AsyncDisplayKit](https://github.com/facebook/AsyncDisplayKit)
