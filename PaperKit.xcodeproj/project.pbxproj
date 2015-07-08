@@ -8,20 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		023066691B5185A61F1B3BA8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC63CE84E0C6B70E54C88966 /* libPods.a */; };
-		8C3B8F7D1B4C078100DB64B8 /* PKCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F641B4C078100DB64B8 /* PKCollectionView.m */; };
-		8C3B8F7E1B4C078100DB64B8 /* PKCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F661B4C078100DB64B8 /* PKCollectionViewCell.m */; };
-		8C3B8F7F1B4C078100DB64B8 /* PKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F681B4C078100DB64B8 /* PKCollectionViewController.m */; };
-		8C3B8F801B4C078100DB64B8 /* PKCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F6A1B4C078100DB64B8 /* PKCollectionViewFlowLayout.m */; };
-		8C3B8F811B4C078100DB64B8 /* PKContentCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F6C1B4C078100DB64B8 /* PKContentCollectionView.m */; };
-		8C3B8F821B4C078100DB64B8 /* PKContentScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F6E1B4C078100DB64B8 /* PKContentScrollView.m */; };
-		8C3B8F831B4C078100DB64B8 /* PKContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F701B4C078100DB64B8 /* PKContentViewController.m */; };
-		8C3B8F841B4C078100DB64B8 /* PKPanGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F721B4C078100DB64B8 /* PKPanGestureRecognizer.m */; };
-		8C3B8F851B4C078100DB64B8 /* PKScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F741B4C078100DB64B8 /* PKScrollView.m */; };
-		8C3B8F861B4C078100DB64B8 /* PKTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F761B4C078100DB64B8 /* PKTableView.m */; };
-		8C3B8F871B4C078100DB64B8 /* PKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F781B4C078100DB64B8 /* PKViewController.m */; };
-		8C3B8F881B4C078100DB64B8 /* PKWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F7A1B4C078100DB64B8 /* PKWindow.m */; };
-		8C3B8F891B4C078100DB64B8 /* PKWindowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B8F7C1B4C078100DB64B8 /* PKWindowManager.m */; };
 		8C837A4B1B2BF1CC00B169FD /* PaperKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A4A1B2BF1CC00B169FD /* PaperKitTests.m */; };
+		8C96997B1B4CADC4008F9CD9 /* PKCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9699621B4CADC4008F9CD9 /* PKCollectionView.m */; };
+		8C96997C1B4CADC4008F9CD9 /* PKCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9699641B4CADC4008F9CD9 /* PKCollectionViewCell.m */; };
+		8C96997D1B4CADC4008F9CD9 /* PKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9699661B4CADC4008F9CD9 /* PKCollectionViewController.m */; };
+		8C96997E1B4CADC4008F9CD9 /* PKCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9699681B4CADC4008F9CD9 /* PKCollectionViewFlowLayout.m */; };
+		8C96997F1B4CADC4008F9CD9 /* PKContentCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C96996A1B4CADC4008F9CD9 /* PKContentCollectionView.m */; };
+		8C9699801B4CADC4008F9CD9 /* PKContentScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C96996C1B4CADC4008F9CD9 /* PKContentScrollView.m */; };
+		8C9699811B4CADC4008F9CD9 /* PKContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C96996E1B4CADC4008F9CD9 /* PKContentViewController.m */; };
+		8C9699821B4CADC4008F9CD9 /* PKPanGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9699701B4CADC4008F9CD9 /* PKPanGestureRecognizer.m */; };
+		8C9699831B4CADC4008F9CD9 /* PKScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9699721B4CADC4008F9CD9 /* PKScrollView.m */; };
+		8C9699841B4CADC4008F9CD9 /* PKTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9699741B4CADC4008F9CD9 /* PKTableView.m */; };
+		8C9699851B4CADC4008F9CD9 /* PKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9699761B4CADC4008F9CD9 /* PKViewController.m */; };
+		8C9699861B4CADC4008F9CD9 /* PKWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9699781B4CADC4008F9CD9 /* PKWindow.m */; };
+		8C9699871B4CADC4008F9CD9 /* PKWindowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C96997A1B4CADC4008F9CD9 /* PKWindowManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,37 +36,37 @@
 
 /* Begin PBXFileReference section */
 		26356A34CDED90DE68B8436B /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		8C3B8F631B4C078100DB64B8 /* PKCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKCollectionView.h; sourceTree = "<group>"; };
-		8C3B8F641B4C078100DB64B8 /* PKCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCollectionView.m; sourceTree = "<group>"; };
-		8C3B8F651B4C078100DB64B8 /* PKCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKCollectionViewCell.h; sourceTree = "<group>"; };
-		8C3B8F661B4C078100DB64B8 /* PKCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCollectionViewCell.m; sourceTree = "<group>"; };
-		8C3B8F671B4C078100DB64B8 /* PKCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKCollectionViewController.h; sourceTree = "<group>"; };
-		8C3B8F681B4C078100DB64B8 /* PKCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCollectionViewController.m; sourceTree = "<group>"; };
-		8C3B8F691B4C078100DB64B8 /* PKCollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKCollectionViewFlowLayout.h; sourceTree = "<group>"; };
-		8C3B8F6A1B4C078100DB64B8 /* PKCollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCollectionViewFlowLayout.m; sourceTree = "<group>"; };
-		8C3B8F6B1B4C078100DB64B8 /* PKContentCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKContentCollectionView.h; sourceTree = "<group>"; };
-		8C3B8F6C1B4C078100DB64B8 /* PKContentCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKContentCollectionView.m; sourceTree = "<group>"; };
-		8C3B8F6D1B4C078100DB64B8 /* PKContentScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKContentScrollView.h; sourceTree = "<group>"; };
-		8C3B8F6E1B4C078100DB64B8 /* PKContentScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKContentScrollView.m; sourceTree = "<group>"; };
-		8C3B8F6F1B4C078100DB64B8 /* PKContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKContentViewController.h; sourceTree = "<group>"; };
-		8C3B8F701B4C078100DB64B8 /* PKContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKContentViewController.m; sourceTree = "<group>"; };
-		8C3B8F711B4C078100DB64B8 /* PKPanGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKPanGestureRecognizer.h; sourceTree = "<group>"; };
-		8C3B8F721B4C078100DB64B8 /* PKPanGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKPanGestureRecognizer.m; sourceTree = "<group>"; };
-		8C3B8F731B4C078100DB64B8 /* PKScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKScrollView.h; sourceTree = "<group>"; };
-		8C3B8F741B4C078100DB64B8 /* PKScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKScrollView.m; sourceTree = "<group>"; };
-		8C3B8F751B4C078100DB64B8 /* PKTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKTableView.h; sourceTree = "<group>"; };
-		8C3B8F761B4C078100DB64B8 /* PKTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKTableView.m; sourceTree = "<group>"; };
-		8C3B8F771B4C078100DB64B8 /* PKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKViewController.h; sourceTree = "<group>"; };
-		8C3B8F781B4C078100DB64B8 /* PKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKViewController.m; sourceTree = "<group>"; };
-		8C3B8F791B4C078100DB64B8 /* PKWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindow.h; sourceTree = "<group>"; };
-		8C3B8F7A1B4C078100DB64B8 /* PKWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindow.m; sourceTree = "<group>"; };
-		8C3B8F7B1B4C078100DB64B8 /* PKWindowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindowManager.h; sourceTree = "<group>"; };
-		8C3B8F7C1B4C078100DB64B8 /* PKWindowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindowManager.m; sourceTree = "<group>"; };
 		8C837A2B1B2BF1CC00B169FD /* PaperKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C837A2F1B2BF1CC00B169FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C837A441B2BF1CC00B169FD /* PaperKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaperKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C837A491B2BF1CC00B169FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C837A4A1B2BF1CC00B169FD /* PaperKitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaperKitTests.m; sourceTree = "<group>"; };
+		8C9699611B4CADC4008F9CD9 /* PKCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKCollectionView.h; sourceTree = "<group>"; };
+		8C9699621B4CADC4008F9CD9 /* PKCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCollectionView.m; sourceTree = "<group>"; };
+		8C9699631B4CADC4008F9CD9 /* PKCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKCollectionViewCell.h; sourceTree = "<group>"; };
+		8C9699641B4CADC4008F9CD9 /* PKCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCollectionViewCell.m; sourceTree = "<group>"; };
+		8C9699651B4CADC4008F9CD9 /* PKCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKCollectionViewController.h; sourceTree = "<group>"; };
+		8C9699661B4CADC4008F9CD9 /* PKCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCollectionViewController.m; sourceTree = "<group>"; };
+		8C9699671B4CADC4008F9CD9 /* PKCollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKCollectionViewFlowLayout.h; sourceTree = "<group>"; };
+		8C9699681B4CADC4008F9CD9 /* PKCollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKCollectionViewFlowLayout.m; sourceTree = "<group>"; };
+		8C9699691B4CADC4008F9CD9 /* PKContentCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKContentCollectionView.h; sourceTree = "<group>"; };
+		8C96996A1B4CADC4008F9CD9 /* PKContentCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKContentCollectionView.m; sourceTree = "<group>"; };
+		8C96996B1B4CADC4008F9CD9 /* PKContentScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKContentScrollView.h; sourceTree = "<group>"; };
+		8C96996C1B4CADC4008F9CD9 /* PKContentScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKContentScrollView.m; sourceTree = "<group>"; };
+		8C96996D1B4CADC4008F9CD9 /* PKContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKContentViewController.h; sourceTree = "<group>"; };
+		8C96996E1B4CADC4008F9CD9 /* PKContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKContentViewController.m; sourceTree = "<group>"; };
+		8C96996F1B4CADC4008F9CD9 /* PKPanGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKPanGestureRecognizer.h; sourceTree = "<group>"; };
+		8C9699701B4CADC4008F9CD9 /* PKPanGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKPanGestureRecognizer.m; sourceTree = "<group>"; };
+		8C9699711B4CADC4008F9CD9 /* PKScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKScrollView.h; sourceTree = "<group>"; };
+		8C9699721B4CADC4008F9CD9 /* PKScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKScrollView.m; sourceTree = "<group>"; };
+		8C9699731B4CADC4008F9CD9 /* PKTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKTableView.h; sourceTree = "<group>"; };
+		8C9699741B4CADC4008F9CD9 /* PKTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKTableView.m; sourceTree = "<group>"; };
+		8C9699751B4CADC4008F9CD9 /* PKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKViewController.h; sourceTree = "<group>"; };
+		8C9699761B4CADC4008F9CD9 /* PKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKViewController.m; sourceTree = "<group>"; };
+		8C9699771B4CADC4008F9CD9 /* PKWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindow.h; sourceTree = "<group>"; };
+		8C9699781B4CADC4008F9CD9 /* PKWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindow.m; sourceTree = "<group>"; };
+		8C9699791B4CADC4008F9CD9 /* PKWindowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindowManager.h; sourceTree = "<group>"; };
+		8C96997A1B4CADC4008F9CD9 /* PKWindowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindowManager.m; sourceTree = "<group>"; };
 		8C990B6B1B4A30F900EB9AAC /* PaperKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaperKit.h; sourceTree = "<group>"; };
 		CC63CE84E0C6B70E54C88966 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D860E867AC355A559EF1B3FD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -157,32 +157,32 @@
 		8CB002771B3B08A900967B23 /* PaperKit */ = {
 			isa = PBXGroup;
 			children = (
-				8C3B8F631B4C078100DB64B8 /* PKCollectionView.h */,
-				8C3B8F641B4C078100DB64B8 /* PKCollectionView.m */,
-				8C3B8F651B4C078100DB64B8 /* PKCollectionViewCell.h */,
-				8C3B8F661B4C078100DB64B8 /* PKCollectionViewCell.m */,
-				8C3B8F671B4C078100DB64B8 /* PKCollectionViewController.h */,
-				8C3B8F681B4C078100DB64B8 /* PKCollectionViewController.m */,
-				8C3B8F691B4C078100DB64B8 /* PKCollectionViewFlowLayout.h */,
-				8C3B8F6A1B4C078100DB64B8 /* PKCollectionViewFlowLayout.m */,
-				8C3B8F6B1B4C078100DB64B8 /* PKContentCollectionView.h */,
-				8C3B8F6C1B4C078100DB64B8 /* PKContentCollectionView.m */,
-				8C3B8F6D1B4C078100DB64B8 /* PKContentScrollView.h */,
-				8C3B8F6E1B4C078100DB64B8 /* PKContentScrollView.m */,
-				8C3B8F6F1B4C078100DB64B8 /* PKContentViewController.h */,
-				8C3B8F701B4C078100DB64B8 /* PKContentViewController.m */,
-				8C3B8F711B4C078100DB64B8 /* PKPanGestureRecognizer.h */,
-				8C3B8F721B4C078100DB64B8 /* PKPanGestureRecognizer.m */,
-				8C3B8F731B4C078100DB64B8 /* PKScrollView.h */,
-				8C3B8F741B4C078100DB64B8 /* PKScrollView.m */,
-				8C3B8F751B4C078100DB64B8 /* PKTableView.h */,
-				8C3B8F761B4C078100DB64B8 /* PKTableView.m */,
-				8C3B8F771B4C078100DB64B8 /* PKViewController.h */,
-				8C3B8F781B4C078100DB64B8 /* PKViewController.m */,
-				8C3B8F791B4C078100DB64B8 /* PKWindow.h */,
-				8C3B8F7A1B4C078100DB64B8 /* PKWindow.m */,
-				8C3B8F7B1B4C078100DB64B8 /* PKWindowManager.h */,
-				8C3B8F7C1B4C078100DB64B8 /* PKWindowManager.m */,
+				8C9699611B4CADC4008F9CD9 /* PKCollectionView.h */,
+				8C9699621B4CADC4008F9CD9 /* PKCollectionView.m */,
+				8C9699631B4CADC4008F9CD9 /* PKCollectionViewCell.h */,
+				8C9699641B4CADC4008F9CD9 /* PKCollectionViewCell.m */,
+				8C9699651B4CADC4008F9CD9 /* PKCollectionViewController.h */,
+				8C9699661B4CADC4008F9CD9 /* PKCollectionViewController.m */,
+				8C9699671B4CADC4008F9CD9 /* PKCollectionViewFlowLayout.h */,
+				8C9699681B4CADC4008F9CD9 /* PKCollectionViewFlowLayout.m */,
+				8C9699691B4CADC4008F9CD9 /* PKContentCollectionView.h */,
+				8C96996A1B4CADC4008F9CD9 /* PKContentCollectionView.m */,
+				8C96996B1B4CADC4008F9CD9 /* PKContentScrollView.h */,
+				8C96996C1B4CADC4008F9CD9 /* PKContentScrollView.m */,
+				8C96996D1B4CADC4008F9CD9 /* PKContentViewController.h */,
+				8C96996E1B4CADC4008F9CD9 /* PKContentViewController.m */,
+				8C96996F1B4CADC4008F9CD9 /* PKPanGestureRecognizer.h */,
+				8C9699701B4CADC4008F9CD9 /* PKPanGestureRecognizer.m */,
+				8C9699711B4CADC4008F9CD9 /* PKScrollView.h */,
+				8C9699721B4CADC4008F9CD9 /* PKScrollView.m */,
+				8C9699731B4CADC4008F9CD9 /* PKTableView.h */,
+				8C9699741B4CADC4008F9CD9 /* PKTableView.m */,
+				8C9699751B4CADC4008F9CD9 /* PKViewController.h */,
+				8C9699761B4CADC4008F9CD9 /* PKViewController.m */,
+				8C9699771B4CADC4008F9CD9 /* PKWindow.h */,
+				8C9699781B4CADC4008F9CD9 /* PKWindow.m */,
+				8C9699791B4CADC4008F9CD9 /* PKWindowManager.h */,
+				8C96997A1B4CADC4008F9CD9 /* PKWindowManager.m */,
 				8C990B6B1B4A30F900EB9AAC /* PaperKit.h */,
 			);
 			name = PaperKit;
@@ -328,19 +328,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C3B8F871B4C078100DB64B8 /* PKViewController.m in Sources */,
-				8C3B8F891B4C078100DB64B8 /* PKWindowManager.m in Sources */,
-				8C3B8F811B4C078100DB64B8 /* PKContentCollectionView.m in Sources */,
-				8C3B8F7F1B4C078100DB64B8 /* PKCollectionViewController.m in Sources */,
-				8C3B8F851B4C078100DB64B8 /* PKScrollView.m in Sources */,
-				8C3B8F821B4C078100DB64B8 /* PKContentScrollView.m in Sources */,
-				8C3B8F7D1B4C078100DB64B8 /* PKCollectionView.m in Sources */,
-				8C3B8F841B4C078100DB64B8 /* PKPanGestureRecognizer.m in Sources */,
-				8C3B8F861B4C078100DB64B8 /* PKTableView.m in Sources */,
-				8C3B8F881B4C078100DB64B8 /* PKWindow.m in Sources */,
-				8C3B8F7E1B4C078100DB64B8 /* PKCollectionViewCell.m in Sources */,
-				8C3B8F801B4C078100DB64B8 /* PKCollectionViewFlowLayout.m in Sources */,
-				8C3B8F831B4C078100DB64B8 /* PKContentViewController.m in Sources */,
+				8C9699851B4CADC4008F9CD9 /* PKViewController.m in Sources */,
+				8C9699871B4CADC4008F9CD9 /* PKWindowManager.m in Sources */,
+				8C96997F1B4CADC4008F9CD9 /* PKContentCollectionView.m in Sources */,
+				8C96997D1B4CADC4008F9CD9 /* PKCollectionViewController.m in Sources */,
+				8C9699831B4CADC4008F9CD9 /* PKScrollView.m in Sources */,
+				8C9699801B4CADC4008F9CD9 /* PKContentScrollView.m in Sources */,
+				8C96997B1B4CADC4008F9CD9 /* PKCollectionView.m in Sources */,
+				8C9699821B4CADC4008F9CD9 /* PKPanGestureRecognizer.m in Sources */,
+				8C9699841B4CADC4008F9CD9 /* PKTableView.m in Sources */,
+				8C9699861B4CADC4008F9CD9 /* PKWindow.m in Sources */,
+				8C96997C1B4CADC4008F9CD9 /* PKCollectionViewCell.m in Sources */,
+				8C96997E1B4CADC4008F9CD9 /* PKCollectionViewFlowLayout.m in Sources */,
+				8C9699811B4CADC4008F9CD9 /* PKContentViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

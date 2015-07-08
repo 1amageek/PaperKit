@@ -313,6 +313,19 @@
     return 10;
 }
 
+- (void)reloadBackgroundData
+{
+    // TODO Block when a user is touching
+    [self.collectionView reloadData];
+    [self.overlayCollectionView reloadData];
+}
+
+- (void)reloadForegroundDataOnCategory:(NSInteger)category
+{
+    // TODO　Block when a user is touching
+    [[self foregroundViewControllerAtIndex:category] reloadData];
+}
+
 #pragma mark - <UICollectionViewDelegate>
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
@@ -325,14 +338,6 @@
     
     // overlay
     if (self.overlayCollectionView == collectionView) {
-        PKCollectionViewController *viewController = [self viewControllerAtIndex:indexPath.item];
-        if (![self.childViewControllers containsObject:viewController]) {
-            viewController.delegate = self;
-            [self addChildViewController:viewController];
-            [cell addSubview:viewController.view];
-            [viewController didMoveToParentViewController:self];
-            ((_PKOverlayCollectionViewCell *)cell).viewController = viewController;
-        }
         return;
     }
     
@@ -341,6 +346,44 @@
         return;
     }
     
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    // background
+    if (self.collectionView == collectionView) {
+        return [self backgroundCollectionView:collectionView cellForItemAtIndexPath:indexPath];
+    }
+    
+    // overlay
+    if (self.overlayCollectionView == collectionView) {
+        _PKOverlayCollectionViewCell *cell = (_PKOverlayCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"_PKOverlayCollectionViewCell" forIndexPath:indexPath];
+        PKCollectionViewController *viewController = [self viewControllerAtIndex:indexPath.item];
+        if (![self.childViewControllers containsObject:viewController]) {
+            viewController.delegate = self;
+            [self addChildViewController:viewController];
+            [cell addSubview:viewController.view];
+            [viewController didMoveToParentViewController:self];
+            ((_PKOverlayCollectionViewCell *)cell).viewController = viewController;
+        }
+        return cell;
+    }
+    
+    // foreground
+    PKCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PKCollectionViewCell" forIndexPath:indexPath];
+    PKCollectionViewController *parentViewController = [self foregroundViewControllerAtCollectionView:collectionView];
+    NSUInteger index = [self indexAtCollectionView:collectionView];
+    PKContentViewController *viewController = [self _collectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:indexPath onCategory:index];
+    
+    if (![parentViewController.childViewControllers containsObject:viewController]) {
+        [parentViewController addChildViewController:viewController];
+        [cell addSubview:viewController.view];
+        [parentViewController didMoveToParentViewController:self];
+        ((PKCollectionViewCell *)cell).viewController = viewController;
+    }
+    cell.transitionProgress = parentViewController.transitionProgress;
+    return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
@@ -369,36 +412,6 @@
         [viewController.view removeFromSuperview];
         [viewController removeFromParentViewController];
     }
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    // background
-    if (self.collectionView == collectionView) {
-        return [self backgroundCollectionView:collectionView cellForItemAtIndexPath:indexPath];
-    }
-    
-    // overlay
-    if (self.overlayCollectionView == collectionView) {
-        _PKOverlayCollectionViewCell *cell = (_PKOverlayCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"_PKOverlayCollectionViewCell" forIndexPath:indexPath];
-        return cell;
-    }
-    
-    // foreground
-    PKCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PKCollectionViewCell" forIndexPath:indexPath];
-    PKCollectionViewController *parentViewController = [self foregroundViewControllerAtCollectionView:collectionView];
-    NSUInteger index = [self indexAtCollectionView:collectionView];
-    PKContentViewController *viewController = [self _collectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:indexPath onCategory:index];
-    
-    if (![parentViewController.childViewControllers containsObject:viewController]) {
-        [parentViewController addChildViewController:viewController];
-        [cell addSubview:viewController.view];
-        [parentViewController didMoveToParentViewController:self];
-        ((PKCollectionViewCell *)cell).viewController = viewController;
-    }
-    cell.transitionProgress = parentViewController.transitionProgress;
-    return cell;
 }
 
 - (UICollectionViewCell *)backgroundCollectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
