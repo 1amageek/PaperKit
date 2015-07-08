@@ -72,6 +72,17 @@ To control the respective CollectionViewController, override the following metho
 }
 ```
 
+To reload the datasource, run the following method.
+
+```objective-c
+// backgroundCollectionView dataSource reload
+[self reloadBackgroundData];
+
+// foregroundCollectionView dataSource reload
+[self reloadForegroundDataOnCategory:self.selectedCategory];
+
+```
+
 #### PKWindow
 
 PKWindow can be hierarchically arranged the Window.
