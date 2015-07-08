@@ -10,38 +10,48 @@
 #import "ContentViewController.h"
 
 @interface ViewController ()
-@property (nonatomic) UIButton *button;
+@property (nonatomic) UIButton *reloadForegroundButton;
+@property (nonatomic) UIButton *reloadbackgroundButton;
+@property (nonatomic) NSArray *backgroundData;
+@property (nonatomic) NSArray *foregroundData;
 @end
 
 @implementation ViewController
-{
-    NSInteger _count;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
-    _count = 10;
-    _button = [UIButton buttonWithType:UIButtonTypeInfoLight];
-    [_button addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
     
-    [_button sizeToFit];
-    _button.center = self.view.center;
-    [self.view addSubview:_button];
+    _backgroundData = @[@"0"];
+    _foregroundData = @[@"0",@"1",@"2",@"3",@"4"];
+    
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
+    _reloadForegroundButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_reloadForegroundButton setTitle:@"reload foreground" forState:UIControlStateNormal];
+    [_reloadForegroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
+    [_reloadForegroundButton sizeToFit];
+    _reloadForegroundButton.center = CGPointMake(self.view.center.x, self.view.center.x - 30);
+    [self.view addSubview:_reloadForegroundButton];
+    
+    _reloadbackgroundButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_reloadbackgroundButton setTitle:@"reload background" forState:UIControlStateNormal];
+    [_reloadbackgroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
+    [_reloadbackgroundButton sizeToFit];
+    _reloadbackgroundButton.center = CGPointMake(self.view.center.x, self.view.center.x + 30);
+    [self.view addSubview:_reloadbackgroundButton];
     
 }
 
 - (void)tapped:(UIButton *)button
 {
-    PKCollectionViewController *controller = [self foregroundViewControllerAtIndex:self.selectedCategory];
+    if (button == _reloadbackgroundButton) {
+        _backgroundData = @[@"0",@"1",@"2"];
+        [self reloadBackgroundData];
+    }
     
-    
-    //[controller willMoveToParentViewController:self];
-    //[controller.view removeFromSuperview];
-    //[controller removeFromParentViewController];
-    _count = 3;
-    
-    [controller reloadData];
+    if (button == _reloadForegroundButton) {
+        _foregroundData = @[@"0",@"1",@"2"];
+        [self reloadForegroundDataOnCategory:self.selectedCategory];
+    }
     
 }
 
@@ -62,12 +72,12 @@
 
 - (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 10;
+    return _backgroundData.count;
 }
 
 - (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section onCategory:(NSInteger)category
 {
-    return _count;
+    return _foregroundData.count;
 }
 
 - (UICollectionViewCell *)backgroundCollectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
