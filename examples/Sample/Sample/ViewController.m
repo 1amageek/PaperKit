@@ -69,6 +69,10 @@
         [dataSource addObject:@"insert"];
         [dataSource addObject:@"insert"];
         [dataSource addObject:@"insert"];
+        [dataSource addObject:@"insert"];
+        [dataSource addObject:@"insert"];
+        [dataSource addObject:@"insert"];
+        [dataSource addObject:@"insert"];
         _foregroundData = dataSource;
         
         NSMutableArray *insertIndexPaths = @[].mutableCopy;
@@ -76,6 +80,10 @@
         [insertIndexPaths addObject:[NSIndexPath indexPathForItem:1 inSection:0]];
         [insertIndexPaths addObject:[NSIndexPath indexPathForItem:2 inSection:0]];
         [insertIndexPaths addObject:[NSIndexPath indexPathForItem:3 inSection:0]];
+        [insertIndexPaths addObject:[NSIndexPath indexPathForItem:4 inSection:0]];
+        [insertIndexPaths addObject:[NSIndexPath indexPathForItem:5 inSection:0]];
+        [insertIndexPaths addObject:[NSIndexPath indexPathForItem:6 inSection:0]];
+        [insertIndexPaths addObject:[NSIndexPath indexPathForItem:7 inSection:0]];
 
         
         

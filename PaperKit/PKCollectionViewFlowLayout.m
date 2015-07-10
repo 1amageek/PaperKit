@@ -216,7 +216,7 @@
     if ([self.insertPaths containsObject:itemIndexPath]) {
         CGFloat translationX = - (attributes.frame.origin.x + attributes.frame.size.width * 2);
         POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerTranslationX];
-        animation.beginTime = CACurrentMediaTime() + 0.15 * (self.insertPaths.count - itemIndexPath.item);
+        animation.beginTime = CACurrentMediaTime() + 0.15 * (self.insertPaths.count - 1 - itemIndexPath.item);
         animation.fromValue = @(translationX);
         animation.toValue = @(0);
         attributes.animation = animation;

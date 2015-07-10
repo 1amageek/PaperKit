@@ -368,30 +368,38 @@
     // overlay
     if (self.overlayCollectionView == collectionView) {
         _PKOverlayCollectionViewCell *cell = (_PKOverlayCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"_PKOverlayCollectionViewCell" forIndexPath:indexPath];
-        PKCollectionViewController *viewController = [self viewControllerAtIndex:indexPath.item];
-        if (![self.childViewControllers containsObject:viewController]) {
-            viewController.delegate = self;
-            [self addChildViewController:viewController];
-            [cell addSubview:viewController.view];
-            [viewController didMoveToParentViewController:self];
-            ((_PKOverlayCollectionViewCell *)cell).viewController = viewController;
-        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            PKCollectionViewController *viewController = [self viewControllerAtIndex:indexPath.item];
+            if (![self.childViewControllers containsObject:viewController]) {
+                viewController.delegate = self;
+                [self addChildViewController:viewController];
+                [cell addSubview:viewController.view];
+                [viewController didMoveToParentViewController:self];
+                ((_PKOverlayCollectionViewCell *)cell).viewController = viewController;
+            }
+        });
         return cell;
     }
     
     // foreground
-    PKCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PKCollectionViewCell" forIndexPath:indexPath];
-    PKCollectionViewController *parentViewController = [self foregroundViewControllerAtCollectionView:collectionView];
-    NSUInteger index = [self indexAtCollectionView:collectionView];
-    PKContentViewController *viewController = [self _collectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:indexPath onCategory:index];
     
-    if (![parentViewController.childViewControllers containsObject:viewController]) {
-        [parentViewController addChildViewController:viewController];
-        [cell addSubview:viewController.view];
-        [parentViewController didMoveToParentViewController:self];
-        ((PKCollectionViewCell *)cell).viewController = viewController;
-    }
-    cell.transitionProgress = parentViewController.transitionProgress;
+    PKCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PKCollectionViewCell" forIndexPath:indexPath];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        PKCollectionViewController *parentViewController = [self foregroundViewControllerAtCollectionView:collectionView];
+        NSUInteger index = [self indexAtCollectionView:collectionView];
+        PKContentViewController *viewController = [self _collectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:indexPath onCategory:index];
+        
+        if (![parentViewController.childViewControllers containsObject:viewController]) {
+            [parentViewController addChildViewController:viewController];
+            [cell addSubview:viewController.view];
+            [parentViewController didMoveToParentViewController:self];
+            ((PKCollectionViewCell *)cell).viewController = viewController;
+        }
+        cell.transitionProgress = parentViewController.transitionProgress;
+    });
+
     cell.backgroundColor = [UIColor whiteColor];
     return cell;
 }

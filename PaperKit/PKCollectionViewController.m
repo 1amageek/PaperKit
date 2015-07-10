@@ -463,7 +463,6 @@
             _previousScale = _initialTouchScale;
             _initialTouchContentOffset = self.scrollView.contentOffset;
 
-            
             self.selectedIndexPath = [_collectionView indexPathForItemAtPoint:[recognizer locationInView:self.collectionView]];
             
             break;

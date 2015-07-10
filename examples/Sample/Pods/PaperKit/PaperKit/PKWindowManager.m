@@ -48,7 +48,7 @@ static PKWindowManager  *sharedManager = nil;
 
 - (PKWindow *)showWindowWithRootViewController:(UIViewController *)rootViewController
 {
-    return[self showWindowWithRootViewController:rootViewController animated:YES];
+    return [self showWindowWithRootViewController:rootViewController animated:YES];
 }
 
 - (PKWindow *)showWindowWithRootViewController:(UIViewController *)rootViewController animated:(BOOL)animated
