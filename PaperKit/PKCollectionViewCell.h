@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PKCollectionViewFlowLayout.h"
 #import "PKContentViewController.h"
 
-@interface PKCollectionViewCell : UICollectionViewCell
+@interface PKCollectionViewCell : UICollectionViewCell <POPAnimationDelegate>
 
 @property (nonatomic) CGFloat transitionProgress;
 @property (nonatomic) PKContentViewController *viewController;

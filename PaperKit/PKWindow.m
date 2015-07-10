@@ -35,7 +35,7 @@
     CGPoint _initialTouchPosition;
 }
 
-- (nonnull instancetype)initWithCoder:(nonnull NSCoder *)aDecoder
+- (instancetype)initWithCoder:(nonnull NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
@@ -113,7 +113,7 @@
 
 - (BOOL)hasManyWindows
 {
-    return 2 < [self.manager windowsOnBaseWindow].count;
+    return 1 < [self.manager windowsOnBaseWindow].count;
 }
 
 - (NSArray *)childWindows

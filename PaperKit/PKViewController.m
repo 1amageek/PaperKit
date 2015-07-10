@@ -71,7 +71,7 @@
     return self;
 }
 
-- (nonnull instancetype)initWithCoder:(nonnull NSCoder *)aDecoder
+- (instancetype)initWithCoder:(nonnull NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
@@ -80,7 +80,7 @@
     return self;
 }
 
-- (nonnull instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil
+- (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -326,6 +326,15 @@
     [[self foregroundViewControllerAtIndex:category] reloadData];
 }
 
+- (void)foregroundCollectionViewOnCategory:(NSInteger)category performBatchUpdates:(void (^)(PKCollectionViewController *controller))updates completion:(void (^)(BOOL finished))completion
+{
+    // TODO　Block when a user is touching
+    PKCollectionViewController *viewController = [self foregroundViewControllerAtIndex:category];
+    [viewController performBatchUpdates:^(){
+        updates(viewController);
+    } completion:completion];
+}
+
 #pragma mark - <UICollectionViewDelegate>
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
@@ -383,6 +392,7 @@
         ((PKCollectionViewCell *)cell).viewController = viewController;
     }
     cell.transitionProgress = parentViewController.transitionProgress;
+    cell.backgroundColor = [UIColor whiteColor];
     return cell;
 }
 

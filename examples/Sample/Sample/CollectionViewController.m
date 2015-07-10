@@ -40,10 +40,10 @@
     
     if (button == _insertForegroundButton) {
         
-    
-        NSLog(@"%@",[self.collectionView visibleCells]);
-        /*
-
+        [_dataSource addObject:@"insert"];
+        [_dataSource addObject:@"insert"];
+        [_dataSource addObject:@"insert"];
+        [_dataSource addObject:@"insert"];
         [_dataSource addObject:@"insert"];
         [_dataSource addObject:@"insert"];
         [_dataSource addObject:@"insert"];
@@ -54,23 +54,19 @@
         [insertIndexPaths addObject:[NSIndexPath indexPathForItem:1 inSection:0]];
         [insertIndexPaths addObject:[NSIndexPath indexPathForItem:2 inSection:0]];
         [insertIndexPaths addObject:[NSIndexPath indexPathForItem:3 inSection:0]];
+        [insertIndexPaths addObject:[NSIndexPath indexPathForItem:4 inSection:0]];
+        [insertIndexPaths addObject:[NSIndexPath indexPathForItem:5 inSection:0]];
+        [insertIndexPaths addObject:[NSIndexPath indexPathForItem:6 inSection:0]];
+        [insertIndexPaths addObject:[NSIndexPath indexPathForItem:7 inSection:0]];
         
         
 
         [self performBatchUpdates:^{
             [self.collectionView insertItemsAtIndexPaths:insertIndexPaths];
         } completion:^(BOOL finished) {
-            
-        }];
-        */
         
-        /*
-         [self foregroundCollectionViewOnCategory:self.selectedCategory performBatchUpdates:^(PKCollectionViewController *controller){
-         [controller.collectionView insertItemsAtIndexPaths:insertIndexPaths];
-         } completion:^(BOOL finished) {
-         
-         }];
-         */
+        }];
+        
     }
     
 }

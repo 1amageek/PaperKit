@@ -19,8 +19,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    //BackgroundViewController *viewController = [BackgroundViewController new];
-    CollectionViewController *viewController = [CollectionViewController new];
+    BackgroundViewController *viewController = [BackgroundViewController new];
+    //CollectionViewController *viewController = [CollectionViewController new];
     self.window.rootViewController = viewController;
     [self.window makeKeyAndVisible];
     

@@ -42,11 +42,12 @@
         _collectionView = [[PKContentCollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:self.layout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
-        _collectionView.pagingEnabled = YES;
+        _collectionView.pagingEnabled = NO;
         _collectionView.userInteractionEnabled = YES;
         _collectionView.layer.anchorPoint = CGPointMake(0, 0);
         _collectionView.backgroundColor = [UIColor clearColor];
         _collectionView.opaque = NO;
+        _collectionView.scrollEnabled = NO;
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.showsVerticalScrollIndicator = NO;
         _scrollView = [[PKContentScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -295,32 +296,54 @@
         }
     }];
     
-    NSArray *rengeCells = [self.collectionView visibleCells];
+    NSMutableArray *visibleIndexPaths = [self indexPathsForVisibleItems].mutableCopy;
+    NSMutableArray *rengeIndexPaths = [self.collectionView indexPathsForVisibleItems].mutableCopy;
     
-    PKCollectionViewCell *visibleFirstCell = [visibleCells firstObject];
-    PKCollectionViewCell *visibleLastCell = [visibleCells lastObject];
+    [visibleIndexPaths sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSInteger r1 = [obj1 row];
+        NSInteger r2 = [obj2 row];
+        if (r1 > r2) {
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+        if (r1 < r2) {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+        return (NSComparisonResult)NSOrderedSame;
+    }];
     
-    PKCollectionViewCell *rengeFirstCell = [rengeCells firstObject];
-    PKCollectionViewCell *rengeLastCell = [rengeCells lastObject];
+    [rengeIndexPaths sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSInteger r1 = [obj1 row];
+        NSInteger r2 = [obj2 row];
+        if (r1 > r2) {
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+        if (r1 < r2) {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+        return (NSComparisonResult)NSOrderedSame;
+    }];
     
-    if (visibleFirstCell == rengeFirstCell) {
-        if ([self.collectionView indexPathForCell:visibleFirstCell].item != 0) {
+    if (visibleIndexPaths.firstObject == rengeIndexPaths.firstObject) {
+        if (((NSIndexPath *)visibleIndexPaths.firstObject).item != 0) {
             [self.collectionView.collectionViewLayout invalidateLayout];
+            return;
         }
     }
-    if (visibleLastCell == rengeLastCell) {
-        if ([self.collectionView indexPathForCell:visibleLastCell].item != [self.collectionView numberOfItemsInSection:0] - 1) {
+    if (visibleIndexPaths.lastObject == rengeIndexPaths.lastObject) {
+        if (((NSIndexPath *)visibleIndexPaths.lastObject).item != [self.collectionView numberOfItemsInSection:0] - 1) {
             [self.collectionView.collectionViewLayout invalidateLayout];
+            [self.view setNeedsLayout];
+            return;
         }
     }
+    
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
-    
-    NSArray *rengeCells = [self.collectionView visibleCells];
-    if (rengeCells.count < 3) {
-        [self.collectionView.collectionViewLayout invalidateLayout];
+    NSArray *rengeCells = [self visibleCells];
+    if (rengeCells.count < 2) {
+        //[self.collectionView.collectionViewLayout invalidateLayout];
     }
     _transitionProgress = (self.scrollView.zoomScale - self.minimumZoomScale) / (self.maximumZoomScale - self.minimumZoomScale);
 
@@ -375,7 +398,12 @@
 {
     CGRect rect = _collectionView.frame;
     _collectionView.frame = (CGRect){rect.origin, CGSizeMake([self.layout calculateSize].width * self.scrollView.zoomScale, rect.size.height)};
-    [self.collectionView performBatchUpdates:updates completion:completion];
+    _scrollView.contentSize = rect.size;
+    [self.collectionView performBatchUpdates:updates completion:^(BOOL finished){
+        completion(finished);
+        [self setZoomScale:self.zoomScale];
+    }];
+    
 }
 
 #pragma mark - <UICollectionViewDelegate>
@@ -387,10 +415,8 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     PKCollectionViewCell *cell = (PKCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"PKCollectionViewCell" forIndexPath:indexPath];
     return cell;
-    
 }
 
 - (void)collectionView:(nonnull UICollectionView *)collectionView didSelectItemAtIndexPath:(nonnull NSIndexPath *)indexPath

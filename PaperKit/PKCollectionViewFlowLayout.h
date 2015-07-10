@@ -15,25 +15,11 @@
 
 @end
 
-
-typedef NS_ENUM(NSUInteger, PKCollectionSection) {
-    PKCollectionViewSectionMaster = 0,
-    PKCollectionViewSectionStock = 0,
-    PKCollectionViewSectionContent
-};
-
-typedef NS_ENUM(NSInteger, PKCollectionViewLayoutDirection) {
-    PKCollectionViewLayoutDirectionNext,
-    PKCollectionViewLayoutDirectionPrevious,
-    PKCollectionViewLayoutDirectionCreate
-};
-
 @protocol PKCollectionViewFlowLayoutDelegate;
 
 @interface PKCollectionViewFlowLayout : UICollectionViewFlowLayout
 
 @property (nonatomic, weak) NSIndexPath *selectedIndexPath;
-@property (nonatomic) PKCollectionViewLayoutDirection direction;
 @property (nonatomic) CGFloat zoomScale;
 @property (nonatomic) CGRect rengeRect;
 @property (nonatomic) id <PKCollectionViewFlowLayoutDelegate> delegate;

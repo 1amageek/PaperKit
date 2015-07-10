@@ -23,8 +23,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _backgroundData = @[@"0"];
-    _foregroundData = @[@"0",@"1"];
+    _backgroundData = @[@"0",@"1",@"2"];
+    _foregroundData = @[@"0",@"1",@"2",@"3",@"4",@"5"];
     
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
     _reloadForegroundButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -58,7 +58,7 @@
     }
     
     if (button == _reloadForegroundButton) {
-        _foregroundData = @[@"0",@"1",@"2"];
+        _foregroundData = @[@"0",@"1",@"2",@"3",@"4"];
         [self reloadForegroundDataOnCategory:self.selectedCategory];
     }
     
@@ -79,23 +79,12 @@
 
         
         
-        
-        PKCollectionViewController *viewController = [self foregroundViewControllerAtIndex:self.selectedCategory];
-        
-        [viewController performBatchUpdates:^{
-            [viewController.collectionView insertItemsAtIndexPaths:insertIndexPaths];
-        } completion:^(BOOL finished) {
-            
-        }];
-        
-        
-        /*
         [self foregroundCollectionViewOnCategory:self.selectedCategory performBatchUpdates:^(PKCollectionViewController *controller){
             [controller.collectionView insertItemsAtIndexPaths:insertIndexPaths];
         } completion:^(BOOL finished) {
-            
+            [self.view setNeedsLayout];
         }];
-        */
+        
     }
     
 }

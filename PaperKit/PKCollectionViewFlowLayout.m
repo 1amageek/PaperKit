@@ -53,10 +53,10 @@
     originX += self.sectionInset.left;
     originY += self.sectionInset.top;
     
-    NSInteger sections = [self.collectionView.dataSource numberOfSectionsInCollectionView:self.collectionView];
+    NSInteger sections = [self.collectionView numberOfSections];
     for (NSInteger section = 0; section < sections; section ++) {
         
-        NSInteger items = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:section];
+        NSInteger items = [self.collectionView numberOfItemsInSection:section];
         
         for (NSInteger item = 0; item < items; item ++) {
             
@@ -84,7 +84,7 @@
     //self.collectionView.frame = (CGRect){self.collectionView.frame.origin, CGSizeMake(ceilf(_myCollectionViewSize.width * _zoomScale), _myCollectionViewSize.height)};
 }
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
+- (PKCollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return _attributes[indexPath];
 }
@@ -93,11 +93,10 @@
 {
     
     NSMutableArray *attributes = [NSMutableArray array];
-    NSInteger sections = [self.collectionView.dataSource numberOfSectionsInCollectionView:self.collectionView];
-    
+    NSInteger sections = [self.collectionView numberOfSections];
     for (NSInteger section = 0; section < sections; section ++) {
         
-        NSInteger items = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:section];
+        NSInteger items = [self.collectionView numberOfItemsInSection:section];
         
         for (NSInteger item = 0; item < items; item ++) {
             
@@ -107,9 +106,7 @@
             if (intersetsRect) {
                 [attributes addObject:attribute];
             }
-                        
         }
-        
     }
     return attributes;
 }
@@ -137,9 +134,7 @@
     
     NSInteger sections = [self.collectionView.dataSource numberOfSectionsInCollectionView:self.collectionView];
     for (NSInteger section = 0; section < sections; section ++) {
-        
         NSInteger items = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:section];
-        
         for (NSInteger item = 0; item < items; item ++) {
             
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
@@ -149,9 +144,6 @@
             originX += self.itemSize.width;
             originX += self.minimumInteritemSpacing;
             originY += 0;
-            
-            _attributes[indexPath] = attr;
-            
         }
     }
     
@@ -162,7 +154,7 @@
 }
 
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds{
-    return YES;
+    return NO;
 }
 
 - (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset
@@ -176,9 +168,7 @@
         for (NSUInteger section = 0; section < self.selectedIndexPath.section; section++) {
             horizontal += (width * [self.collectionView numberOfItemsInSection:section]);
         }
-        
         horizontal += (self.selectedIndexPath.item * width) + self.sectionInset.left;
-        
         return CGPointMake(horizontal, point.y);
     }
     
@@ -224,16 +214,14 @@
     PKCollectionViewLayoutAttributes *attributes = (PKCollectionViewLayoutAttributes *)[super initialLayoutAttributesForAppearingItemAtIndexPath:itemIndexPath];
     
     if ([self.insertPaths containsObject:itemIndexPath]) {
-        
-        UICollectionViewLayoutAttributes *layoutAttributes = [self layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:self.insertPaths.count -1 inSection:itemIndexPath.section]];
-        CGFloat translationX = -layoutAttributes.frame.origin.x - layoutAttributes.frame.size.width;
-        
+        CGFloat translationX = - (attributes.frame.origin.x + attributes.frame.size.width * 2);
         POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerTranslationX];
-        animation.beginTime = CACurrentMediaTime() + 0.13 * (self.insertPaths.count - itemIndexPath.item);
+        animation.beginTime = CACurrentMediaTime() + 0.15 * (self.insertPaths.count - itemIndexPath.item);
         animation.fromValue = @(translationX);
         animation.toValue = @(0);
         attributes.animation = animation;
-        attributes.transform3D = CATransform3DMakeTranslation(translationX, 0, 0);
+        attributes.frame = CGRectMake(-attributes.size.width, attributes.frame.origin.y, attributes.size.width, attributes.size.height);
+        attributes.alpha = 0;
     }
     return attributes;
 }
@@ -241,40 +229,22 @@
 - (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)itemIndexPath
 {
     UICollectionViewLayoutAttributes * attributes = [super finalLayoutAttributesForDisappearingItemAtIndexPath:itemIndexPath];
-    
-    if ([self.deletePaths containsObject:itemIndexPath]) {
-        
-        CGPoint endPoint;
-        
-        switch (self.direction) {
-            case PKCollectionViewLayoutDirectionCreate:
-                endPoint = CGPointMake(attributes.center.x, attributes.center.y + [UIScreen mainScreen].bounds.size.height);
-                break;
-            case PKCollectionViewLayoutDirectionNext:
-                endPoint = CGPointMake(-attributes.size.width/2, attributes.center.y);
-                break;
-            case PKCollectionViewLayoutDirectionPrevious:
-            default:
-                endPoint = CGPointMake(self.collectionViewContentSize.width + attributes.size.width/2, attributes.center.y);
-                break;
-        }
-        
-        attributes.center = endPoint;
-    }
     return attributes;
 }
 
 - (void)finalizeCollectionViewUpdates
 {
-    
     for (NSIndexPath *indexPath in self.insertPaths) {
         UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
         cell.alpha = 0;
     }
-    
+
+    [super finalizeCollectionViewUpdates];
+    [self.collectionView setNeedsDisplay];
+    [self.collectionView setNeedsLayout];
+    [self.collectionView layoutIfNeeded];
     self.insertPaths = nil;
     self.deletePaths = nil;
-    [super finalizeCollectionViewUpdates];
 }
 
 

@@ -37,4 +37,6 @@
 - (void)reloadBackgroundData;
 - (void)reloadForegroundDataOnCategory:(NSInteger)category;
 
+- (void)foregroundCollectionViewOnCategory:(NSInteger)category performBatchUpdates:(void (^)(PKCollectionViewController *controller))updates completion:(void (^)(BOOL finished))completion;
+
 @end
