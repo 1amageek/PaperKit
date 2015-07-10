@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <PaperKit/PaperKit.h>
 #import "ViewController.h"
+#import "CollectionViewController.h"
 #import "BackgroundViewController.h"
 
 

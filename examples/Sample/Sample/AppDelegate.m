@@ -19,14 +19,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    BackgroundViewController *backgroundViewController = [BackgroundViewController new];
-    self.window.rootViewController = backgroundViewController;
+    //BackgroundViewController *viewController = [BackgroundViewController new];
+    CollectionViewController *viewController = [CollectionViewController new];
+    self.window.rootViewController = viewController;
     [self.window makeKeyAndVisible];
     
     [PKWindowManager managerWithBaseWindow:self.window];
         
     return YES;
 }
-
 
 @end

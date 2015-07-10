@@ -15,6 +15,7 @@
 		8CC085591B3DBDB30002A2D6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CC085581B3DBDB30002A2D6 /* Images.xcassets */; };
 		8CC0855C1B3DBDB30002A2D6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CC0855A1B3DBDB30002A2D6 /* LaunchScreen.xib */; };
 		8CC085681B3DBDB30002A2D6 /* SampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC085671B3DBDB30002A2D6 /* SampleTests.m */; };
+		8CE682B91B4DF76400B11BA1 /* CollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE682B81B4DF76400B11BA1 /* CollectionViewController.m */; };
 		D5EC5F88478237E33B95F8A1 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59D3F20B9D30271B2CE81701 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +48,8 @@
 		8CC085611B3DBDB30002A2D6 /* SampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CC085661B3DBDB30002A2D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8CC085671B3DBDB30002A2D6 /* SampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleTests.m; sourceTree = "<group>"; };
+		8CE682B71B4DF76400B11BA1 /* CollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionViewController.h; sourceTree = "<group>"; };
+		8CE682B81B4DF76400B11BA1 /* CollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionViewController.m; sourceTree = "<group>"; };
 		B55FFFAA997B009A656E7350 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,6 +105,8 @@
 			children = (
 				8CC0854F1B3DBDB30002A2D6 /* AppDelegate.h */,
 				8CC085501B3DBDB30002A2D6 /* AppDelegate.m */,
+				8CE682B71B4DF76400B11BA1 /* CollectionViewController.h */,
+				8CE682B81B4DF76400B11BA1 /* CollectionViewController.m */,
 				8CA457091B417DC9005F0CA5 /* BackgroundViewController.h */,
 				8CA4570A1B417DC9005F0CA5 /* BackgroundViewController.m */,
 				8CC085521B3DBDB30002A2D6 /* ViewController.h */,
@@ -286,6 +291,7 @@
 			files = (
 				8CB517F31B3DC14A00D32B5F /* ContentViewController.m in Sources */,
 				8CC085541B3DBDB30002A2D6 /* ViewController.m in Sources */,
+				8CE682B91B4DF76400B11BA1 /* CollectionViewController.m in Sources */,
 				8CC085511B3DBDB30002A2D6 /* AppDelegate.m in Sources */,
 				8CA4570B1B417DC9005F0CA5 /* BackgroundViewController.m in Sources */,
 				8CC0854E1B3DBDB30002A2D6 /* main.m in Sources */,
