@@ -11,7 +11,9 @@
 
 @interface ViewController ()
 @property (nonatomic) UIButton *reloadForegroundButton;
-@property (nonatomic) UIButton *reloadbackgroundButton;
+@property (nonatomic) UIButton *reloadBackgroundButton;
+@property (nonatomic) UIButton *insertForegroundButton;
+
 @property (nonatomic) NSArray *backgroundData;
 @property (nonatomic) NSArray *foregroundData;
 @end
@@ -22,28 +24,35 @@
     [super viewDidLoad];
     
     _backgroundData = @[@"0"];
-    _foregroundData = @[@"0",@"1",@"2",@"3",@"4"];
+    _foregroundData = @[@"0",@"1"];
     
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
     _reloadForegroundButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [_reloadForegroundButton setTitle:@"reload foreground" forState:UIControlStateNormal];
     [_reloadForegroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
     [_reloadForegroundButton sizeToFit];
-    _reloadForegroundButton.center = CGPointMake(self.view.center.x, self.view.center.x - 30);
+    _reloadForegroundButton.center = CGPointMake(self.view.center.x, self.view.center.x - 60);
     [self.view addSubview:_reloadForegroundButton];
     
-    _reloadbackgroundButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_reloadbackgroundButton setTitle:@"reload background" forState:UIControlStateNormal];
-    [_reloadbackgroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
-    [_reloadbackgroundButton sizeToFit];
-    _reloadbackgroundButton.center = CGPointMake(self.view.center.x, self.view.center.x + 30);
-    [self.view addSubview:_reloadbackgroundButton];
+    _reloadBackgroundButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_reloadBackgroundButton setTitle:@"reload background" forState:UIControlStateNormal];
+    [_reloadBackgroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
+    [_reloadBackgroundButton sizeToFit];
+    _reloadBackgroundButton.center = CGPointMake(self.view.center.x, self.view.center.x - 30);
+    [self.view addSubview:_reloadBackgroundButton];
+    
+    _insertForegroundButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_insertForegroundButton setTitle:@"insert foreground" forState:UIControlStateNormal];
+    [_insertForegroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
+    [_insertForegroundButton sizeToFit];
+    _insertForegroundButton.center = CGPointMake(self.view.center.x, self.view.center.x);
+    [self.view addSubview:_insertForegroundButton];
     
 }
 
 - (void)tapped:(UIButton *)button
 {
-    if (button == _reloadbackgroundButton) {
+    if (button == _reloadBackgroundButton) {
         _backgroundData = @[@"0",@"1",@"2"];
         [self reloadBackgroundData];
     }
@@ -52,6 +61,47 @@
         _foregroundData = @[@"0",@"1",@"2"];
         [self reloadForegroundDataOnCategory:self.selectedCategory];
     }
+    
+    if (button == _insertForegroundButton) {
+        
+        NSMutableArray *dataSource = [NSMutableArray arrayWithArray:_foregroundData];
+        [dataSource addObject:@"insert"];
+        [dataSource addObject:@"insert"];
+        [dataSource addObject:@"insert"];
+        [dataSource addObject:@"insert"];
+        _foregroundData = dataSource;
+        
+        NSMutableArray *insertIndexPaths = @[].mutableCopy;
+        [insertIndexPaths addObject:[NSIndexPath indexPathForItem:0 inSection:0]];
+        [insertIndexPaths addObject:[NSIndexPath indexPathForItem:1 inSection:0]];
+        [insertIndexPaths addObject:[NSIndexPath indexPathForItem:2 inSection:0]];
+        [insertIndexPaths addObject:[NSIndexPath indexPathForItem:3 inSection:0]];
+
+        
+        
+        
+        PKCollectionViewController *viewController = [self foregroundViewControllerAtIndex:self.selectedCategory];
+        
+        [viewController performBatchUpdates:^{
+            [viewController.collectionView insertItemsAtIndexPaths:insertIndexPaths];
+        } completion:^(BOOL finished) {
+            
+        }];
+        
+        
+        /*
+        [self foregroundCollectionViewOnCategory:self.selectedCategory performBatchUpdates:^(PKCollectionViewController *controller){
+            [controller.collectionView insertItemsAtIndexPaths:insertIndexPaths];
+        } completion:^(BOOL finished) {
+            
+        }];
+        */
+    }
+    
+}
+
+- (void)insertForegroundData:(NSArray *)array
+{
     
 }
 
