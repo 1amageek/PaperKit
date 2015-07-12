@@ -8,11 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <PaperKit/PaperKit.h>
-#import "PKToolbar.h"
 
 @interface ViewController : PKViewController
 
-@property (nonatomic) PKToolbar *toolbar;
 
 @end
 

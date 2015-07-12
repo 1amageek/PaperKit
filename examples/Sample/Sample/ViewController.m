@@ -32,6 +32,7 @@
     [_reloadForegroundButton setTitle:@"reload foreground" forState:UIControlStateNormal];
     [_reloadForegroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
     [_reloadForegroundButton sizeToFit];
+    _reloadForegroundButton.tintColor = [UIColor whiteColor];
     _reloadForegroundButton.center = CGPointMake(self.view.center.x, self.view.center.x - 60);
     [self.view addSubview:_reloadForegroundButton];
     
@@ -39,6 +40,7 @@
     [_reloadBackgroundButton setTitle:@"reload background" forState:UIControlStateNormal];
     [_reloadBackgroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
     [_reloadBackgroundButton sizeToFit];
+    _reloadBackgroundButton.tintColor = [UIColor whiteColor];
     _reloadBackgroundButton.center = CGPointMake(self.view.center.x, self.view.center.x - 30);
     [self.view addSubview:_reloadBackgroundButton];
     
@@ -46,11 +48,9 @@
     [_insertForegroundButton setTitle:@"insert foreground" forState:UIControlStateNormal];
     [_insertForegroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
     [_insertForegroundButton sizeToFit];
+    _insertForegroundButton.tintColor = [UIColor whiteColor];
     _insertForegroundButton.center = CGPointMake(self.view.center.x, self.view.center.x);
     [self.view addSubview:_insertForegroundButton];
-    
-    
-    [self.view addSubview:self.toolbar];
     
     UIBarButtonItem *flex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(add:)];
@@ -103,20 +103,6 @@
         
     }
     
-}
-
-- (PKToolbar *)toolbar
-{
-    if (_toolbar) {
-        return _toolbar;
-    }
-    
-    _toolbar = [[PKToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
-    [_toolbar setBackgroundImage:[UIImage new]
-                  forToolbarPosition:UIToolbarPositionAny
-                          barMetrics:UIBarMetricsDefault];
-    [_toolbar setBackgroundColor:[UIColor clearColor]];
-    return _toolbar;
 }
 
 - (void)add:(UIBarButtonItem *)buttonItem

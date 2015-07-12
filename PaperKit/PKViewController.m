@@ -55,8 +55,10 @@
 
 @interface PKViewController () <UICollectionViewDataSource, UICollectionViewDelegate, PKCollectionViewControllerDelegate>
 
+@property (nonatomic) UIView *backgroundView;
 @property (nonatomic) UICollectionViewFlowLayout *layout;
 @property (nonatomic) _PKOverlayCollectionView *overlayCollectionView;
+
 
 @end
 
@@ -112,6 +114,14 @@
     return _layout;
 }
 
+- (void)loadView
+{
+    [super loadView];
+    self.view.backgroundColor = [UIColor blackColor];
+    _backgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+    [self.view addSubview:_backgroundView];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -142,8 +152,10 @@
     _collectionView.alwaysBounceHorizontal = NO;
     _collectionView.alwaysBounceVertical = NO;
     
-    [self.view addSubview:_collectionView];
+    [self.backgroundView addSubview:_collectionView];
+    [self.backgroundView addSubview:self.toolbar];
     [self.view addSubview:_overlayCollectionView];
+    
     
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"UICollectionViewCell"];
     [self.overlayCollectionView registerClass:[_PKOverlayCollectionViewCell class] forCellWithReuseIdentifier:@"_PKOverlayCollectionViewCell"];
@@ -155,12 +167,7 @@
     if (_toolbar) {
         return _toolbar;
     }
-    
     _toolbar = [[PKToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
-    [_toolbar setBackgroundImage:[UIImage new]
-              forToolbarPosition:UIToolbarPositionAny
-                      barMetrics:UIBarMetricsDefault];
-    [_toolbar setBackgroundColor:[UIColor clearColor]];
     return _toolbar;
 }
 
@@ -459,10 +466,10 @@
     
     if (cell) {
         CGFloat scale = POPTransition(transitionProgress, 1, 0.95);
-        cell.transform = CGAffineTransformMakeScale(scale, scale);
+        self.backgroundView.transform = CGAffineTransformMakeScale(scale, scale);
         
         CGFloat alpha = POPTransition(transitionProgress, 1, 0);
-        cell.alpha = alpha;
+        self.backgroundView.alpha = alpha;
     }
     
 }

@@ -10,6 +10,17 @@
 
 @implementation PKToolbar
 
-
+- (nonnull instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setBackgroundImage:[UIImage new]
+                  forToolbarPosition:UIToolbarPositionAny
+                          barMetrics:UIBarMetricsDefault];
+        [self setBackgroundColor:[UIColor clearColor]];
+        self.tintColor = [UIColor whiteColor];
+    }
+    return self;
+}
 
 @end
