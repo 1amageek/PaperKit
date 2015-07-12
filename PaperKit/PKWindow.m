@@ -56,7 +56,7 @@
 - (void)commonInit
 {
     _state = PKWindowStateNormal;
-    _interval = 65;
+    _interval = 60;
     _statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
     _link = YES;
     _linked = YES;
@@ -180,19 +180,19 @@
 
 - (CGFloat)progressToListState
 {
-    NSInteger count = [UIApplication sharedApplication].windows.count - 2;
+    NSInteger count = [self _windows].count - 1;
     CGFloat height = _statusBarHeight + _interval * count;
     return height / [UIScreen mainScreen].bounds.size.height;
 }
 
 - (CGFloat)upperProgress
 {
-    return [self progressToListState] + 0.1 + _statusBarHeight/[UIScreen mainScreen].bounds.size.height;
+    return [self progressToListState] + 0.05;// + _statusBarHeight/[UIScreen mainScreen].bounds.size.height;
 }
 
 - (CGFloat)lowerProgress
 {
-    return [self progressToListState] + _statusBarHeight/[UIScreen mainScreen].bounds.size.height;
+    return [self progressToListState];// + _statusBarHeight/[UIScreen mainScreen].bounds.size.height;
 }
 
 - (CGFloat)thresholdPosition

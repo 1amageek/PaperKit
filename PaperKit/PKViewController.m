@@ -150,6 +150,20 @@
     
 }
 
+- (PKToolbar *)toolbar
+{
+    if (_toolbar) {
+        return _toolbar;
+    }
+    
+    _toolbar = [[PKToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
+    [_toolbar setBackgroundImage:[UIImage new]
+              forToolbarPosition:UIToolbarPositionAny
+                      barMetrics:UIBarMetricsDefault];
+    [_toolbar setBackgroundColor:[UIColor clearColor]];
+    return _toolbar;
+}
+
 - (void)setSelectedCategory:(NSUInteger)selectedCategory
 {
     

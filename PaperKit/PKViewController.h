@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PKToolbar.h"
 #import "PKContentViewController.h"
 #import "PKCollectionViewController.h"
 #import "PKPanGestureRecognizer.h"
@@ -15,6 +16,7 @@
 
 @property (nonatomic) UICollectionView *collectionView;
 @property (nonatomic, readonly) NSUInteger selectedCategory;
+@property (nonatomic) PKToolbar *toolbar;
 
 
 - (void)categoryWillSet:(NSUInteger)currentCategory nextCategory:(NSUInteger)nextCategory;
