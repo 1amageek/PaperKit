@@ -23,9 +23,6 @@
     CGPoint _fromPosition;
 }
 
-@property (nonatomic) CGFloat minimumZoomScale;
-@property (nonatomic) CGFloat maximumZoomScale;
-
 @end
 
 @implementation PKCollectionViewController
@@ -53,8 +50,8 @@
         _scrollView = [[PKContentScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         _scrollView.delaysContentTouches = NO;
         _scrollView.userInteractionEnabled = YES;
-        _scrollView.minimumZoomScale = 0.3f;
-        _scrollView.maximumZoomScale = 1.5f;
+        _scrollView.minimumZoomScale = _minimumZoomScale * 0.5;
+        _scrollView.maximumZoomScale = _maximumZoomScale * 1.5;
         _scrollView.bouncesZoom = YES;
         _scrollView.delegate = self;
         _scrollView.pinchGestureRecognizer.enabled = NO;
@@ -62,6 +59,18 @@
     }
     
     return self;
+}
+
+- (void)setMinimumZoomScale:(CGFloat)minimumZoomScale
+{
+    _minimumZoomScale = minimumZoomScale;
+    _scrollView.minimumZoomScale = minimumZoomScale * 0.5;
+}
+
+- (void)setMaximumZoomScale:(CGFloat)maximumZoomScale
+{
+    _maximumZoomScale = maximumZoomScale;
+    _scrollView.maximumZoomScale = maximumZoomScale * 1.5;
 }
 
 - (PKCollectionViewFlowLayout *)layout {
@@ -108,7 +117,7 @@
     
     // position
     
-    CGFloat height = POPTransition(progress, _fromPosition.y, expand ? 0 : [UIScreen mainScreen].bounds.size.height * (1 - self.minimumZoomScale));
+    CGFloat height = POPTransition(progress, _fromPosition.y, expand ? [UIScreen mainScreen].bounds.size.height * (1 - self.maximumZoomScale) : [UIScreen mainScreen].bounds.size.height * (1 - self.minimumZoomScale));
     _collectionView.layer.position = CGPointMake(_collectionView.layer.position.x, height);
     
     // contentOffset
@@ -339,6 +348,17 @@
     
 }
 
+- (void)scrollViewDidEndDragging:(nonnull UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (scrollView.contentOffset.x < 0) {
+        [self.delegate viewController:self slideToAction:PKCollectionViewControllerScrollDirectionPrevious];
+    }
+    
+    if (scrollView.contentSize.width - self.scrollView.bounds.size.width < scrollView.contentOffset.x) {
+        [self.delegate viewController:self slideToAction:PKCollectionViewControllerScrollDirectionNext];
+    }
+}
+
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
     NSArray *rengeCells = [self visibleCells];
@@ -492,7 +512,7 @@
      
             [self setTransitionProgress:progress];
             
-            CGFloat height = POPTransition(progress, [UIScreen mainScreen].bounds.size.height * (1 - self.minimumZoomScale), 0);
+            CGFloat height = POPTransition(progress, [UIScreen mainScreen].bounds.size.height * (1 - self.minimumZoomScale), [UIScreen mainScreen].bounds.size.height * (1 - self.maximumZoomScale));
             _collectionView.layer.position = CGPointMake(_collectionView.layer.position.x, height);
             [self.scrollView setContentOffset:CGPointMake(offsetX - translation.x, 0) animated:NO];
 

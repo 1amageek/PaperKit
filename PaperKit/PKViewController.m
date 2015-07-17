@@ -94,6 +94,8 @@
 - (void)commonInit
 {
     self.automaticallyAdjustsScrollViewInsets = NO;
+    _minimumZoomScale = 0.45;
+    _maximumZoomScale = 1;
     _selectedCategory = 0;
 }
 
@@ -204,6 +206,41 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+#pragma mark - action
+
+- (void)scrollView:(UIScrollView *)scrollView slideToAction:(PKCollectionViewControllerScrollDirection)direction;
+{
+    // override method
+}
+
+
+#pragma mark - reload
+- (void)reloadBackgroundData
+{
+    // TODO Block when a user is touching
+    [self.collectionView reloadData];
+    [self.overlayCollectionView reloadData];
+}
+
+- (void)reloadForegroundDataOnCategory:(NSInteger)category
+{
+    // TODO　Block when a user is touching
+    [[self foregroundViewControllerAtIndex:category] reloadData];
+}
+
+- (void)foregroundCollectionViewOnCategory:(NSInteger)category performBatchUpdates:(void (^)(PKCollectionViewController *controller))updates completion:(void (^)(BOOL finished))completion
+{
+    // TODO　Block when a user is touching
+    PKCollectionViewController *viewController = [self foregroundViewControllerAtIndex:category];
+    [viewController performBatchUpdates:^(){
+        updates(viewController);
+    } completion:completion];
+}
+
+
+#pragma mark - Private
+
 - (PKCollectionViewController *)viewControllerAtIndex:(NSInteger)index
 {
     _PKOverlayCollectionViewCell *cell = (_PKOverlayCollectionViewCell *)[self.overlayCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0]];
@@ -279,6 +316,19 @@
     return viewController;
 }
 
+#pragma mark - <UIScorllViewDelegate>
+
+- (void)scrollViewDidEndDragging:(nonnull UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (scrollView.contentOffset.x < 0) {
+        [self scrollView:scrollView slideToAction:PKCollectionViewControllerScrollDirectionPrevious];
+    }
+    
+    if (scrollView.contentSize.width - scrollView.bounds.size.width < scrollView.contentOffset.x) {
+        [self scrollView:scrollView slideToAction:PKCollectionViewControllerScrollDirectionNext];
+    }
+}
+
 - (void)scrollViewWillEndDragging:(nonnull UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout nonnull CGPoint *)targetContentOffset
 {
     if (scrollView == self.collectionView) {
@@ -334,28 +384,6 @@
     return 10;
 }
 
-- (void)reloadBackgroundData
-{
-    // TODO Block when a user is touching
-    [self.collectionView reloadData];
-    [self.overlayCollectionView reloadData];
-}
-
-- (void)reloadForegroundDataOnCategory:(NSInteger)category
-{
-    // TODO　Block when a user is touching
-    [[self foregroundViewControllerAtIndex:category] reloadData];
-}
-
-- (void)foregroundCollectionViewOnCategory:(NSInteger)category performBatchUpdates:(void (^)(PKCollectionViewController *controller))updates completion:(void (^)(BOOL finished))completion
-{
-    // TODO　Block when a user is touching
-    PKCollectionViewController *viewController = [self foregroundViewControllerAtIndex:category];
-    [viewController performBatchUpdates:^(){
-        updates(viewController);
-    } completion:completion];
-}
-
 #pragma mark - <UICollectionViewDelegate>
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
@@ -392,6 +420,8 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             PKCollectionViewController *viewController = [self viewControllerAtIndex:indexPath.item];
+            viewController.minimumZoomScale = self.minimumZoomScale;
+            viewController.maximumZoomScale = self.maximumZoomScale;
             if (![self.childViewControllers containsObject:viewController]) {
                 viewController.delegate = self;
                 [self addChildViewController:viewController];
@@ -404,9 +434,7 @@
     }
     
     // foreground
-    
     PKCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PKCollectionViewCell" forIndexPath:indexPath];
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         PKCollectionViewController *parentViewController = [self foregroundViewControllerAtCollectionView:collectionView];
         NSUInteger index = [self indexAtCollectionView:collectionView];
@@ -421,7 +449,6 @@
         cell.transitionProgress = parentViewController.transitionProgress;
     });
 
-    cell.backgroundColor = [UIColor whiteColor];
     return cell;
 }
 
@@ -460,6 +487,8 @@
     return cell;
 }
 
+#pragma mark - PKCollectionViewControllerDelegate
+
 - (void)viewController:(PKCollectionViewController *)viewController didChangeTransitionProgress:(CGFloat)transitionProgress
 {
     UICollectionViewCell *cell = [self.collectionView visibleCells][0];
@@ -471,7 +500,11 @@
         CGFloat alpha = POPTransition(transitionProgress, 1, 0);
         self.backgroundView.alpha = alpha;
     }
-    
+}
+
+- (void)viewController:(PKCollectionViewController *)viewController slideToAction:(PKCollectionViewControllerScrollDirection)direction
+{
+    [self scrollView:viewController.scrollView slideToAction:direction];
 }
 
 static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloat endValue) {

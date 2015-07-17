@@ -146,5 +146,14 @@
     return [ContentViewController new];
 }
 
+- (void)scrollView:(UIScrollView *)scrollView slideToAction:(PKCollectionViewControllerScrollDirection)direction;
+{
+    if (direction == PKCollectionViewControllerScrollDirectionPrevious) {
+        NSLog(@"PKCollectionViewControllerScrollDirectionPrevious");
+    } else {
+        NSLog(@"PKCollectionViewControllerScrollDirectionNext");
+    }
+}
+
 
 @end

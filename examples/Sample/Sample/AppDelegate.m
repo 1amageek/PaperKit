@@ -20,7 +20,6 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     BackgroundViewController *viewController = [BackgroundViewController new];
-    //CollectionViewController *viewController = [CollectionViewController new];
     self.window.rootViewController = viewController;
     [self.window makeKeyAndVisible];
     

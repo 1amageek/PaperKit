@@ -17,14 +17,21 @@
 #import "PKCollectionViewFlowLayout.h"
 #import "PKPanGestureRecognizer.h"
 
+typedef NS_ENUM(NSInteger, PKCollectionViewControllerScrollDirection)
+{
+    PKCollectionViewControllerScrollDirectionPrevious,
+    PKCollectionViewControllerScrollDirectionNext
+};
+
 @protocol PKCollectionViewControllerDelegate;
 @interface PKCollectionViewController : UIViewController
 
-@property (nonatomic) PKCollectionViewFlowLayout *layout;
+@property (nonatomic) CGFloat minimumZoomScale;
+@property (nonatomic) CGFloat maximumZoomScale;
 
+@property (nonatomic) PKCollectionViewFlowLayout *layout;
 @property (nonatomic) PKContentScrollView *scrollView;
 @property (nonatomic) PKContentCollectionView *collectionView;
-
 @property (nonatomic) CGFloat transitionProgress;
 @property (nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic) PKPanGestureRecognizer *panGestureRecognizer;
@@ -43,6 +50,10 @@
 @end
 
 @protocol PKCollectionViewControllerDelegate <NSObject>
+/*
+ This set of methods is called when the scroll view was a gesture that exceeds the contentSize.
+ */
+- (void)viewController:(PKCollectionViewController *)viewController slideToAction:(PKCollectionViewControllerScrollDirection)direction;
 @required
 - (void)viewController:(PKCollectionViewController *)viewController didChangeTransitionProgress:(CGFloat)transitionProgress;
 @end

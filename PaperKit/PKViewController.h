@@ -14,6 +14,13 @@
 
 @interface PKViewController : UIViewController
 
+/*
+ Collection View Zoom scale
+ */
+
+@property (nonatomic) CGFloat minimumZoomScale;     // default 0.45
+@property (nonatomic) CGFloat maximumZoomScale;     // default 1
+
 @property (nonatomic) UICollectionView *collectionView;
 @property (nonatomic, readonly) NSUInteger selectedCategory;
 @property (nonatomic) PKToolbar *toolbar;
@@ -33,6 +40,10 @@
 - (NSInteger)numberOfSectionsInForegroundCollectionView:(UICollectionView *)collectionView onCategory:(NSInteger)category;
 - (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section onCategory:(NSInteger)category;
 - (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath onCategory:(NSUInteger)category;
+
+
+// action
+- (void)scrollView:(UIScrollView *)scrollView slideToAction:(PKCollectionViewControllerScrollDirection)direction;
 
 
 // reload
