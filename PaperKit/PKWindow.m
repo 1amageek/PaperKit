@@ -187,7 +187,7 @@
 
 - (CGFloat)upperProgress
 {
-    return [self progressToListState] + 0.05;// + _statusBarHeight/[UIScreen mainScreen].bounds.size.height;
+    return [self progressToListState] + 0.08;// + _statusBarHeight/[UIScreen mainScreen].bounds.size.height;
 }
 
 - (CGFloat)lowerProgress

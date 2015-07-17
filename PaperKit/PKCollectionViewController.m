@@ -485,6 +485,10 @@
 
             self.selectedIndexPath = [_collectionView indexPathForItemAtPoint:[recognizer locationInView:self.collectionView]];
             
+            if (!self.selectedIndexPath) {
+                recognizer.state = UIGestureRecognizerStateFailed;
+            }
+            
             break;
         }
             
@@ -497,11 +501,11 @@
             
             if (scale < self.minimumZoomScale) {
                 CGFloat deltaZoomScale = self.minimumZoomScale - scale;
-                scale = self.minimumZoomScale - deltaZoomScale / 4;
+                scale = self.minimumZoomScale - deltaZoomScale / 2.5;
             }
             if (self.maximumZoomScale < scale) {
                 CGFloat deltaZoomScale = scale - self.maximumZoomScale;
-                scale = self.maximumZoomScale + deltaZoomScale / 4;
+                scale = self.maximumZoomScale + deltaZoomScale / 5;
             }
 
             scale = MIN(self.scrollView.maximumZoomScale, scale);
@@ -573,7 +577,7 @@
         animation.property = propX;
         animation.springSpeed = 8;
         animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
-            
+            self.selectedIndexPath = nil;
         };
         [self pop_addAnimation:animation forKey:@"inc.stamp.pk.scrollView.progress"];
     }

@@ -25,7 +25,9 @@
 @property (nonatomic, readonly) NSUInteger selectedCategory;
 @property (nonatomic) PKToolbar *toolbar;
 
-
+/*
+ This methods is called when it appears to have background view cell changes. 
+ */
 - (void)categoryWillSet:(NSUInteger)currentCategory nextCategory:(NSUInteger)nextCategory;
 - (void)categoryDidSet:(NSUInteger)category;
 
@@ -43,8 +45,15 @@
 
 
 // action
+/*
+ This methods is called when the scroll view was a gesture that exceeds the contentSize.
+ */
 - (void)scrollView:(UIScrollView *)scrollView slideToAction:(PKCollectionViewControllerScrollDirection)direction;
 
+/*
+ This methods is called when the foreground view has been pull down.
+ */
+- (void)pullDownToActionWithProgress:(CGFloat)progress;
 
 // reload
 - (void)reloadBackgroundData;

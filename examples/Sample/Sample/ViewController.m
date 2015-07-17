@@ -155,5 +155,10 @@
     }
 }
 
+- (void)pullDownToActionWithProgress:(CGFloat)progress
+{
+    NSLog(@"progress %f", progress);
+}
+
 
 @end

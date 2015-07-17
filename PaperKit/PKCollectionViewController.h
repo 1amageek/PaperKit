@@ -51,7 +51,7 @@ typedef NS_ENUM(NSInteger, PKCollectionViewControllerScrollDirection)
 
 @protocol PKCollectionViewControllerDelegate <NSObject>
 /*
- This set of methods is called when the scroll view was a gesture that exceeds the contentSize.
+ This methods is called when the scroll view was a gesture that exceeds the contentSize.
  */
 - (void)viewController:(PKCollectionViewController *)viewController slideToAction:(PKCollectionViewControllerScrollDirection)direction;
 @required

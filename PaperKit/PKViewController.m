@@ -214,6 +214,11 @@
     // override method
 }
 
+- (void)pullDownToActionWithProgress:(CGFloat)progress
+{
+    // override method
+}
+
 
 #pragma mark - reload
 - (void)reloadBackgroundData
@@ -500,6 +505,12 @@
         CGFloat alpha = POPTransition(transitionProgress, 1, 0);
         self.backgroundView.alpha = alpha;
     }
+    
+    if (transitionProgress < 0) {
+        CGFloat progress = -(transitionProgress / 0.25);
+        [self pullDownToActionWithProgress:progress];
+    }
+    
 }
 
 - (void)viewController:(PKCollectionViewController *)viewController slideToAction:(PKCollectionViewControllerScrollDirection)direction
