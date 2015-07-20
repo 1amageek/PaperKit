@@ -12,6 +12,9 @@
 static PKWindowManager  *sharedManager = nil;
 
 @implementation PKWindowManager
+{
+    BOOL _lock;
+}
 
 #pragma mark - Initialize
 
@@ -33,14 +36,17 @@ static PKWindowManager  *sharedManager = nil;
 
 - (instancetype)initWithBaseWidnow:(UIWindow *)window
 {
-    if (self = [super init]) {
-        _baseWindow = window;
-        _windows = @[];
-        if (nil == sharedManager) {
-            [PKWindowManager setSharedManager:self];
+    @synchronized(self){
+        if (self = [super init]) {
+            _baseWindow = window;
+            _windows = @[];
+            _lock = NO;
+            if (nil == sharedManager) {
+                [PKWindowManager setSharedManager:self];
+            }
+            
         }
     }
-    
     return self;
 }
 
@@ -53,15 +59,18 @@ static PKWindowManager  *sharedManager = nil;
 
 - (PKWindow *)showWindowWithRootViewController:(UIViewController *)rootViewController animated:(BOOL)animated
 {
-    PKWindow *window = [[PKWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    window.windowLevel = UIWindowLevelStatusBar + self.windows.count + 1;
-    window.rootViewController = rootViewController;
-    window.manager = self;
-    NSMutableArray *windows = [NSMutableArray arrayWithArray:self.windows];
-    [windows addObject:window];
-    _windows = windows;
-    [window makeKeyAndVisible:animated];
-    return window;
+    if (!_lock) {
+        PKWindow *window = [[PKWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        window.windowLevel = UIWindowLevelStatusBar + self.windows.count + 1;
+        window.rootViewController = rootViewController;
+        window.manager = self;
+        NSMutableArray *windows = [NSMutableArray arrayWithArray:self.windows];
+        [windows addObject:window];
+        _windows = windows;
+        [window makeKeyAndVisible:animated];
+        return window;
+    }
+    return nil;
 }
 
 #pragma mark - PKWindowDelegate
@@ -73,11 +82,19 @@ static PKWindowManager  *sharedManager = nil;
 
 - (void)windowWillAppear:(PKWindow *)window
 {
+    _lock = YES;
+    [self.windows enumerateObjectsUsingBlock:^(PKWindow *window, NSUInteger idx, BOOL * __nonnull stop) {
+        window.rootViewController.view.userInteractionEnabled = NO;
+    }];
     //self.baseWindow.userInteractionEnabled = NO;
 }
 
 - (void)windowDidAppear:(PKWindow *)window
 {
+    _lock = NO;
+    [self.windows enumerateObjectsUsingBlock:^(PKWindow *window, NSUInteger idx, BOOL * __nonnull stop) {
+        window.rootViewController.view.userInteractionEnabled = YES;
+    }];
     //self.baseWindow.userInteractionEnabled = YES;
 }
 
