@@ -17,13 +17,25 @@
 
 - (nullable UIView *)hitTest:(CGPoint)point withEvent:(nullable UIEvent *)event
 {
+
     UIView *view = [super hitTest:point withEvent:event];
     if (self.subviews.count) {
-        UIView *subView = self.subviews.firstObject;
-        if (CGRectContainsPoint(subView.frame, point)) {
-            return view;
-        } else {
-            return nil;
+        UIView *scrollView = self.subviews.firstObject;
+        if (scrollView.subviews.count) {
+            __block UICollectionView *collectionView = nil;
+            [scrollView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * __nonnull obj, NSUInteger idx, BOOL * __nonnull stop) {
+                if ([obj isKindOfClass:[UICollectionView class]]) {
+                    collectionView = obj;
+                    *stop = YES;
+                }
+            }];
+            
+            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:[collectionView indexPathForItemAtPoint:point]];
+            if (cell) {
+                return view;
+            } else {
+                return nil;
+            }
         }
     }
     return nil;
