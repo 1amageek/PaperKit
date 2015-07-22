@@ -72,6 +72,20 @@ To control the respective CollectionViewController, override the following metho
 }
 ```
 
+You can use the method for Datasource reload.
+This method is called when you pull beyond the contentSize of scroll view.
+
+```objective-c
+- (void)scrollView:(UIScrollView *)scrollView slideToAction:(PKCollectionViewControllerScrollDirection)direction;
+{
+    if (direction == PKCollectionViewControllerScrollDirectionPrevious) {
+        NSLog(@"PKCollectionViewControllerScrollDirectionPrevious");
+    } else {
+        NSLog(@"PKCollectionViewControllerScrollDirectionNext");
+    }
+}
+```
+
 To reload the datasource, run the following method.
 
 ```objective-c
