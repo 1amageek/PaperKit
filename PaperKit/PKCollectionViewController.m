@@ -29,8 +29,8 @@
                     *stop = YES;
                 }
             }];
-            
-            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:[collectionView indexPathForItemAtPoint:point]];
+            CGPoint convertPoint = [view convertPoint:point toView:collectionView];
+            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:[collectionView indexPathForItemAtPoint:convertPoint]];
             if (cell) {
                 return view;
             } else {
@@ -451,7 +451,7 @@
 - (void)reloadData
 {
     CGRect rect = _collectionView.frame;
-    _collectionView.frame = (CGRect){rect.origin, CGSizeMake([self.layout calculateSize].width * self.zoomScale, rect.size.height)};
+    _collectionView.frame = (CGRect){rect.origin, CGSizeMake([self.layout calculateSize].width * self.scrollView.zoomScale, rect.size.height)};
     _scrollView.contentSize = rect.size;
     [_collectionView reloadData];
     [self.view setNeedsLayout];
