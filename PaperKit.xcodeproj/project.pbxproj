@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		023066691B5185A61F1B3BA8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC63CE84E0C6B70E54C88966 /* libPods.a */; };
+		8C39A4371B6709F100FE032D /* PKPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C39A4361B6709F100FE032D /* PKPreviewView.m */; };
 		8C837A4B1B2BF1CC00B169FD /* PaperKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A4A1B2BF1CC00B169FD /* PaperKitTests.m */; };
 		8CB0450D1B61C67100079E16 /* PKCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB044F21B61C67100079E16 /* PKCollectionView.m */; };
 		8CB0450E1B61C67100079E16 /* PKCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB044F41B61C67100079E16 /* PKCollectionViewCell.m */; };
@@ -37,6 +38,8 @@
 
 /* Begin PBXFileReference section */
 		26356A34CDED90DE68B8436B /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		8C39A4351B6709F100FE032D /* PKPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKPreviewView.h; sourceTree = "<group>"; };
+		8C39A4361B6709F100FE032D /* PKPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKPreviewView.m; sourceTree = "<group>"; };
 		8C837A2B1B2BF1CC00B169FD /* PaperKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C837A2F1B2BF1CC00B169FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C837A441B2BF1CC00B169FD /* PaperKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaperKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +171,8 @@
 				8CB044F61B61C67100079E16 /* PKCollectionViewController.m */,
 				8CB044F71B61C67100079E16 /* PKCollectionViewFlowLayout.h */,
 				8CB044F81B61C67100079E16 /* PKCollectionViewFlowLayout.m */,
+				8C39A4351B6709F100FE032D /* PKPreviewView.h */,
+				8C39A4361B6709F100FE032D /* PKPreviewView.m */,
 				8CB044F91B61C67100079E16 /* PKContentCollectionView.h */,
 				8CB044FA1B61C67100079E16 /* PKContentCollectionView.m */,
 				8CB044FB1B61C67100079E16 /* PKContentScrollView.h */,
@@ -343,6 +348,7 @@
 				8CB045161B61C67100079E16 /* PKTableView.m in Sources */,
 				8CB045181B61C67100079E16 /* PKViewController.m in Sources */,
 				8CB045191B61C67100079E16 /* PKWindow.m in Sources */,
+				8C39A4371B6709F100FE032D /* PKPreviewView.m in Sources */,
 				8CB0450E1B61C67100079E16 /* PKCollectionViewCell.m in Sources */,
 				8CB045101B61C67100079E16 /* PKCollectionViewFlowLayout.m in Sources */,
 				8CB045171B61C67100079E16 /* PKToolbar.m in Sources */,
