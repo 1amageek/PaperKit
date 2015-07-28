@@ -17,3 +17,4 @@
 #import "PKViewController.h"
 #import "PKCollectionView.h"
 #import "PKScrollView.h"
+#import "PKPreviewView.h"
