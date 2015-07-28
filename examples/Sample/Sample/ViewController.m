@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "ContentViewController.h"
+#import "FullScreenContentViewController.h"
 
 
 @interface ViewController ()
@@ -142,8 +143,11 @@
 
 - (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath onCategory:(NSUInteger)category
 {
-    //NSLog(@"indexPaht %@ cateogry %lu",indexPath, (unsigned long)category);
-    return [ContentViewController new];
+    if (indexPath.item % 3) {
+        return [ContentViewController new];
+    } else {
+        return [FullScreenContentViewController new];
+    }
 }
 
 - (void)scrollView:(UIScrollView *)scrollView slideToAction:(PKCollectionViewControllerScrollDirection)direction;
