@@ -130,3 +130,4 @@ ViewController *nextViewController = [ViewController new];
 
 * Read the [Design Details: Paper by Facebook](http://blog.brianlovin.com/design-details-paper-by-facebook/)
 * [AsyncDisplayKit](https://github.com/facebook/AsyncDisplayKit)
+* [PaperKit+Camera](https://github.com/1amageek/PaperKit-Camera)
