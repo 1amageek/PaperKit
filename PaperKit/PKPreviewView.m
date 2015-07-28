@@ -7,6 +7,7 @@
 //
 
 #import "PKPreviewView.h"
+#import <CoreMotion/CoreMotion.h>
 
 @implementation PKPreviewView
 
