@@ -17,9 +17,13 @@ typedef NS_ENUM(NSInteger, PKPreviewViewContentMode)
 @interface PKPreviewView : UIScrollView
 
 @property (nonatomic) PKPreviewViewContentMode contentMode; // default PKPreviewViewContentModeScaleAspectFill
-@property (nonatomic) UIImage *image;
-@property (nonatomic) UIImageView *imageView;
+@property (nullable, nonatomic) UIImage *image;
+@property (nullable, nonatomic) UIImageView *imageView;
 
-- (nonnull instancetype)initWithImage:(UIImage *)image;
+- (nonnull instancetype)initWithImage:(nullable UIImage *)image;
+
+- (void)resetOffset;
+- (void)startMotion;
+- (void)stopMotion;
 
 @end

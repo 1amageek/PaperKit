@@ -8,6 +8,14 @@
 
 #import "PKPreviewView.h"
 #import <CoreMotion/CoreMotion.h>
+#import <pop/POP.h>
+#import <pop/POPLayerExtras.h>
+
+@interface PKPreviewView ()
+@property (nonatomic) CMMotionManager *motionManger;
+@property (nonatomic) NSOperationQueue *operationQueue;
+@property (nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
+@end
 
 @implementation PKPreviewView
 
@@ -33,9 +41,22 @@
 
 - (void)_commonInit
 {
+    // scrollView
+    self.maximumZoomScale = 2;
+    self.bouncesZoom = YES;
+    self.backgroundColor = [UIColor blackColor];
+    
     _contentMode = PKPreviewViewContentModeScaleAspectFill;
+    _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
+    [self addGestureRecognizer:_tapGestureRecognizer];
+    
     [self addSubview:self.imageView];
+    self.contentSize = self.imageView.bounds.size;
+    CGFloat contentOffsetX = self.imageView.bounds.size.width/2 - self.bounds.size.width/2;
+    self.contentOffset = CGPointMake(-contentOffsetX, 0);
 }
+
+#pragma mark - ImageView
 
 - (UIImageView *)imageView
 {
@@ -50,12 +71,72 @@
 - (void)setImage:(UIImage *)image
 {
     _image = image;
-    
-    CGSize size = [self sizeThatSize:image.size contentMode:self.contentMode];
-    self.imageView.frame = (CGRect){CGPointZero, size};
-    self.imageView.image = image;
-    [self.imageView setNeedsDisplay];
+    if (image) {
+        CGSize fillSize = [self sizeThatSize:image.size contentMode:PKPreviewViewContentModeScaleAspectFill];
+        CGSize fitSize = [self sizeThatSize:image.size contentMode:PKPreviewViewContentModeScaleAspectFit];
+        
+        self.minimumZoomScale = fitSize.width/fillSize.width;
+        
+        self.imageView.frame = (CGRect){CGPointZero, fillSize};
+        self.imageView.image = image;
+        [self.imageView setNeedsDisplay];
+    }
 }
+
+#pragma mark - GestureRecognizer
+
+- (void)tapGesture:(UITapGestureRecognizer *)recognizer
+{
+    
+}
+
+#pragma mark - MotionManager
+
+- (CMMotionManager *)motionManger
+{
+    if (_motionManger) {
+        return _motionManger;
+    }
+    
+    _motionManger = [CMMotionManager new];
+    return _motionManger;
+}
+
+- (NSOperationQueue *)operationQueue
+{
+    if (_operationQueue) {
+        return _operationQueue;
+    }
+    _operationQueue = [NSOperationQueue new];
+    return _operationQueue;
+}
+
+- (void)startMotion
+{
+    if (self.motionManger.deviceMotionAvailable) {
+        self.motionManger.deviceMotionUpdateInterval = 0.01;
+        
+        [self.motionManger startDeviceMotionUpdatesToQueue:self.operationQueue withHandler:^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error) {
+            if (error) {
+                return;
+            }
+            if (motion) {
+                
+                CGFloat rotationRateY = motion.rotationRate.y;
+                
+            }
+        }];
+    }
+}
+
+- (void)stopMotion
+{
+    if (self.motionManger.deviceMotionActive) {
+        [self.motionManger stopDeviceMotionUpdates];
+    }
+}
+
+#pragma mark - util
 
 - (CGSize)sizeThatSize:(CGSize)size contentMode:(PKPreviewViewContentMode)contentMode
 {
