@@ -12,5 +12,7 @@
 
 @property (nonatomic) PKCollectionView *collectionView;
 @property (nonatomic) UIImageView *imageView;
+@property (nonatomic) UIButton *button1;
+@property (nonatomic) UIButton *button2;
 
 @end
