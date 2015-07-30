@@ -45,15 +45,13 @@
     self.maximumZoomScale = 2;
     self.bouncesZoom = YES;
     self.backgroundColor = [UIColor blackColor];
+    self.showsHorizontalScrollIndicator = NO;
+    self.showsVerticalScrollIndicator = NO;
     
     _contentMode = PKPreviewViewContentModeScaleAspectFill;
     _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
     [self addGestureRecognizer:_tapGestureRecognizer];
-    
     [self addSubview:self.imageView];
-    self.contentSize = self.imageView.bounds.size;
-    CGFloat contentOffsetX = self.imageView.bounds.size.width/2 - self.bounds.size.width/2;
-    self.contentOffset = CGPointMake(-contentOffsetX, 0);
 }
 
 #pragma mark - ImageView
@@ -65,6 +63,7 @@
     }
     _imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     _imageView.contentMode = UIViewContentModeScaleAspectFit;
+    _imageView.userInteractionEnabled = NO;
     return _imageView;
 }
 
@@ -72,6 +71,7 @@
 {
     _image = image;
     if (image) {
+        
         CGSize fillSize = [self sizeThatSize:image.size contentMode:PKPreviewViewContentModeScaleAspectFill];
         CGSize fitSize = [self sizeThatSize:image.size contentMode:PKPreviewViewContentModeScaleAspectFit];
         
@@ -79,6 +79,11 @@
         
         self.imageView.frame = (CGRect){CGPointZero, fillSize};
         self.imageView.image = image;
+        
+        self.contentSize = self.imageView.bounds.size;
+        CGFloat contentOffsetX = self.imageView.bounds.size.width/2 - self.bounds.size.width/2;
+        self.contentOffset = CGPointMake(contentOffsetX, 0);
+        
         [self.imageView setNeedsDisplay];
     }
 }
@@ -113,19 +118,25 @@
 
 - (void)startMotion
 {
-    if (self.motionManger.deviceMotionAvailable) {
-        self.motionManger.deviceMotionUpdateInterval = 0.01;
-        
-        [self.motionManger startDeviceMotionUpdatesToQueue:self.operationQueue withHandler:^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error) {
-            if (error) {
-                return;
-            }
-            if (motion) {
-                
-                CGFloat rotationRateY = motion.rotationRate.y;
-                
-            }
-        }];
+    if (!self.motionManger.deviceMotionActive) {
+        if (self.motionManger.deviceMotionAvailable) {
+            self.motionManger.deviceMotionUpdateInterval = 0.05;
+            
+            [self.motionManger startDeviceMotionUpdatesToQueue:self.operationQueue withHandler:^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error) {
+                if (error) {
+                    return;
+                }
+                if (motion) {
+                    
+                    // FIXME
+                    CGFloat rotationRateY = motion.rotationRate.y;
+                    CGPoint contentOffset = CGPointMake(self.contentOffset.x + rotationRateY * 100, self.contentOffset.y);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self setContentOffset:contentOffset];
+                    });
+                }
+            }];
+        }
     }
 }
 

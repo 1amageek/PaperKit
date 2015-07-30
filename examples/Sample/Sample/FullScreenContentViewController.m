@@ -20,6 +20,16 @@
     [self.view addSubview:_previewView];
 }
 
+- (void)setTransitionProgress:(CGFloat)transitionProgress
+{
+    [super transitionProgress];
+    if (transitionProgress == 1) {
+        [self.previewView startMotion];
+    } else {
+        [self.previewView stopMotion];
+    }
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

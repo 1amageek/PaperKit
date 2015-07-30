@@ -8,7 +8,7 @@
 
 #import "PKCollectionViewController.h"
 
-
+/*
 @interface _PKHitTestView : UIView
 
 @end
@@ -40,11 +40,8 @@
     }
     return nil;
 }
-
-
 @end
-
-
+*/
 
 @interface PKCollectionViewController () <PKCollectionViewFlowLayoutDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate>
 {
@@ -98,12 +95,12 @@
     
     return self;
 }
-
+/*
 - (void)loadView
 {
     self.view = [[_PKHitTestView alloc] initWithFrame:[UIScreen mainScreen].bounds];
 }
-
+*/
 - (void)setMinimumZoomScale:(CGFloat)minimumZoomScale
 {
     _minimumZoomScale = minimumZoomScale;
