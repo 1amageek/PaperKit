@@ -10,6 +10,8 @@
 #import <CoreMotion/CoreMotion.h>
 #import <pop/POP.h>
 #import <pop/POPLayerExtras.h>
+#define LOWPASS_FILTER_ALPHA 0.9
+
 
 @interface PKPreviewView ()
 @property (nonatomic) CMMotionManager *motionManger;
@@ -18,6 +20,9 @@
 @end
 
 @implementation PKPreviewView
+{
+    CGFloat _previousValue;
+}
 
 
 - (nonnull instancetype)initWithFrame:(CGRect)frame
@@ -41,6 +46,9 @@
 
 - (void)_commonInit
 {
+    _previousValue = 0;
+    
+    
     // scrollView
     self.maximumZoomScale = 2;
     self.bouncesZoom = YES;
@@ -120,7 +128,7 @@
 {
     if (!self.motionManger.deviceMotionActive) {
         if (self.motionManger.deviceMotionAvailable) {
-            self.motionManger.deviceMotionUpdateInterval = 0.05;
+            self.motionManger.deviceMotionUpdateInterval = 0.01;
             
             [self.motionManger startDeviceMotionUpdatesToQueue:self.operationQueue withHandler:^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error) {
                 if (error) {
@@ -129,8 +137,14 @@
                 if (motion) {
                     
                     // FIXME
-                    CGFloat rotationRateY = motion.rotationRate.y;
-                    CGPoint contentOffset = CGPointMake(self.contentOffset.x + rotationRateY * 100, self.contentOffset.y);
+                    CGFloat rotationRateY = floorf(motion.rotationRate.y * 1000)/80;
+                    CGFloat translation = [self lowPassFilter:(rotationRateY)];
+                    CGFloat offsetX = (self.contentOffset.x + translation);
+                    CGFloat maxOffsetX = (self.contentSize.width - self.bounds.size.width);
+                    offsetX = offsetX < 0 ? 0 : offsetX;
+                    offsetX = maxOffsetX < offsetX ? maxOffsetX : offsetX;
+                    
+                    CGPoint contentOffset = CGPointMake(offsetX, self.contentOffset.y);
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self setContentOffset:contentOffset];
                     });
@@ -145,9 +159,30 @@
     if (self.motionManger.deviceMotionActive) {
         [self.motionManger stopDeviceMotionUpdates];
     }
+    [self resetOffset];
+}
+
+- (void)resetOffset
+{
+    POPSpringAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.previewView.contentOffset"];
+    if (!animation) {
+        animation = [POPSpringAnimation animationWithPropertyNamed:kPOPScrollViewContentOffset];
+        [self pop_addAnimation:animation forKey:@"inc.stamp.pk.previewView.contentOffset"];
+    }
+    CGFloat contentOffsetX = self.imageView.bounds.size.width/2 - self.bounds.size.width/2;
+    animation.toValue = [NSValue valueWithCGPoint:CGPointMake(contentOffsetX, 0)];
+    
 }
 
 #pragma mark - util
+
+- (CGFloat)lowPassFilter:(CGFloat)value
+{
+    CGFloat currentValue = _previousValue * LOWPASS_FILTER_ALPHA;
+    currentValue += (1 - LOWPASS_FILTER_ALPHA) * value;
+    _previousValue = currentValue;
+    return currentValue;
+}
 
 - (CGSize)sizeThatSize:(CGSize)size contentMode:(PKPreviewViewContentMode)contentMode
 {
