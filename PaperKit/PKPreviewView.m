@@ -17,6 +17,7 @@
 @property (nonatomic) CMMotionManager *motionManger;
 @property (nonatomic) NSOperationQueue *operationQueue;
 @property (nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
+@property (nonatomic) CGFloat zoomScaleProgress;
 @end
 
 @implementation PKPreviewView
@@ -47,10 +48,12 @@
 - (void)_commonInit
 {
     _previousValue = 0;
-    
+    _zoomScaleProgress = 0;
     
     // scrollView
     self.maximumZoomScale = 2;
+    self.minimumZoomScale = 1;
+    self.zoomScale = 1;
     self.bouncesZoom = YES;
     self.backgroundColor = [UIColor blackColor];
     self.showsHorizontalScrollIndicator = NO;
@@ -84,7 +87,7 @@
         CGSize fitSize = [self sizeThatSize:image.size contentMode:PKPreviewViewContentModeScaleAspectFit];
         
         self.minimumZoomScale = fitSize.width/fillSize.width;
-        
+
         self.imageView.frame = (CGRect){CGPointZero, fillSize};
         self.imageView.image = image;
         
@@ -100,7 +103,37 @@
 
 - (void)tapGesture:(UITapGestureRecognizer *)recognizer
 {
+
+    // FIXME
     
+    POPSpringAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.previewView.zoom"];
+    if (!animation) {
+        animation = [POPSpringAnimation animation];
+        POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.previewView.zoom.property" initializer:^(POPMutableAnimatableProperty *prop) {
+            prop.readBlock = ^(id obj, CGFloat values[]) {
+                values[0] = [obj zoomScaleProgress];
+            };
+            prop.writeBlock = ^(id obj, const CGFloat values[]) {
+                [obj setZoomScaleProgress:values[0]];
+            };
+            prop.threshold = 0.01;
+        }];
+        
+        animation.property = propX;
+        [self pop_addAnimation:animation forKey:@"inc.stamp.pk.previewView.zoom"];
+    }
+    animation.toValue = @(1);
+}
+
+- (void)setZoomScaleProgress:(CGFloat)zoomScaleProgress
+{
+    _zoomScaleProgress = zoomScaleProgress;
+    CGFloat scale = POPTransition(zoomScaleProgress, self.minimumZoomScale, self.maximumZoomScale);
+    [self setZoomScale:scale animated:NO];
+}
+
+static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloat endValue) {
+    return startValue + (progress * (endValue - startValue));
 }
 
 #pragma mark - MotionManager
@@ -172,6 +205,16 @@
     CGFloat contentOffsetX = self.imageView.bounds.size.width/2 - self.bounds.size.width/2;
     animation.toValue = [NSValue valueWithCGPoint:CGPointMake(contentOffsetX, 0)];
     
+}
+
+#pragma Gesture Recognizer
+
+- (BOOL)gestureRecognizerShouldBegin:(nonnull UIGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer == self.panGestureRecognizer) {
+        return NO;
+    }
+    return YES;
 }
 
 #pragma mark - util
