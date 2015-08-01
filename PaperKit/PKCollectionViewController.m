@@ -498,6 +498,9 @@
         self.scrollView.decelerationRate = UIScrollViewDecelerationRateFast;
         self.pagingEnabled = YES;
         [self animationTransitionExpand:YES velocity:0];
+        if ([self.delegate respondsToSelector:@selector(viewController:didSelectItemAtIndexPath:)]) {
+            [self.delegate viewController:self didSelectItemAtIndexPath:self.selectedIndexPath];
+        }
     }
 }
 
@@ -527,6 +530,7 @@
             
             if (!self.selectedIndexPath) {
                 recognizer.state = UIGestureRecognizerStateFailed;
+                return;
             }
             
             break;
@@ -573,6 +577,9 @@
             _fromPosition = self.collectionView.layer.position;
             
             if (velocity.y < 0) {
+                if ([self.delegate respondsToSelector:@selector(viewController:didSelectItemAtIndexPath:)]) {
+                    [self.delegate viewController:self didSelectItemAtIndexPath:self.selectedIndexPath];
+                }
                 self.pagingEnabled = YES;
                 [self animationTransitionExpand:YES velocity:velocity.y];
             } else {

@@ -33,6 +33,16 @@
 
 - (PKCollectionViewController *)foregroundViewControllerAtIndex:(NSInteger)category;
 
+/*
+ This methods is called when select viewController
+ */
+- (void)didSelectViewController:(PKContentViewController *)viewController;
+
+/*
+ This methods is called when change transtionProgress
+ */
+- (void)didChangeTransitionProgress:(CGFloat)transitionProgress;
+
 // background Collection View
 - (NSInteger)numberOfSectionsInBackgroundCollectionView:(UICollectionView *)collectionView;
 - (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
@@ -45,6 +55,7 @@
 
 
 // action
+
 /*
  This methods is called when the scroll view was a gesture that exceeds the contentSize.
  */

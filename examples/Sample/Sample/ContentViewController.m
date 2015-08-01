@@ -58,6 +58,7 @@
     [self.view addSubview:_button2];
 }
 
+
 #pragma Button Action
 
 - (void)changeLayout:(UIButton *)button
@@ -75,8 +76,6 @@
     if (button == _button2) {
         layout.itemSize = CGSizeMake(self.view.bounds.size.width / 2, self.view.bounds.size.width/3);
     }
-    
-    
     
     [self.collectionView setCollectionViewLayout:layout animated:YES];
 }

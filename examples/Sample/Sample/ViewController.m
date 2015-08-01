@@ -15,6 +15,7 @@
 @property (nonatomic) UIButton *reloadForegroundButton;
 @property (nonatomic) UIButton *reloadBackgroundButton;
 @property (nonatomic) UIButton *insertForegroundButton;
+@property (nonatomic) UIButton *showCellsButton;
 
 @property (nonatomic) NSArray *backgroundData;
 @property (nonatomic) NSArray *foregroundData;
@@ -27,8 +28,17 @@
     
     _backgroundData = @[@"0",@"1",@"2"];
     _foregroundData = @[@"0",@"1",@"2",@"3",@"4",@"5"];
-    
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
+    
+    _showCellsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_showCellsButton setTitle:@"show visibleCells" forState:UIControlStateNormal];
+    [_showCellsButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
+    [_showCellsButton sizeToFit];
+    _showCellsButton.tintColor = [UIColor whiteColor];
+    _showCellsButton.center = CGPointMake(self.view.center.x, self.view.center.x - 90);
+    [self.view addSubview:_showCellsButton];
+    
+
     _reloadForegroundButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [_reloadForegroundButton setTitle:@"reload foreground" forState:UIControlStateNormal];
     [_reloadForegroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -53,6 +63,8 @@
     _insertForegroundButton.center = CGPointMake(self.view.center.x, self.view.center.x);
     [self.view addSubview:_insertForegroundButton];
     
+
+    
     UIBarButtonItem *flex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(add:)];
     [self.toolbar setItems:@[flex, add]];
@@ -61,6 +73,13 @@
 
 - (void)tapped:(UIButton *)button
 {
+    if (button == _showCellsButton) {
+        PKCollectionViewController *foregroundViewController = [self foregroundViewControllerAtIndex:self.selectedCategory];
+        NSArray *cells = [foregroundViewController visibleCells];
+        
+        NSLog(@"cells %@", cells);
+    }
+    
     if (button == _reloadBackgroundButton) {
         _backgroundData = @[@"0",@"1",@"2"];
         [self reloadBackgroundData];
@@ -108,18 +127,25 @@
 
 - (void)add:(UIBarButtonItem *)buttonItem
 {
-    
+
 }
 
 - (void)categoryWillSet:(NSUInteger)currentCategory nextCategory:(NSUInteger)nextCategory
 {
-    
+    NSLog(@"categoryWillSet %lu %lu", currentCategory, (unsigned long)nextCategory);
 }
 
 - (void)categoryDidSet:(NSUInteger)category
 {
-    
+    NSLog(@"categoryDidSet %lu", category);
 }
+
+- (void)didSelectViewController:(PKContentViewController *)viewController
+{
+    NSLog(@"didSelectViewController %@", viewController);
+}
+
+
 
 - (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {

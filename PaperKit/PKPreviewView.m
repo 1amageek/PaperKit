@@ -177,7 +177,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
                     offsetX = offsetX < 0 ? 0 : offsetX;
                     offsetX = maxOffsetX < offsetX ? maxOffsetX : offsetX;
                     
-                    CGPoint contentOffset = CGPointMake(offsetX, self.contentOffset.y);
+                    CGPoint contentOffset = CGPointMake(-offsetX, self.contentOffset.y);
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self setContentOffset:contentOffset];
                     });

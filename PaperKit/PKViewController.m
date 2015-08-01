@@ -209,6 +209,16 @@
 
 #pragma mark - action
 
+- (void)didSelectViewController:(PKContentViewController *)viewController 
+{
+    // override method
+}
+
+- (void)didChangeTransitionProgress:(CGFloat)transitionProgress
+{
+    // override method
+}
+
 - (void)scrollView:(UIScrollView *)scrollView slideToAction:(PKCollectionViewControllerScrollDirection)direction;
 {
     // override method
@@ -494,8 +504,15 @@
 
 #pragma mark - PKCollectionViewControllerDelegate
 
+- (void)viewController:(nonnull PKCollectionViewController *)viewController didSelectItemAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
+    [self didSelectViewController:((PKCollectionViewCell *)[viewController.collectionView cellForItemAtIndexPath:indexPath]).viewController];
+}
+
 - (void)viewController:(PKCollectionViewController *)viewController didChangeTransitionProgress:(CGFloat)transitionProgress
 {
+    [self didChangeTransitionProgress:transitionProgress];
+    
     UICollectionViewCell *cell = [self.collectionView visibleCells][0];
     
     if (cell) {
