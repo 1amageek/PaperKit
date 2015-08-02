@@ -8,6 +8,7 @@
 
 #import "BackgroundViewController.h"
 #import "ViewController.h"
+#import "FullScreenContentViewController.h"
 
 @interface BackgroundViewController ()
 

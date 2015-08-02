@@ -13,7 +13,7 @@
 #define LOWPASS_FILTER_ALPHA 0.9
 
 
-@interface PKPreviewView ()
+@interface PKPreviewView () <UIScrollViewDelegate>
 @property (nonatomic) CMMotionManager *motionManger;
 @property (nonatomic) NSOperationQueue *operationQueue;
 @property (nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
@@ -23,6 +23,8 @@
 @implementation PKPreviewView
 {
     CGFloat _previousValue;
+    CGPoint _fromPoisition;
+    CGFloat _fromZoomScale;
 }
 
 
@@ -47,22 +49,25 @@
 
 - (void)_commonInit
 {
+    
     _previousValue = 0;
     _zoomScaleProgress = 0;
-    
-    // scrollView
-    self.maximumZoomScale = 2;
-    self.minimumZoomScale = 1;
-    self.zoomScale = 1;
-    self.bouncesZoom = YES;
-    self.backgroundColor = [UIColor blackColor];
-    self.showsHorizontalScrollIndicator = NO;
-    self.showsVerticalScrollIndicator = NO;
-    
+    _zoomScale = 1;
+    _maximumZoomScale = 2;
+    _minimumZoomScale = 1;
+
     _contentMode = PKPreviewViewContentModeScaleAspectFill;
     _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
+    self.clipsToBounds = YES;
     [self addGestureRecognizer:_tapGestureRecognizer];
     [self addSubview:self.imageView];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (nullable UIView *)viewForZoomingInScrollView:(nonnull UIScrollView *)scrollView
+{
+    return self.imageView;
 }
 
 #pragma mark - ImageView
@@ -90,10 +95,7 @@
 
         self.imageView.frame = (CGRect){CGPointZero, fillSize};
         self.imageView.image = image;
-        
-        self.contentSize = self.imageView.bounds.size;
-        CGFloat contentOffsetX = self.imageView.bounds.size.width/2 - self.bounds.size.width/2;
-        self.contentOffset = CGPointMake(contentOffsetX, 0);
+        self.imageView.center = self.center;
         
         [self.imageView setNeedsDisplay];
     }
@@ -104,8 +106,26 @@
 - (void)tapGesture:(UITapGestureRecognizer *)recognizer
 {
 
-    // FIXME
-    
+    NSValue *toProgress;
+    switch (self.contentMode) {
+        case PKPreviewViewContentModeScaleAspectFit:
+            self.contentMode = PKPreviewViewContentModeScaleAspectFill;
+            _fromZoomScale = 1;
+            _fromPoisition = self.center;
+            toProgress = @(0);
+            break;
+        case PKPreviewViewContentModeScaleAspectFill:
+        default:
+            self.contentMode = PKPreviewViewContentModeScaleAspectFit;
+            _fromZoomScale = self.zoomScale;
+            _fromPoisition = self.imageView.layer.position;
+            toProgress = @(1);
+            if (self.motionManger.deviceMotionActive) {
+                [self.motionManger stopDeviceMotionUpdates];
+            }
+            break;
+    }
+
     POPSpringAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.previewView.zoom"];
     if (!animation) {
         animation = [POPSpringAnimation animation];
@@ -120,16 +140,29 @@
         }];
         
         animation.property = propX;
+        animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
+            if (finished) {
+                if (self.contentMode == PKPreviewViewContentModeScaleAspectFill) {
+                    [self startMotion];
+                }
+            }
+        };
         [self pop_addAnimation:animation forKey:@"inc.stamp.pk.previewView.zoom"];
     }
-    animation.toValue = @(1);
+    animation.toValue = toProgress;
 }
 
 - (void)setZoomScaleProgress:(CGFloat)zoomScaleProgress
 {
     _zoomScaleProgress = zoomScaleProgress;
-    CGFloat scale = POPTransition(zoomScaleProgress, self.minimumZoomScale, self.maximumZoomScale);
-    [self setZoomScale:scale animated:NO];
+    
+    CGFloat scale = POPTransition(zoomScaleProgress, _fromZoomScale, self.minimumZoomScale);
+    POPLayerSetScaleXY(self.imageView.layer, CGPointMake(scale, scale));
+    [self setZoomScale:scale];
+    
+    CGFloat positionX = POPTransition(zoomScaleProgress, _fromPoisition.x, self.center.x);
+    self.imageView.layer.position = CGPointMake(positionX, self.imageView.layer.position.y);
+    
 }
 
 static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloat endValue) {
@@ -159,30 +192,31 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 
 - (void)startMotion
 {
-    if (!self.motionManger.deviceMotionActive) {
-        if (self.motionManger.deviceMotionAvailable) {
-            self.motionManger.deviceMotionUpdateInterval = 0.01;
-            
-            [self.motionManger startDeviceMotionUpdatesToQueue:self.operationQueue withHandler:^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error) {
-                if (error) {
-                    return;
-                }
-                if (motion) {
-                    
-                    // FIXME
-                    CGFloat rotationRateY = floorf(motion.rotationRate.y * 1000)/80;
-                    CGFloat translation = [self lowPassFilter:(rotationRateY)];
-                    CGFloat offsetX = (self.contentOffset.x - translation);
-                    CGFloat maxOffsetX = (self.contentSize.width - self.bounds.size.width);
-                    offsetX = offsetX < 0 ? 0 : offsetX;
-                    offsetX = maxOffsetX < offsetX ? maxOffsetX : offsetX;
-                    
-                    CGPoint contentOffset = CGPointMake(offsetX, self.contentOffset.y);
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self setContentOffset:contentOffset];
-                    });
-                }
-            }];
+    if (self.contentMode == PKPreviewViewContentModeScaleAspectFill) {
+        if (!self.motionManger.deviceMotionActive) {
+            if (self.motionManger.deviceMotionAvailable) {
+                self.motionManger.deviceMotionUpdateInterval = 0.01;
+                
+                [self.motionManger startDeviceMotionUpdatesToQueue:self.operationQueue withHandler:^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error) {
+                    if (error) {
+                        return;
+                    }
+                    if (motion) {
+                        
+                        CGFloat rotationRateY = floorf(motion.rotationRate.y * 1000)/100;
+                        CGFloat translationX = [self lowPassFilter:(rotationRateY)];
+                        CGFloat pointX = self.imageView.center.x + translationX;
+                        
+                        pointX = (CGRectGetMidX(self.imageView.bounds) < pointX) ? CGRectGetMidX(self.imageView.bounds) : pointX;
+                        pointX = (pointX < self.bounds.size.width - CGRectGetMidX(self.imageView.bounds)) ? self.bounds.size.width - CGRectGetMidX(self.imageView.bounds) : pointX;
+                        
+                        CGPoint translation = CGPointMake(pointX, self.imageView.center.y);
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            self.imageView.center = translation;
+                        });
+                    }
+                }];
+            }
         }
     }
 }
@@ -197,24 +231,39 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 
 - (void)resetOffset
 {
-    POPSpringAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.previewView.contentOffset"];
-    if (!animation) {
-        animation = [POPSpringAnimation animationWithPropertyNamed:kPOPScrollViewContentOffset];
-        [self pop_addAnimation:animation forKey:@"inc.stamp.pk.previewView.contentOffset"];
-    }
-    CGFloat contentOffsetX = self.imageView.bounds.size.width/2 - self.bounds.size.width/2;
-    animation.toValue = [NSValue valueWithCGPoint:CGPointMake(contentOffsetX, 0)];
     
-}
-
-#pragma Gesture Recognizer
-
-- (BOOL)gestureRecognizerShouldBegin:(nonnull UIGestureRecognizer *)gestureRecognizer
-{
-    if (gestureRecognizer == self.panGestureRecognizer) {
-        return NO;
+    if (self.contentMode == PKPreviewViewContentModeScaleAspectFill) {
+        POPSpringAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.previewView.resetOffset"];
+        if (!animation) {
+            animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionX];
+            [self.imageView.layer pop_addAnimation:animation forKey:@"inc.stamp.pk.previewView.resetOffset"];
+        }
+        animation.toValue = @(self.center.x);
     }
-    return YES;
+    
+    if (self.contentMode == PKPreviewViewContentModeScaleAspectFit) {
+        self.contentMode = PKPreviewViewContentModeScaleAspectFill;
+        _fromZoomScale = 1;
+        _fromPoisition = self.center;
+        POPSpringAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.previewView.zoom"];
+        if (!animation) {
+            animation = [POPSpringAnimation animation];
+            POPAnimatableProperty *propX = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.previewView.zoom.property" initializer:^(POPMutableAnimatableProperty *prop) {
+                prop.readBlock = ^(id obj, CGFloat values[]) {
+                    values[0] = [obj zoomScaleProgress];
+                };
+                prop.writeBlock = ^(id obj, const CGFloat values[]) {
+                    [obj setZoomScaleProgress:values[0]];
+                };
+                prop.threshold = 0.01;
+            }];
+            
+            animation.property = propX;
+            [self pop_addAnimation:animation forKey:@"inc.stamp.pk.previewView.zoom"];
+        }
+        animation.toValue = @(0);
+    }
+    
 }
 
 #pragma mark - util
