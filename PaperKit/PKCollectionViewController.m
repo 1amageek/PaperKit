@@ -55,6 +55,7 @@
     CGFloat _fromProgress;
     CGFloat _fromScale;
     CGPoint _fromPosition;
+    CGFloat _targetContentOffsetX;
 }
 
 @end
@@ -69,6 +70,7 @@
         _maximumZoomScale = 1.0f;
         _minimumZoomScale = 0.45f;
         _transitionProgress = 0.0f;
+        _targetContentOffsetX = 0;
         _pagingEnabled = NO;
         _collectionView = [[PKContentCollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:self.layout];
         _collectionView.delegate = self;
@@ -323,6 +325,7 @@
 {
     if (self.pagingEnabled) {
         CGPoint contentOffset = [self.layout targetContentOffsetForProposedContentOffset:*targetContentOffset withScrollingVelocity:velocity];
+        _targetContentOffsetX = contentOffset.x;
         *targetContentOffset = CGPointMake(contentOffset.x, contentOffset.y);
     }
 }
@@ -343,6 +346,7 @@
         if (cell.transitionProgress != self.transitionProgress) {
             cell.transitionProgress = self.transitionProgress;
         }
+        [cell.viewController viewControllerDidScroll:scrollView];
     }];
     
     NSMutableArray *visibleIndexPaths = [self indexPathsForVisibleItems].mutableCopy;
@@ -386,6 +390,14 @@
         }
     }
     
+    // PKContetnViewController helper function
+    if (self.pagingEnabled && scrollView.decelerating) {
+        if (_targetContentOffsetX == scrollView.contentOffset.x) {
+            PKCollectionViewCell *cell = visibleCells.firstObject;
+            PKContentViewController *viewController = cell.viewController;
+            [viewController viewDidDisplayInFullScreen];
+        }
+    }
 }
 
 - (void)scrollViewDidEndDragging:(nonnull UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
@@ -403,6 +415,7 @@
 {
     NSArray *rengeCells = [self visibleCells];
     if (rengeCells.count < 2) {
+        // FIXME
         //[self.collectionView.collectionViewLayout invalidateLayout];
     }
     _transitionProgress = (self.scrollView.zoomScale - self.minimumZoomScale) / (self.maximumZoomScale - self.minimumZoomScale);
@@ -625,10 +638,34 @@
         animation.springSpeed = 8;
         animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
             self.selectedIndexPath = nil;
+            if (finished) {
+                [self _didEndTransitionAnimation:expand];
+            }
         };
         [self pop_addAnimation:animation forKey:@"inc.stamp.pk.scrollView.progress"];
     }
     animation.toValue = expand ? @(1) : @(0);
+}
+
+- (void)_didEndTransitionAnimation:(BOOL)expand
+{
+    
+    if ([self.delegate respondsToSelector:@selector(viewController:didEndTransitionAnimation:)]) {
+        [self.delegate viewController:self didEndTransitionAnimation:expand];
+    }
+    NSArray *visibleCells = [self visibleCells];
+    [visibleCells enumerateObjectsUsingBlock:^(PKCollectionViewCell *cell, NSUInteger idx, BOOL *stop) {
+        
+        CGFloat transitionProgress = (expand ? 1 : 0);
+        if (cell.transitionProgress != transitionProgress) {
+            cell.transitionProgress = transitionProgress;
+        }
+        if (!cell.viewController.isDisplayingInFullScreen && expand) {
+            [cell.viewController viewDidDisplayInFullScreen];
+        }
+        
+    }];
+    
 }
 
 static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloat endValue) {

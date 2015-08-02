@@ -58,7 +58,6 @@
     [self.view addSubview:_button2];
 }
 
-
 #pragma Button Action
 
 - (void)changeLayout:(UIButton *)button

@@ -21,8 +21,7 @@
 - (void)setTransitionProgress:(CGFloat)transitionProgress
 {
     _transitionProgress = transitionProgress;
-    self.viewController.transitionProgress = transitionProgress;
-    
+    [self.viewController setTransitionProgress:transitionProgress];
     if (1 <= transitionProgress) {
         self.viewController.view.userInteractionEnabled = YES;
     } else {

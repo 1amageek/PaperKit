@@ -20,14 +20,16 @@
     [self.view addSubview:_previewView];
 }
 
-- (void)setTransitionProgress:(CGFloat)transitionProgress
+- (void)viewDidDisplayInFullScreen
 {
-    [super transitionProgress];
-    if (transitionProgress == 1) {
-        [self.previewView startMotion];
-    } else {
-        [self.previewView stopMotion];
-    }
+    [super viewDidDisplayInFullScreen];
+    [self.previewView startMotion];
+}
+
+- (void)viewDidEndDisplayingInFullScreen
+{
+    [super viewDidEndDisplayingInFullScreen];
+    [self.previewView stopMotion];
 }
 
 - (void)didReceiveMemoryWarning {

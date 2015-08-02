@@ -172,12 +172,12 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
                     // FIXME
                     CGFloat rotationRateY = floorf(motion.rotationRate.y * 1000)/80;
                     CGFloat translation = [self lowPassFilter:(rotationRateY)];
-                    CGFloat offsetX = (self.contentOffset.x + translation);
+                    CGFloat offsetX = (self.contentOffset.x - translation);
                     CGFloat maxOffsetX = (self.contentSize.width - self.bounds.size.width);
                     offsetX = offsetX < 0 ? 0 : offsetX;
                     offsetX = maxOffsetX < offsetX ? maxOffsetX : offsetX;
                     
-                    CGPoint contentOffset = CGPointMake(-offsetX, self.contentOffset.y);
+                    CGPoint contentOffset = CGPointMake(offsetX, self.contentOffset.y);
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self setContentOffset:contentOffset];
                     });

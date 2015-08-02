@@ -39,9 +39,14 @@
 - (void)didSelectViewController:(PKContentViewController *)viewController;
 
 /*
- This methods is called when change transtionProgress
+ This methods is called when change transitionProgress
  */
 - (void)didChangeTransitionProgress:(CGFloat)transitionProgress;
+
+/*
+ This methods is called when animation finished
+ */
+- (void)didEndTransitionAnimation:(BOOL)expand;
 
 // background Collection View
 - (NSInteger)numberOfSectionsInBackgroundCollectionView:(UICollectionView *)collectionView;

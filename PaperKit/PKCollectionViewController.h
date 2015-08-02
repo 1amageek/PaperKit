@@ -57,6 +57,7 @@ typedef NS_ENUM(NSInteger, PKCollectionViewControllerScrollDirection)
 /*
  This methods is called when the scroll view was a gesture that exceeds the contentSize.
  */
+- (void)viewController:(nonnull PKCollectionViewController *)viewController didEndTransitionAnimation:(BOOL)expand;
 - (void)viewController:(nonnull PKCollectionViewController *)viewController slideToAction:(PKCollectionViewControllerScrollDirection)direction;
 @required
 - (void)viewController:(nonnull PKCollectionViewController *)viewController didChangeTransitionProgress:(CGFloat)transitionProgress;

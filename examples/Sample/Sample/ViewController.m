@@ -145,7 +145,10 @@
     NSLog(@"didSelectViewController %@", viewController);
 }
 
-
+- (void)didEndTransitionAnimation:(BOOL)expand
+{
+    NSLog(@"didEndTransitionAnimation %d", expand);
+}
 
 - (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {

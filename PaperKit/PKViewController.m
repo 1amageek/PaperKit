@@ -207,7 +207,7 @@
 }
 
 
-#pragma mark - action
+#pragma mark - override method
 
 - (void)didSelectViewController:(PKContentViewController *)viewController 
 {
@@ -215,6 +215,11 @@
 }
 
 - (void)didChangeTransitionProgress:(CGFloat)transitionProgress
+{
+    // override method
+}
+
+- (void)didEndTransitionAnimation:(BOOL)expand
 {
     // override method
 }
@@ -512,7 +517,6 @@
 - (void)viewController:(PKCollectionViewController *)viewController didChangeTransitionProgress:(CGFloat)transitionProgress
 {
     [self didChangeTransitionProgress:transitionProgress];
-    
     UICollectionViewCell *cell = [self.collectionView visibleCells][0];
     
     if (cell) {
@@ -528,6 +532,11 @@
         [self pullDownToActionWithProgress:progress];
     }
     
+}
+
+- (void)viewController:(nonnull PKCollectionViewController *)viewController didEndTransitionAnimation:(BOOL)expand
+{
+    [self didEndTransitionAnimation:expand];
 }
 
 - (void)viewController:(PKCollectionViewController *)viewController slideToAction:(PKCollectionViewControllerScrollDirection)direction
