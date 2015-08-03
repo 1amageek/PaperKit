@@ -10,6 +10,8 @@ PaperKit is Framework that can easily create a Facebook's Paper.It can be create
 
 ### Try Sample
 
+requirement : Xcode7 beta4 
+
 ```bash
 $ pod try PaperKit
 ```
