@@ -108,6 +108,8 @@
             // FIXME
             UICollectionViewLayoutAttributes *attribute = [self layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section]];
             CGRect frame = [self.collectionView convertRect:attribute.frame toView:nil];
+            //NSLog(@"frame %@", NSStringFromCGRect(frame));
+            //NSLog(@"renge %@", NSStringFromCGRect(self.rengeRect));
             BOOL intersetsRect = CGRectIntersectsRect(self.rengeRect, frame);
             if (intersetsRect) {
                 [attributes addObject:attribute];

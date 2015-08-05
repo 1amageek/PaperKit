@@ -491,6 +491,7 @@
     [self.collectionView performBatchUpdates:updates completion:^(BOOL finished){
         completion(finished);
         [self setZoomScale:self.zoomScale];
+        [self.collectionView.collectionViewLayout invalidateLayout];
     }];
     
 }
