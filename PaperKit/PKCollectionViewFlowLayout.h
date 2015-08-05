@@ -21,10 +21,12 @@
 
 @property (nonatomic, weak) NSIndexPath *selectedIndexPath;
 @property (nonatomic) CGFloat zoomScale;
-@property (nonatomic) CGRect rengeRect;
+@property (nonatomic, readonly) CGSize rengeSize;
+@property (nonatomic, readonly) CGRect rengeRect;
 @property (nonatomic) id <PKCollectionViewFlowLayoutDelegate> delegate;
 
 - (CGSize)calculateSize;
+
 
 @end
 
@@ -32,5 +34,6 @@
 @protocol PKCollectionViewFlowLayoutDelegate <NSObject>
 
 - (CGFloat)layoutZoomScale;
+- (CGSize)sizeOfRengeInCollectionView:(nonnull UICollectionView *)collectionView;
 
 @end

@@ -32,7 +32,6 @@
     self = [super init];
     if (self) {
         _attributes = [NSMutableDictionary dictionary];
-        _rengeRect = [UIScreen mainScreen].bounds;
     }
     return self;
 }
@@ -76,11 +75,6 @@
     contentSizeWidth += (originX - self.minimumInteritemSpacing);
     _myCollectionViewSize = CGSizeMake(contentSizeWidth, contentSizeHeight);
     _zoomScale = [self.delegate layoutZoomScale];
-    
-    CGRect rengeRect = [UIScreen mainScreen].bounds;
-    rengeRect.origin.x -= self.itemSize.width;
-    rengeRect.size.width += (self.itemSize.width * 2);
-    self.rengeRect = rengeRect;
     //self.collectionView.frame = (CGRect){self.collectionView.frame.origin, CGSizeMake(ceilf(_myCollectionViewSize.width * _zoomScale), _myCollectionViewSize.height)};
 }
 
@@ -89,9 +83,21 @@
     return _attributes[indexPath];
 }
 
+- (CGSize)rengeSize
+{
+    return [self.delegate sizeOfRengeInCollectionView:self.collectionView];
+}
+
+- (CGRect)rengeRect
+{
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width/2;
+    CGFloat rengeWidth = self.rengeSize.width/2;
+    
+    return (CGRect){CGPointMake(screenWidth - rengeWidth, 0), self.rengeSize};
+}
+
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
 {
-    
     NSMutableArray *attributes = [NSMutableArray array];
     NSInteger sections = [self.collectionView numberOfSections];
     for (NSInteger section = 0; section < sections; section ++) {
@@ -99,7 +105,7 @@
         NSInteger items = [self.collectionView numberOfItemsInSection:section];
         
         for (NSInteger item = 0; item < items; item ++) {
-            
+            // FIXME
             UICollectionViewLayoutAttributes *attribute = [self layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section]];
             CGRect frame = [self.collectionView convertRect:attribute.frame toView:nil];
             BOOL intersetsRect = CGRectIntersectsRect(self.rengeRect, frame);
@@ -180,14 +186,13 @@
     
     NSIndexPath *indexPath = self.selectedIndexPath;
     NSIndexPath *previousIndexPath = [NSIndexPath indexPathForItem:(indexPath.item == 0) ? 0 : indexPath.item - 1 inSection:indexPath.section];
-    NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:(indexPath.item == [self.collectionView numberOfItemsInSection:indexPath.section] -1 ) ? indexPath.item : indexPath.item + 1 inSection:indexPath.section];
+    NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:(indexPath.item == [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:indexPath.section] - 1 ) ? indexPath.item : indexPath.item + 1 inSection:indexPath.section];
     
     if (velocity.x < 0) {
         indexPath = previousIndexPath;
     } else if (0 < velocity.x) {
         indexPath = nextIndexPath;
     }
-    
     UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
     return CGPointMake(cell.frame.origin.x, cell.frame.origin.y);
 }

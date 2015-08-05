@@ -314,6 +314,15 @@
     return self.scrollView.zoomScale;
 }
 
+- (CGSize)sizeOfRengeInCollectionView:(nonnull UICollectionView *)collectionView
+{
+    if (self.pagingEnabled) {
+        return CGSizeMake(self.view.bounds.size.width * 4, self.view.bounds.size.height);
+    } else {
+        return CGSizeMake(self.view.bounds.size.width * 2, self.view.bounds.size.height);
+    }
+}
+
 #pragma mark - <UIScrollViewDelegate>
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
@@ -349,6 +358,16 @@
         [cell.viewController viewControllerDidScroll:scrollView];
     }];
     
+    // PKContetnViewController helper function
+    if (self.pagingEnabled && scrollView.decelerating) {
+        if (_targetContentOffsetX == scrollView.contentOffset.x) {
+            PKCollectionViewCell *cell = visibleCells.firstObject;
+            PKContentViewController *viewController = cell.viewController;
+            [viewController viewDidDisplayInFullScreen];
+        }
+    }
+    
+    
     NSMutableArray *visibleIndexPaths = [self indexPathsForVisibleItems].mutableCopy;
     NSMutableArray *rengeIndexPaths = [self.collectionView indexPathsForVisibleItems].mutableCopy;
     
@@ -376,32 +395,29 @@
         return (NSComparisonResult)NSOrderedSame;
     }];
     
-    if (visibleIndexPaths.firstObject == rengeIndexPaths.firstObject) {
-        if (((NSIndexPath *)visibleIndexPaths.firstObject).item != 0) {
-            [self.collectionView.collectionViewLayout invalidateLayout];
-            return;
+    if (!self.pagingEnabled) {
+        if (visibleIndexPaths.firstObject == rengeIndexPaths.firstObject) {
+            if (((NSIndexPath *)visibleIndexPaths.firstObject).item != 0) {
+                [self.collectionView.collectionViewLayout invalidateLayout];
+                return;
+            }
         }
-    }
-    if (visibleIndexPaths.lastObject == rengeIndexPaths.lastObject) {
-        if (((NSIndexPath *)visibleIndexPaths.lastObject).item != [self.collectionView numberOfItemsInSection:0] - 1) {
-            [self.collectionView.collectionViewLayout invalidateLayout];
-            [self.view setNeedsLayout];
-            return;
-        }
-    }
-    
-    // PKContetnViewController helper function
-    if (self.pagingEnabled && scrollView.decelerating) {
-        if (_targetContentOffsetX == scrollView.contentOffset.x) {
-            PKCollectionViewCell *cell = visibleCells.firstObject;
-            PKContentViewController *viewController = cell.viewController;
-            [viewController viewDidDisplayInFullScreen];
+        if (visibleIndexPaths.lastObject == rengeIndexPaths.lastObject) {
+            if (((NSIndexPath *)visibleIndexPaths.lastObject).item != [self.collectionView numberOfItemsInSection:0] - 1) {
+                [self.collectionView.collectionViewLayout invalidateLayout];
+                return;
+            }
         }
     }
 }
 
 - (void)scrollViewDidEndDragging:(nonnull UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
+    if (self.pagingEnabled) {
+        [self.collectionView.collectionViewLayout invalidateLayout];
+        [self.collectionView setNeedsLayout];
+    }
+    
     if (scrollView.contentOffset.x < 0) {
         [self.delegate viewController:self slideToAction:PKCollectionViewControllerScrollDirectionPrevious];
     }
@@ -545,7 +561,6 @@
                 recognizer.state = UIGestureRecognizerStateFailed;
                 return;
             }
-            
             break;
         }
             
