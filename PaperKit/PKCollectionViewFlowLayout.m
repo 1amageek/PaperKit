@@ -105,10 +105,9 @@
         NSInteger items = [self.collectionView numberOfItemsInSection:section];
         
         for (NSInteger item = 0; item < items; item ++) {
-            // FIXME
             UICollectionViewLayoutAttributes *attribute = [self layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section]];
             CGRect frame = [self.collectionView convertRect:attribute.frame toView:nil];
-            //NSLog(@"frame %@", NSStringFromCGRect(frame));
+            NSLog(@"frame %@", NSStringFromCGRect(frame));
             //NSLog(@"renge %@", NSStringFromCGRect(self.rengeRect));
             BOOL intersetsRect = CGRectIntersectsRect(self.rengeRect, frame);
             if (intersetsRect) {
@@ -187,8 +186,8 @@
 {
     
     NSIndexPath *indexPath = self.selectedIndexPath;
-    NSIndexPath *previousIndexPath = [NSIndexPath indexPathForItem:(indexPath.item == 0) ? 0 : indexPath.item - 1 inSection:indexPath.section];
-    NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:(indexPath.item == [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:indexPath.section] - 1 ) ? indexPath.item : indexPath.item + 1 inSection:indexPath.section];
+    NSIndexPath *previousIndexPath = [self _previousIndexPath];
+    NSIndexPath *nextIndexPath = [self _nextIndexPath];
     
     if (velocity.x < 0) {
         indexPath = previousIndexPath;
@@ -197,6 +196,38 @@
     }
     UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
     return CGPointMake(cell.frame.origin.x, cell.frame.origin.y);
+}
+
+- (NSIndexPath *)_previousIndexPath
+{
+    if (self.selectedIndexPath.item == 0) {
+        if (self.selectedIndexPath.section == 0) {
+            return self.selectedIndexPath;
+        } else {
+            NSInteger section = self.selectedIndexPath.section - 1;
+            NSInteger numberOfItem = [self.collectionView numberOfItemsInSection:section];
+            return [NSIndexPath indexPathForItem:numberOfItem - 1 inSection:section];
+        }
+        
+    } else {
+        return [NSIndexPath indexPathForItem:self.selectedIndexPath.item - 1 inSection:self.selectedIndexPath.section];
+    }
+}
+
+- (NSIndexPath *)_nextIndexPath
+{
+    NSInteger numberOfItem = [self.collectionView numberOfItemsInSection:self.selectedIndexPath.section];
+    NSInteger numberOfSection = [self.collectionView numberOfSections];
+    if ((numberOfItem - 1) == self.selectedIndexPath.item) {
+        if ((numberOfSection - 1) == self.selectedIndexPath.section) {
+            return self.selectedIndexPath;
+        } else {
+             NSInteger section = self.selectedIndexPath.section + 1;
+            return [NSIndexPath indexPathForItem:0 inSection:section];
+        }
+    } else {
+        return [NSIndexPath indexPathForItem:self.selectedIndexPath.item + 1 inSection:self.selectedIndexPath.section];
+    }
 }
 
 - (void)prepareForCollectionViewUpdates:(NSArray *)updateItems

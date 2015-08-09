@@ -372,38 +372,22 @@
     NSMutableArray *rengeIndexPaths = [self.collectionView indexPathsForVisibleItems].mutableCopy;
     
     [visibleIndexPaths sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        NSInteger r1 = [obj1 row];
-        NSInteger r2 = [obj2 row];
-        if (r1 > r2) {
-            return (NSComparisonResult)NSOrderedDescending;
-        }
-        if (r1 < r2) {
-            return (NSComparisonResult)NSOrderedAscending;
-        }
-        return (NSComparisonResult)NSOrderedSame;
+        return [obj1 compare:obj2];
     }];
     
-    [rengeIndexPaths sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        NSInteger r1 = [obj1 row];
-        NSInteger r2 = [obj2 row];
-        if (r1 > r2) {
-            return (NSComparisonResult)NSOrderedDescending;
-        }
-        if (r1 < r2) {
-            return (NSComparisonResult)NSOrderedAscending;
-        }
-        return (NSComparisonResult)NSOrderedSame;
+    [rengeIndexPaths sortUsingComparator:^NSComparisonResult(NSIndexPath *obj1, NSIndexPath *obj2) {
+        return [obj1 compare:obj2];
     }];
     
     if (!self.pagingEnabled) {
         if (visibleIndexPaths.firstObject == rengeIndexPaths.firstObject) {
-            if (((NSIndexPath *)visibleIndexPaths.firstObject).item != 0) {
+            if (!([((NSIndexPath *)visibleIndexPaths.firstObject) compare:[NSIndexPath indexPathForItem:0 inSection:0]] == NSOrderedSame)) {
                 [self.collectionView.collectionViewLayout invalidateLayout];
                 return;
             }
         }
         if (visibleIndexPaths.lastObject == rengeIndexPaths.lastObject) {
-            if (((NSIndexPath *)visibleIndexPaths.lastObject).item != [self.collectionView numberOfItemsInSection:0] - 1) {
+            if (((NSIndexPath *)visibleIndexPaths.lastObject).item != [self.collectionView numberOfItemsInSection:(((NSIndexPath *)visibleIndexPaths.lastObject).section)] - 1) {
                 [self.collectionView.collectionViewLayout invalidateLayout];
                 return;
             }
@@ -466,12 +450,12 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+    return 0;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 3;
+    return 0;
 }
 
 - (void)reloadData

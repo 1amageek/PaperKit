@@ -18,6 +18,12 @@
 
 @implementation PKCollectionViewCell
 
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+    _viewController = nil;
+}
+
 - (void)setTransitionProgress:(CGFloat)transitionProgress
 {
     _transitionProgress = transitionProgress;

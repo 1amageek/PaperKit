@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "ContentViewController.h"
 #import "FullScreenContentViewController.h"
-
+#import "CollectionViewController.h"
 
 @interface ViewController ()
 @property (nonatomic) UIButton *reloadForegroundButton;
@@ -155,8 +155,17 @@
     return _backgroundData.count;
 }
 
+- (NSInteger)numberOfSectionsInForegroundCollectionView:(UICollectionView *)collectionView onCategory:(NSInteger)category
+{
+    return 2;
+}
+
 - (NSInteger)foregroundCollectionVew:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section onCategory:(NSInteger)category
 {
+    if (section == 0) {
+        return 1;
+    }
+    
     return _foregroundData.count;
 }
 
@@ -172,6 +181,10 @@
 
 - (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath onCategory:(NSUInteger)category
 {
+    if (indexPath.section == 0) {
+        return [CollectionViewController new];
+    }
+    
     if (indexPath.item % 3) {
         return [ContentViewController new];
     } else {

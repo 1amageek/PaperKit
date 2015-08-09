@@ -319,7 +319,7 @@
 
 - (PKContentViewController *)_collectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath
                                   onCategory:(NSUInteger)category {
-    
+
     PKCollectionViewCell *cell = (PKCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     if (cell.viewController) {
         return (PKContentViewController *)cell.viewController;
