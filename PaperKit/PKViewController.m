@@ -197,6 +197,7 @@
 
 - (void)viewWillLayoutSubviews
 {
+    self.view.frame = [UIScreen mainScreen].bounds;
     _collectionView.contentInset = UIEdgeInsetsZero;
     _overlayCollectionView.contentInset = UIEdgeInsetsZero;
 }

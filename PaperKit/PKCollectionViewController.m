@@ -242,6 +242,7 @@
 
 - (void)viewWillLayoutSubviews
 {
+    self.view.frame = [UIScreen mainScreen].bounds;
     _scrollView.contentInset = UIEdgeInsetsZero;
 }
 

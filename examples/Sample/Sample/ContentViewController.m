@@ -58,6 +58,12 @@
     [self.view addSubview:_button2];
 }
 
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    self.collectionView.frame = self.view.bounds;
+}
+
 #pragma Button Action
 
 - (void)changeLayout:(UIButton *)button

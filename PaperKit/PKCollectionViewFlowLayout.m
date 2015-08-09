@@ -75,7 +75,6 @@
     contentSizeWidth += (originX - self.minimumInteritemSpacing);
     _myCollectionViewSize = CGSizeMake(contentSizeWidth, contentSizeHeight);
     _zoomScale = [self.delegate layoutZoomScale];
-    //self.collectionView.frame = (CGRect){self.collectionView.frame.origin, CGSizeMake(ceilf(_myCollectionViewSize.width * _zoomScale), _myCollectionViewSize.height)};
 }
 
 - (PKCollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath

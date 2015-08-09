@@ -42,6 +42,11 @@
     return self;
 }
 
+- (void)viewWillLayoutSubviews
+{
+    self.view.frame = [UIScreen mainScreen].bounds;
+}
+
 - (void)_commonInit
 {
     _isDisplayingInFullScreen = NO;
