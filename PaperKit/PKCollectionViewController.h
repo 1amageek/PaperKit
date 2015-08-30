@@ -32,9 +32,15 @@ typedef NS_ENUM(NSInteger, PKCollectionViewControllerScrollDirection)
 @property (nonatomic) PKCollectionViewFlowLayout *layout;
 @property (nonatomic) PKContentScrollView *scrollView;
 @property (nonatomic) PKContentCollectionView *collectionView;
-@property (nonatomic) CGFloat transitionProgress;
+@property (nonatomic) UIColor *collectionViewBackgroundColor;
+
+// Gesture
 @property (nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic) PKPanGestureRecognizer *panGestureRecognizer;
+
+// transition
+@property (nonatomic) CGFloat transitionProgress;
+
 @property (nonatomic) CGFloat zoomScale;
 @property (nonatomic) BOOL pagingEnabled;
 @property (nonatomic) NSIndexPath *selectedIndexPath;

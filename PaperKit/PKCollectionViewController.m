@@ -72,17 +72,28 @@
         _transitionProgress = 0.0f;
         _targetContentOffsetX = 0;
         _pagingEnabled = NO;
+        _collectionViewBackgroundColor = [UIColor clearColor];
+        
         _collectionView = [[PKContentCollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:self.layout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.pagingEnabled = NO;
         _collectionView.userInteractionEnabled = YES;
         _collectionView.layer.anchorPoint = CGPointMake(0, 0);
-        _collectionView.backgroundColor = [UIColor clearColor];
         _collectionView.opaque = NO;
         _collectionView.scrollEnabled = NO;
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.showsVerticalScrollIndicator = NO;
+        _collectionView.backgroundColor = _collectionViewBackgroundColor;
+        //_collectionView.layer.shadowPath = [UIBezierPath bezierPathWithRect:_collectionView.bounds].CGPath;
+        //_collectionView.layer.shouldRasterize = YES;
+        //_collectionView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+        _collectionView.layer.shadowColor = [UIColor blackColor].CGColor;
+        _collectionView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
+        _collectionView.layer.shadowOpacity = 0.2f;
+        _collectionView.layer.shadowRadius = 8;
+        _collectionView.layer.masksToBounds = NO;
+        
         _scrollView = [[PKContentScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         _scrollView.delaysContentTouches = NO;
         _scrollView.userInteractionEnabled = YES;
