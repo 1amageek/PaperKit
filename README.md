@@ -8,6 +8,7 @@ PaperKit is Framework that can easily create a Facebook's Paper.It can be create
 
 ![sample](PaperKit.gif)
 
+
 ### Try Sample
 
 requirement : Xcode7 beta4 
@@ -15,6 +16,8 @@ requirement : Xcode7 beta4
 ```bash
 $ pod try PaperKit
 ```
+
+Alternatively, [appetize.io](https://appetize.io/app/9dyj8nqfkchaj2je2yrtzvm4uw?device=iphone5s&scale=75&orientation=portrait)
 
 ### Quick start
 
