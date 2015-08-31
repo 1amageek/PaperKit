@@ -21,8 +21,8 @@
 		8C6597BA1B93181400ADF1AA /* PKTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6597A71B93181400ADF1AA /* PKTableView.m */; settings = {ASSET_TAGS = (); }; };
 		8C6597BB1B93181400ADF1AA /* PKToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6597A91B93181400ADF1AA /* PKToolbar.m */; settings = {ASSET_TAGS = (); }; };
 		8C6597BC1B93181400ADF1AA /* PKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6597AB1B93181400ADF1AA /* PKViewController.m */; settings = {ASSET_TAGS = (); }; };
-		8C6597BD1B93181400ADF1AA /* PKWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6597AD1B93181400ADF1AA /* PKWindow.m */; settings = {ASSET_TAGS = (); }; };
-		8C6597BE1B93181400ADF1AA /* PKWindowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6597AF1B93181400ADF1AA /* PKWindowManager.m */; settings = {ASSET_TAGS = (); }; };
+		8C6597C31B93E53F00ADF1AA /* PKWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6597C01B93E53F00ADF1AA /* PKWindow.m */; settings = {ASSET_TAGS = (); }; };
+		8C6597C41B93E53F00ADF1AA /* PKWindowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6597C21B93E53F00ADF1AA /* PKWindowManager.m */; settings = {ASSET_TAGS = (); }; };
 		8C837A4B1B2BF1CC00B169FD /* PaperKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A4A1B2BF1CC00B169FD /* PaperKitTests.m */; };
 		8CACE75E1B67DE9A00BBBE47 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CACE75D1B67DE9A00BBBE47 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
@@ -65,10 +65,10 @@
 		8C6597A91B93181400ADF1AA /* PKToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKToolbar.m; sourceTree = "<group>"; };
 		8C6597AA1B93181400ADF1AA /* PKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKViewController.h; sourceTree = "<group>"; };
 		8C6597AB1B93181400ADF1AA /* PKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKViewController.m; sourceTree = "<group>"; };
-		8C6597AC1B93181400ADF1AA /* PKWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindow.h; sourceTree = "<group>"; };
-		8C6597AD1B93181400ADF1AA /* PKWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindow.m; sourceTree = "<group>"; };
-		8C6597AE1B93181400ADF1AA /* PKWindowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindowManager.h; sourceTree = "<group>"; };
-		8C6597AF1B93181400ADF1AA /* PKWindowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindowManager.m; sourceTree = "<group>"; };
+		8C6597BF1B93E53F00ADF1AA /* PKWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindow.h; sourceTree = "<group>"; };
+		8C6597C01B93E53F00ADF1AA /* PKWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindow.m; sourceTree = "<group>"; };
+		8C6597C11B93E53F00ADF1AA /* PKWindowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindowManager.h; sourceTree = "<group>"; };
+		8C6597C21B93E53F00ADF1AA /* PKWindowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindowManager.m; sourceTree = "<group>"; };
 		8C837A2B1B2BF1CC00B169FD /* PaperKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C837A2F1B2BF1CC00B169FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C837A441B2BF1CC00B169FD /* PaperKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaperKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -192,10 +192,10 @@
 				8C6597A91B93181400ADF1AA /* PKToolbar.m */,
 				8C6597AA1B93181400ADF1AA /* PKViewController.h */,
 				8C6597AB1B93181400ADF1AA /* PKViewController.m */,
-				8C6597AC1B93181400ADF1AA /* PKWindow.h */,
-				8C6597AD1B93181400ADF1AA /* PKWindow.m */,
-				8C6597AE1B93181400ADF1AA /* PKWindowManager.h */,
-				8C6597AF1B93181400ADF1AA /* PKWindowManager.m */,
+				8C6597BF1B93E53F00ADF1AA /* PKWindow.h */,
+				8C6597C01B93E53F00ADF1AA /* PKWindow.m */,
+				8C6597C11B93E53F00ADF1AA /* PKWindowManager.h */,
+				8C6597C21B93E53F00ADF1AA /* PKWindowManager.m */,
 				8C990B6B1B4A30F900EB9AAC /* PaperKit.h */,
 			);
 			name = PaperKit;
@@ -347,9 +347,9 @@
 				8C6597B91B93181400ADF1AA /* PKScrollView.m in Sources */,
 				8C6597B51B93181400ADF1AA /* PKContentScrollView.m in Sources */,
 				8C6597BA1B93181400ADF1AA /* PKTableView.m in Sources */,
-				8C6597BE1B93181400ADF1AA /* PKWindowManager.m in Sources */,
+				8C6597C41B93E53F00ADF1AA /* PKWindowManager.m in Sources */,
 				8C6597B01B93181400ADF1AA /* PKCollectionView.m in Sources */,
-				8C6597BD1B93181400ADF1AA /* PKWindow.m in Sources */,
+				8C6597C31B93E53F00ADF1AA /* PKWindow.m in Sources */,
 				8C6597B81B93181400ADF1AA /* PKPreviewView.m in Sources */,
 				8C6597B71B93181400ADF1AA /* PKPanGestureRecognizer.m in Sources */,
 				8C6597BB1B93181400ADF1AA /* PKToolbar.m in Sources */,

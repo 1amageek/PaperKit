@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, PKWindowManagerStatus) {
 @property (nonatomic, readonly) NSArray <PKWindow *>*windows;
 
 @property(nonatomic,readonly,getter=isSingle)       BOOL single;
+@property(nonatomic,readonly,getter=isLinking)      BOOL linking;
 @property(nonatomic,readonly,getter=isTracking)     BOOL tracking;
 @property(nonatomic,readonly,getter=isDragging)     BOOL dragging;
 @property(nonatomic,readonly,getter=isDecelerating) BOOL decelerating;
