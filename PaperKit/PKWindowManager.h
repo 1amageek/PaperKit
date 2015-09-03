@@ -17,7 +17,8 @@ typedef NS_ENUM(NSInteger, PKWindowManagerStatus) {
     PKWindowManagerStatusList,
     PKWindowManagerStatusConfirm,
     PKWindowManagerStatusSingleWindowOpen,
-    PKWindowManagerStatusMultipleWindowOpen
+    PKWindowManagerStatusMultipleWindowOpen,
+    PKWindowManagerStatusDismiss
 };
 
 @interface PKWindowManager : NSObject <PKWindowDelegate>
