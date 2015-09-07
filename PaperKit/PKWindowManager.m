@@ -474,9 +474,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     switch (status) {
         case PKWindowManagerStatusDismiss:
         {
-            [self _removeWindow:self.topWindow];
             [self animation].toValue = @(0);
-            self.status = PKWindowManagerStatusDefault;
             break;
         }
         case PKWindowManagerStatusList:
@@ -530,6 +528,13 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 - (void)setTransitionProgress:(CGFloat)transitionProgress
 {
     _transitionProgress = transitionProgress;
+    
+    if (self.status == PKWindowManagerStatusDismiss) {
+        PKWindow *window = self.topWindow;
+        CGFloat yPosition = [self positionForWindow:window progress:(1 - transitionProgress)].y;
+        POPLayerSetTranslationY(window.layer, yPosition);
+        return;
+    }
     
     if (self.uniting) {
         PKWindow *window = self.topWindow;
@@ -670,6 +675,13 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 {
     _decelerating = NO;
     self.animating = NO;
+    if (finished) {
+        NSLog(@"finish");
+        if (self.status == PKWindowManagerStatusDismiss) {
+            [self _removeWindow:self.topWindow];
+            self.status = PKWindowManagerStatusDefault;
+        }
+    }
 }
 
 @end
