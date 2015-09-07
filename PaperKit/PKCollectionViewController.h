@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <POP.h>
-#import <POP/POPLayerExtras.h>
+#import <pop/POP.h>
+#import <pop/POPLayerExtras.h>
 #import "PKScrollView.h"
 #import "PKCollectionView.h"
 #import "PKContentScrollView.h"
@@ -29,27 +29,27 @@ typedef NS_ENUM(NSInteger, PKCollectionViewControllerScrollDirection)
 @property (nonatomic) CGFloat minimumZoomScale;
 @property (nonatomic) CGFloat maximumZoomScale;
 
-@property (nonatomic) PKCollectionViewFlowLayout *layout;
-@property (nonatomic) PKContentScrollView *scrollView;
-@property (nonatomic) PKContentCollectionView *collectionView;
-@property (nonatomic) UIColor *collectionViewBackgroundColor;
+@property (nonnull, nonatomic) PKCollectionViewFlowLayout *layout;
+@property (nonnull, nonatomic) PKContentScrollView *scrollView;
+@property (nonnull, nonatomic) PKContentCollectionView *collectionView;
+@property (nonnull, nonatomic) UIColor *collectionViewBackgroundColor;
 
 // Gesture
-@property (nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
-@property (nonatomic) PKPanGestureRecognizer *panGestureRecognizer;
+@property (nonnull, nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
+@property (nonnull, nonatomic) PKPanGestureRecognizer *panGestureRecognizer;
 
 // transition
 @property (nonatomic) CGFloat transitionProgress;
 
 @property (nonatomic) CGFloat zoomScale;
 @property (nonatomic) BOOL pagingEnabled;
-@property (nonatomic) NSIndexPath *selectedIndexPath;
-@property (nonatomic, weak) id <PKCollectionViewControllerDelegate> delegate;
+@property (nonnull, nonatomic) NSIndexPath *selectedIndexPath;
+@property (nonnull, nonatomic, weak) id <PKCollectionViewControllerDelegate> delegate;
 
 
-- (NSArray *)visibleCells;
-- (NSArray *)indexPathsForVisibleItems;
-- (UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (nonnull NSArray *)visibleCells;
+- (nonnull NSArray *)indexPathsForVisibleItems;
+- (nonnull UICollectionViewCell *)cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath;
 - (void)reloadData;
 - (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion;
 
