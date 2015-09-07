@@ -189,15 +189,22 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         if (self.status == PKWindowManagerStatusNothing) {
             [self animation].fromValue = @(1);
         }
+        if (self.status == PKWindowManagerStatusDefault) {
+            self.linking = NO;
+            [self animation].fromValue = @(1);
+        }
         
         self.status = PKWindowManagerStatusDefault;
-        PKWindow *window = [[PKWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        CGRect screen = [UIScreen mainScreen].bounds;
+        PKWindow *window = [[PKWindow alloc] initWithFrame:screen];
         window.windowLevel = UIWindowLevelStatusBar + self.windows.count + 1;
         window.rootViewController = rootViewController;
         window.manager = self;
         [self _addWindow:window];
-        [self animation].toValue = @(0);
+        
         [window makeKeyAndVisible:animated];
+        [self animationToStatus:PKWindowManagerStatusDefault];
+        
         return window;
     }
     return nil;
@@ -250,7 +257,18 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 
 - (void)window:(PKWindow *)window tapGesture:(UITapGestureRecognizer *)recognizer
 {
-    [self animationToStatus:PKWindowManagerStatusDefault];
+    if (!self.isSingle) {
+        NSInteger index = [self.windows indexOfObject:window];
+        [self showWindowAtIndex:index];
+        return;
+    } else {
+        [self animationToStatus:PKWindowManagerStatusDefault];
+    }
+}
+
+- (void)showWindowAtIndex:(NSInteger)index
+{
+    [self dismissAnimationSelectIndex:index].toValue = @(1);
 }
 
 - (void)window:(PKWindow *)window panGesture:(UIPanGestureRecognizer *)recognizer
@@ -372,7 +390,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         if (!self.isUniting) {
             self.animating = YES;
             [self unitAnimation].fromValue = @(0);
-            NSLog(@"0");
         }
         [self unitAnimation].toValue = @(1);
     } else {
@@ -404,10 +421,18 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
                     if (self.isSingle) {
                         status = PKWindowManagerStatusSingleWindowOpen;
                     } else {
-                        status = PKWindowManagerStatusDismiss;
+                        if (self.isTouchingOtherWindow) {
+                            status = PKWindowManagerStatusMultipleWindowOpen;
+                        } else {
+                            status = PKWindowManagerStatusDismiss;
+                        }
                     }
                 } else {
-                    status = PKWindowManagerStatusList;
+                    if (self.isTouchingOtherWindow) {
+                        status = PKWindowManagerStatusDefault;
+                    } else {
+                        status = PKWindowManagerStatusList;
+                    }
                 }
             } else {
                 if (self.lowerProgress < transitionProgress) {
@@ -471,6 +496,8 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 
 - (void)animationToStatus:(PKWindowManagerStatus)status
 {
+    NSLog(@"status %d", status);
+    self.status = status;
     switch (status) {
         case PKWindowManagerStatusDismiss:
         {
@@ -481,6 +508,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         {
             [self animation].toValue = @([self progressToListStatus]);
             if (!self.isLinking) {
+                [self setLink:YES];
                 [self linkAnimation].toValue = @([self progressToListStatus]);
             }
             break;
@@ -505,7 +533,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             break;
         }
     }
-    self.status = status;
+    
 }
 
 - (CGPoint)positionForWindow:(PKWindow *)window progress:(CGFloat)transitionProgress
@@ -558,6 +586,19 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     }
 }
 
+
+- (void)setTransitionProgress:(CGFloat)transitionProgress selectIndex:(NSInteger)index
+{
+    _transitionProgress = transitionProgress;
+    
+    [self.windows enumerateObjectsUsingBlock:^(PKWindow * _Nonnull window, NSUInteger idx, BOOL * _Nonnull stop) {
+        CGFloat progressToListStatus = [self progressToListStatus];
+        CGFloat progress = (index < idx) ? transitionProgress :  POPTransition(transitionProgress, progressToListStatus, 0);
+        CGFloat yPosition = [self positionForWindow:window progress:progress].y;
+        POPLayerSetTranslationY(window.layer, yPosition);
+    }];
+}
+
 - (void)setLinkTransitionProgress:(CGFloat)linkTransitionProgress
 {
     _linkTransitionProgress = linkTransitionProgress;
@@ -568,7 +609,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
                 POPLayerSetTranslationY(window.layer, yPosition);
             }
         }];
-        if (self.transitionProgress < linkTransitionProgress) {
+        if (self.transitionProgress <= linkTransitionProgress) {
             self.linking = YES;
         }
     }
@@ -598,6 +639,17 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         animation.duration = 0.28f;
         animation.property = self.animatableProperty;
         animation.delegate = self;
+        animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
+            if (finished) {
+                if (self.status == PKWindowManagerStatusDismiss) {
+                    [self _removeWindow:self.topWindow];
+                    self.status = PKWindowManagerStatusDefault;
+                }
+                if (self.status == PKWindowManagerStatusDefault) {
+                    self.uniting = NO;
+                }
+            }
+        };
         [self pop_addAnimation:animation forKey:@"inc.stamp.pk.window.progress"];
     }
     return animation;
@@ -625,6 +677,11 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         animation.duration = 0.32f;
         animation.property = self.linkAnimatableProperty;
         animation.delegate = self;
+        animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
+            if (finished) {
+                self.animating = NO;
+            }
+        };
         [self pop_addAnimation:animation forKey:@"inc.stamp.pk.window.link"];
     }
     return animation;
@@ -671,16 +728,60 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     return prop;
 }
 
+- (POPBasicAnimation *)dismissAnimationSelectIndex:(NSInteger)index
+{
+    POPBasicAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.window.dismiss"];
+    if (!animation) {
+        animation = [POPBasicAnimation easeOutAnimation];
+        animation.duration = 0.28f;
+        animation.property = [self dismissAnimationPropertySelectIndex:index];
+        animation.delegate = self;
+        animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
+            if (finished) {
+                NSMutableArray *windows = self.windows.mutableCopy;
+                NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+                [self.windows enumerateObjectsUsingBlock:^(PKWindow * _Nonnull window, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (index < idx) {
+                        [indexSet addIndex:idx];
+                    }
+                }];
+                
+                [windows removeObjectsAtIndexes:indexSet];
+                self.windows = windows;
+                self.status = PKWindowManagerStatusDefault;
+                if (1 < self.windows.count) {
+                    self.single = NO;
+                } else {
+                    self.single = YES;
+                }
+                self.linking = YES;
+                self.uniting = NO;
+            }
+        };
+        [self pop_addAnimation:animation forKey:@"inc.stamp.pk.window.dismiss"];
+    }
+    return animation;
+}
+
+- (POPAnimatableProperty *)dismissAnimationPropertySelectIndex:(NSInteger)index
+{
+    POPAnimatableProperty *prop = [POPAnimatableProperty propertyWithName:@"inc.stamp.pk.property.window.dismiss" initializer:^(POPMutableAnimatableProperty *prop) {
+        prop.readBlock = ^(id obj, CGFloat values[]) {
+            values[0] = [obj transitionProgress];
+        };
+        prop.writeBlock = ^(id obj, const CGFloat values[]) {
+            [obj setTransitionProgress:values[0] selectIndex:index];
+        };
+        prop.threshold = 0.01;
+    }];
+    return prop;
+}
+
 - (void)pop_animationDidStop:(POPAnimation *)anim finished:(BOOL)finished
 {
     _decelerating = NO;
-    self.animating = NO;
     if (finished) {
-        NSLog(@"finish");
-        if (self.status == PKWindowManagerStatusDismiss) {
-            [self _removeWindow:self.topWindow];
-            self.status = PKWindowManagerStatusDefault;
-        }
+        
     }
 }
 

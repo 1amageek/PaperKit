@@ -127,7 +127,8 @@
 
 - (void)add:(UIBarButtonItem *)buttonItem
 {
-
+    ViewController *nextViewController = [ViewController new];
+    [[PKWindowManager sharedManager] showWindowWithRootViewController:nextViewController];
 }
 
 - (void)categoryWillSet:(NSUInteger)currentCategory nextCategory:(NSUInteger)nextCategory
