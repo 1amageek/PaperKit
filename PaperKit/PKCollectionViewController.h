@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, PKCollectionViewControllerScrollDirection)
 @property (nonatomic) CGFloat zoomScale;
 @property (nonatomic) BOOL pagingEnabled;
 @property (nonnull, nonatomic) NSIndexPath *selectedIndexPath;
-@property (nonnull, nonatomic, weak) id <PKCollectionViewControllerDelegate> delegate;
+@property (nullable, nonatomic, weak) id <PKCollectionViewControllerDelegate> delegate;
 
 
 - (nonnull NSArray *)visibleCells;
