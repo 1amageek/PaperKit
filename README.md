@@ -1,3 +1,5 @@
+<p align="center"><img src="https://raw.githubusercontent.com/1amageek/PaperKit/master/PaperKit.png"></p>
+
 # PaperKit
 PaperKit is Framework that can easily create a Facebook's Paper.It can be created to operate the CollectionView of UIKit.
 
