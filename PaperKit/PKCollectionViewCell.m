@@ -7,8 +7,6 @@
 //
 
 #import "PKCollectionViewCell.h"
-#import <POP.h>
-#import <POPLayerExtras.h>
 
 @interface PKCollectionViewCell ()
 

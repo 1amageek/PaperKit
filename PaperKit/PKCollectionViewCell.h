@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <pop/POP.h>
+#import <pop/POPLayerExtras.h>
 #import "PKCollectionViewFlowLayout.h"
 #import "PKContentViewController.h"
 
