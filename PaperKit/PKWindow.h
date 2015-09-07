@@ -7,31 +7,37 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <pop/POP.h>
-#import <pop/POPLayerExtras.h>
 
-typedef NS_ENUM(NSInteger, PKWindowState) {
-    PKWindowStateNormal = 0,
-    PKWindowStateList,
-    PKWindowStateOpen,
-    PKWindowStateDismiss
+
+typedef NS_ENUM(NSInteger, PKWindowDismissTransitionStyle) {
+    PKWindowDismissTransitionStyleLink = 0,
+    PKWindowDismissTransitionStyleUnlink,
+    PKWindowDismissTransitionStyleRequireConfirm
 };
 
 @protocol PKWindowDelegate;
 @interface PKWindow : UIWindow
 
-@property (nonatomic) PKWindowState state;
+@property (nonatomic) PKWindowDismissTransitionStyle dismissTransitionStyle;
 @property (nonatomic, weak) id <PKWindowDelegate> manager;
 @property (nonatomic) CGFloat transitionProgress;
 @property (nonatomic) CGFloat globalProgress;
 @property (nonatomic) CGFloat interval;
-@property (nonatomic) BOOL link;
 
 - (void)makeKeyAndVisible:(BOOL)animated;
 - (void)dissmis;
 
 @end
 
+@protocol PKWindowDelegate <NSObject>
+
+- (BOOL)window:(PKWindow *)window shouldGesture:(UIGestureRecognizer *)recognizer;
+- (void)window:(PKWindow *)window tapGesture:(UITapGestureRecognizer *)recognizer;
+- (void)window:(PKWindow *)window panGesture:(UIPanGestureRecognizer *)recognizer;
+
+@end
+
+/*
 @protocol PKWindowDelegate <NSObject>
 @required
 - (void)windowWillAppear:(PKWindow *)window;
@@ -40,4 +46,4 @@ typedef NS_ENUM(NSInteger, PKWindowState) {
 
 - (NSArray *)windowsOnBaseWindow;
 
-@end
+@end*/
