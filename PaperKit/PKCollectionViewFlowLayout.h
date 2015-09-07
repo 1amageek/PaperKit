@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <POP.h>
+#import <pop/POP.h>
+#import <pop/POPLayerExtras.h>
 
 @interface PKCollectionViewLayoutAttributes : UICollectionViewLayoutAttributes
 
