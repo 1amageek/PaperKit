@@ -10,10 +10,11 @@
 
 @interface PKWindowManager () <POPAnimationDelegate>
 
-@property (nonatomic, readwrite,getter=isLinking) BOOL linking;
-@property (nonatomic, readwrite,getter=isUniting) BOOL uniting;
-@property (nonatomic, readwrite,getter=isAnimating) BOOL animating;
-@property (nonatomic, readwrite,getter=isOtherWindow) BOOL otherWindow;
+@property (nonatomic, readwrite,getter=isSingle)                BOOL single;
+@property (nonatomic, readwrite,getter=isLinking)               BOOL linking;
+@property (nonatomic, readwrite,getter=isUniting)               BOOL uniting;
+@property (nonatomic, readwrite,getter=isAnimating)             BOOL animating;
+@property (nonatomic, readwrite,getter=isTouchingOtherWindow)   BOOL touchingOtherWindow;
 
 @property (nonatomic, readwrite, weak) UIWindow *baseWindow;
 @property (nonatomic, readwrite) NSArray <PKWindow *>*windows;
@@ -204,8 +205,21 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 
 - (void)_addWindow:(PKWindow *)window
 {
-    NSMutableArray *windows = [NSMutableArray arrayWithArray:self.windows];
+    NSMutableArray *windows = self.windows.mutableCopy;
     [windows addObject:window];
+    self.windows = windows;
+    
+    if (self.windows.count == 1) {
+        _single = YES;
+    } else {
+        _single = NO;
+    }
+}
+
+- (void)_removeWindow:(PKWindow *)window
+{
+    NSMutableArray *windows = self.windows.mutableCopy;
+    [windows removeObject:window];
     self.windows = windows;
     
     if (self.windows.count == 1) {
@@ -253,9 +267,9 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             _initialTouchTopWindowPosition = self.topWindow.frame.origin;
             
             if (window != self.topWindow) {
-                self.otherWindow = YES;
+                self.touchingOtherWindow = YES;
             } else {
-                self.otherWindow = NO;
+                self.touchingOtherWindow = NO;
             }
             
             break;
@@ -273,11 +287,11 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
                 y = x/8;
             }
             
-            if (self.isOtherWindow) {
+            if (self.isTouchingOtherWindow && self.status == PKWindowManagerStatusList) {
                 [self setUnit:YES];
             }
             
-            if (!self.isSingle && !self.isOtherWindow) {
+            if (!self.isSingle && !self.isTouchingOtherWindow && !self.isUniting) {
                 CGFloat lower = self.lowerProgress;
                 CGFloat upper = self.topWindowDismissTranstionStyle == PKWindowDismissTransitionStyleRequireConfirm ? CGFLOAT_MAX : self.upperProgress;
                 CGFloat k = self.topWindowDismissTranstionStyle == PKWindowDismissTransitionStyleRequireConfirm ? 10 : 5;
@@ -358,8 +372,9 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         if (!self.isUniting) {
             self.animating = YES;
             [self unitAnimation].fromValue = @(0);
-            [self unitAnimation].toValue = @(1);
+            NSLog(@"0");
         }
+        [self unitAnimation].toValue = @(1);
     } else {
         self.uniting = NO;
         if (!self.isAnimating) {
@@ -385,7 +400,15 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         case PKWindowManagerStatusList:
         {
             if (0 < velocity) {
-                status = PKWindowManagerStatusSingleWindowOpen;
+                if (self.upperProgress < transitionProgress) {
+                    if (self.isSingle) {
+                        status = PKWindowManagerStatusSingleWindowOpen;
+                    } else {
+                        status = PKWindowManagerStatusDismiss;
+                    }
+                } else {
+                    status = PKWindowManagerStatusList;
+                }
             } else {
                 if (self.lowerProgress < transitionProgress) {
                     status = PKWindowManagerStatusList;
@@ -418,9 +441,12 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         default:
         {
             if (0 < velocity) {
-                
                 if (self.upperProgress < transitionProgress) {
-                    status = PKWindowManagerStatusSingleWindowOpen;
+                    if (self.isTouchingOtherWindow) {
+                        status = PKWindowManagerStatusMultipleWindowOpen;
+                    } else {
+                        status = PKWindowManagerStatusDismiss;
+                    }
                 } else {
                     status = PKWindowManagerStatusList;
                 }
@@ -432,7 +458,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
                 if (self.topWindowDismissTranstionStyle == PKWindowDismissTransitionStyleRequireConfirm) {
                     status = PKWindowManagerStatusConfirm;
                 }
-                
             } else {
                 status = PKWindowManagerStatusDefault;
             }
@@ -443,12 +468,53 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     return status;
 }
 
+
+- (void)animationToStatus:(PKWindowManagerStatus)status
+{
+    switch (status) {
+        case PKWindowManagerStatusDismiss:
+        {
+            [self _removeWindow:self.topWindow];
+            [self animation].toValue = @(0);
+            self.status = PKWindowManagerStatusDefault;
+            break;
+        }
+        case PKWindowManagerStatusList:
+        {
+            [self animation].toValue = @([self progressToListStatus]);
+            if (!self.isLinking) {
+                [self linkAnimation].toValue = @([self progressToListStatus]);
+            }
+            break;
+        }
+        case PKWindowManagerStatusConfirm:
+        {
+            
+            break;
+        }
+        case PKWindowManagerStatusMultipleWindowOpen:
+        case PKWindowManagerStatusSingleWindowOpen:
+        {
+            [self animation].toValue = @(0.9);
+            break;
+        }
+        case PKWindowManagerStatusNothing:
+        case PKWindowManagerStatusDefault:
+        default:
+        {
+            self.uniting = NO;
+            [self animation].toValue = @(0);
+            break;
+        }
+    }
+    self.status = status;
+}
+
 - (CGPoint)positionForWindow:(PKWindow *)window progress:(CGFloat)transitionProgress
 {
     NSUInteger i = [self indexOfWindow:window];
     CGFloat progress = transitionProgress/[self progressToListStatus];
     CGFloat height = POPTransition(transitionProgress, 0, [UIScreen mainScreen].bounds.size.height) - POPTransition(progress, 0, interval * (self.numberOfWindowsInManager - 1 - i));
-    
     return CGPointMake(0, height);
 }
 
@@ -458,13 +524,21 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     CGFloat progress = transitionProgress/[self progressToListStatus];
     CGFloat intervalToProgress = POPTransition((1 - unitProgress), 0, interval);
     CGFloat height = POPTransition(transitionProgress, 0, [UIScreen mainScreen].bounds.size.height) - POPTransition(progress, 0, intervalToProgress * (self.numberOfWindowsInManager - 1 - i));
-    
     return CGPointMake(0, height);
 }
 
 - (void)setTransitionProgress:(CGFloat)transitionProgress
 {
     _transitionProgress = transitionProgress;
+    
+    if (self.uniting) {
+        PKWindow *window = self.topWindow;
+        CGFloat yPosition = [self positionForWindow:window progress:transitionProgress].y;
+        [self.windows enumerateObjectsUsingBlock:^(PKWindow * _Nonnull window, NSUInteger idx, BOOL * _Nonnull stop) {
+            POPLayerSetTranslationY(window.layer, yPosition);
+        }];
+        return;
+    }
     
     if (self.isAnimating) {
         PKWindow *window = self.topWindow;
@@ -509,39 +583,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     if (1 <= unitTransitionProgress) {
         self.uniting = YES;
     }
-}
-
-- (void)animationToStatus:(PKWindowManagerStatus)status
-{
-    switch (status) {
-        case PKWindowManagerStatusList:
-        {
-            [self animation].toValue = @([self progressToListStatus]);
-            if (!self.isLinking) {
-                [self linkAnimation].toValue = @([self progressToListStatus]);
-            }
-            break;
-        }
-        case PKWindowManagerStatusConfirm:
-        {
-            
-            break;
-        }
-        case PKWindowManagerStatusMultipleWindowOpen:
-        case PKWindowManagerStatusSingleWindowOpen:
-        {
-            [self animation].toValue = @(0.9);
-            break;
-        }
-        case PKWindowManagerStatusNothing:
-        case PKWindowManagerStatusDefault:
-        default:
-        {
-            [self animation].toValue = @(0);
-            break;
-        }
-    }
-    self.status = status;
 }
 
 - (POPBasicAnimation *)animation
