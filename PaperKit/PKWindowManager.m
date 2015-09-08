@@ -496,7 +496,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 
 - (void)animationToStatus:(PKWindowManagerStatus)status
 {
-    NSLog(@"status %d", status);
     self.status = status;
     switch (status) {
         case PKWindowManagerStatusDismiss:

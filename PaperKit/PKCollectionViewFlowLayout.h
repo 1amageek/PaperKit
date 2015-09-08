@@ -12,7 +12,7 @@
 
 @interface PKCollectionViewLayoutAttributes : UICollectionViewLayoutAttributes
 
-@property (nonatomic) POPAnimation *animation;
+@property (nullable, nonatomic) POPAnimation *animation;
 
 @end
 
@@ -24,7 +24,7 @@
 @property (nonatomic) CGFloat zoomScale;
 @property (nonatomic, readonly) CGSize rengeSize;
 @property (nonatomic, readonly) CGRect rengeRect;
-@property (nonatomic) id <PKCollectionViewFlowLayoutDelegate> delegate;
+@property (nullable, nonatomic) id <PKCollectionViewFlowLayoutDelegate> delegate;
 
 - (CGSize)calculateSize;
 

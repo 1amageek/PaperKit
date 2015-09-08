@@ -300,7 +300,7 @@
         CGRect frame = [cell.superview convertRect:cell.frame toView:self.view];
         BOOL intersetsRect = CGRectIntersectsRect([UIScreen mainScreen].bounds, frame);
         if (intersetsRect) {
-            NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:cell.center];
+            NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
             [indexPaths addObject:indexPath];
         }
     }];
@@ -378,7 +378,6 @@
             [viewController viewDidDisplayInFullScreen];
         }
     }
-    
     
     NSMutableArray *visibleIndexPaths = [self indexPathsForVisibleItems].mutableCopy;
     NSMutableArray *rengeIndexPaths = [self.collectionView indexPathsForVisibleItems].mutableCopy;
