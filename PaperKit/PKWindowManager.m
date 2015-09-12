@@ -470,7 +470,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             [self animation].toValue = @([self progressToListStatus]);
             if (!self.isLinking) {
                 [self setLink:YES];
-                //[self linkAnimation].toValue = @([self progressToListStatus]);
+                [self linkAnimation].toValue = @([self progressToListStatus]);
             }
             break;
         }
@@ -612,7 +612,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             [self animation].toValue = @([self progressToListStatus]);
             if (!self.isLinking) {
                 [self setLink:YES];
-                //[self linkAnimation].toValue = @([self progressToListStatus]);
+                [self linkAnimation].toValue = @([self progressToListStatus]);
             }
             break;
         }
@@ -636,7 +636,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         }
     }
 }
-/*
+
 - (POPBasicAnimation *)linkAnimation
 {
     POPBasicAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.window.link"];
@@ -689,13 +689,12 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             values[0] = [obj unitTransitionProgress];
         };
         prop.writeBlock = ^(id obj, const CGFloat values[]) {
-            [obj setStackTransitionProgress:values[0]];
+            //[obj setStackTransitionProgress:values[0]];
         };
         prop.threshold = 0.01;
     }];
     return prop;
 }
- */
 - (void)pop_animationDidStop:(POPAnimation *)anim finished:(BOOL)finished
 {
     _decelerating = NO;

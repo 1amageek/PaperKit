@@ -273,7 +273,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 
 - (void)showWindowAtIndex:(NSInteger)index
 {
-    [self dismissAnimationSelectIndex:index].toValue = @(1);
+    //[self dismissAnimationSelectIndex:index].toValue = @(1);
 }
 
 - (void)window:(PKWindow *)window panGesture:(UIPanGestureRecognizer *)recognizer
@@ -689,7 +689,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             values[0] = [obj unitTransitionProgress];
         };
         prop.writeBlock = ^(id obj, const CGFloat values[]) {
-            [obj setStackTransitionProgress:values[0]];
+            //[obj setStackTransitionProgress:values[0]];
         };
         prop.threshold = 0.01;
     }];
