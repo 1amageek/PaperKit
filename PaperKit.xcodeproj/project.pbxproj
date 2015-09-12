@@ -22,7 +22,7 @@
 		8C2D71231BA3ED6F003C94C1 /* PKToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2D71111BA3ED6F003C94C1 /* PKToolbar.m */; settings = {ASSET_TAGS = (); }; };
 		8C2D71241BA3ED6F003C94C1 /* PKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2D71131BA3ED6F003C94C1 /* PKViewController.m */; settings = {ASSET_TAGS = (); }; };
 		8C2D71251BA3ED6F003C94C1 /* PKWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2D71151BA3ED6F003C94C1 /* PKWindow.m */; settings = {ASSET_TAGS = (); }; };
-		8C2D71261BA3ED6F003C94C1 /* PKWindowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2D71171BA3ED6F003C94C1 /* PKWindowManager.m */; settings = {ASSET_TAGS = (); }; };
+		8C2D71651BA4036E003C94C1 /* PKWindowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2D71641BA4036E003C94C1 /* PKWindowManager.m */; settings = {ASSET_TAGS = (); }; };
 		8C837A4B1B2BF1CC00B169FD /* PaperKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C837A4A1B2BF1CC00B169FD /* PaperKitTests.m */; };
 		8CACE75E1B67DE9A00BBBE47 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CACE75D1B67DE9A00BBBE47 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
@@ -67,8 +67,8 @@
 		8C2D71131BA3ED6F003C94C1 /* PKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKViewController.m; sourceTree = "<group>"; };
 		8C2D71141BA3ED6F003C94C1 /* PKWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindow.h; sourceTree = "<group>"; };
 		8C2D71151BA3ED6F003C94C1 /* PKWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindow.m; sourceTree = "<group>"; };
-		8C2D71161BA3ED6F003C94C1 /* PKWindowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindowManager.h; sourceTree = "<group>"; };
-		8C2D71171BA3ED6F003C94C1 /* PKWindowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindowManager.m; sourceTree = "<group>"; };
+		8C2D71631BA4036E003C94C1 /* PKWindowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKWindowManager.h; sourceTree = "<group>"; };
+		8C2D71641BA4036E003C94C1 /* PKWindowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKWindowManager.m; sourceTree = "<group>"; };
 		8C837A2B1B2BF1CC00B169FD /* PaperKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C837A2F1B2BF1CC00B169FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C837A441B2BF1CC00B169FD /* PaperKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaperKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -194,8 +194,8 @@
 				8C2D71131BA3ED6F003C94C1 /* PKViewController.m */,
 				8C2D71141BA3ED6F003C94C1 /* PKWindow.h */,
 				8C2D71151BA3ED6F003C94C1 /* PKWindow.m */,
-				8C2D71161BA3ED6F003C94C1 /* PKWindowManager.h */,
-				8C2D71171BA3ED6F003C94C1 /* PKWindowManager.m */,
+				8C2D71631BA4036E003C94C1 /* PKWindowManager.h */,
+				8C2D71641BA4036E003C94C1 /* PKWindowManager.m */,
 				8C990B6B1B4A30F900EB9AAC /* PaperKit.h */,
 			);
 			name = PaperKit;
@@ -347,7 +347,7 @@
 				8C2D71211BA3ED6F003C94C1 /* PKScrollView.m in Sources */,
 				8C2D711D1BA3ED6F003C94C1 /* PKContentScrollView.m in Sources */,
 				8C2D71221BA3ED6F003C94C1 /* PKTableView.m in Sources */,
-				8C2D71261BA3ED6F003C94C1 /* PKWindowManager.m in Sources */,
+				8C2D71651BA4036E003C94C1 /* PKWindowManager.m in Sources */,
 				8C2D71181BA3ED6F003C94C1 /* PKCollectionView.m in Sources */,
 				8C2D71251BA3ED6F003C94C1 /* PKWindow.m in Sources */,
 				8C2D71201BA3ED6F003C94C1 /* PKPreviewView.m in Sources */,

@@ -273,7 +273,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 
 - (void)showWindowAtIndex:(NSInteger)index
 {
-    //[self dismissAnimationSelectIndex:index].toValue = @(1);
+    [self dismissAnimationSelectIndex:index].toValue = @(1);
 }
 
 - (void)window:(PKWindow *)window panGesture:(UIPanGestureRecognizer *)recognizer
@@ -470,7 +470,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             [self animation].toValue = @([self progressToListStatus]);
             if (!self.isLinking) {
                 [self setLink:YES];
-                //[self linkAnimation].toValue = @([self progressToListStatus]);
+                [self linkAnimation].toValue = @([self progressToListStatus]);
             }
             break;
         }
@@ -612,7 +612,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             [self animation].toValue = @([self progressToListStatus]);
             if (!self.isLinking) {
                 [self setLink:YES];
-                //[self linkAnimation].toValue = @([self progressToListStatus]);
+                [self linkAnimation].toValue = @([self progressToListStatus]);
             }
             break;
         }
@@ -636,7 +636,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         }
     }
 }
-/*
+
 - (POPBasicAnimation *)linkAnimation
 {
     POPBasicAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.window.link"];
@@ -695,7 +695,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     }];
     return prop;
 }
- */
 - (void)pop_animationDidStop:(POPAnimation *)anim finished:(BOOL)finished
 {
     _decelerating = NO;
