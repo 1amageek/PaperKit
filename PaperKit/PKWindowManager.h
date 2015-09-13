@@ -30,9 +30,7 @@ typedef NS_ENUM(NSInteger, PKWindowManagerStatus) {
 // Multiwindow status
 @property (nonatomic, readonly, getter=isSingleWindow)  BOOL singleWindow;
 @property (nonatomic, readonly, getter=isLinking)       BOOL linking;
-@property (nonatomic, readonly, getter=isLinked)        BOOL linked;
 @property (nonatomic, readonly, getter=isStacking)      BOOL stacking;
-@property (nonatomic, readonly, getter=isStacked)       BOOL stacked;
 
 // Gesture status
 @property (nonatomic, readonly, getter=isTracking)      BOOL tracking;
