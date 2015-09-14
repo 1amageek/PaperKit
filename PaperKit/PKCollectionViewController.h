@@ -51,7 +51,7 @@ typedef NS_ENUM(NSInteger, PKCollectionViewControllerScrollDirection)
 - (nonnull NSArray *)indexPathsForVisibleItems;
 - (nonnull UICollectionViewCell *)cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath;
 - (void)reloadData;
-- (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion;
+- (void)performBatchUpdates:(void (^ _Nonnull)(void))updates completion:(void (^ _Nullable)(BOOL finished))completion;
 
 @end
 
