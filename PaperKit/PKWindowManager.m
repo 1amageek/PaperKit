@@ -122,7 +122,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 
 - (void)setStatus:(PKWindowManagerStatus)status
 {
-    //NSLog(@"status %d", status);
     _status = status;
     if (status == PKWindowManagerStatusDefault) {
         [self.windows enumerateObjectsUsingBlock:^(PKWindow * _Nonnull window, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -149,10 +148,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 
 - (PKWindow *)windowForIndex:(NSInteger)index
 {
-    if (index < self.numberOfWindowsInManager) {
-        return [self.windows objectAtIndex:index];
-    }
-    return nil;
+    return [self.windows objectAtIndex:index];
 }
 
 - (CGFloat)upperProgress
@@ -213,9 +209,12 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         window.windowLevel = UIWindowLevelStatusBar + self.windows.count + 1;
         window.rootViewController = rootViewController;
         window.manager = self;
-        self.linking = NO;
+        _link = NO;
+        _linking = NO;
+        _stack = NO;
+        _stacking = NO;
         [self _addWindow:window];
-        
+        self.dismissIndex = [self indexOfWindow:window];
         [window makeKeyAndVisible:animated];
         POPLayerSetTranslationY(window.layer, screen.size.height);
         [self animation].fromValue = @(1);
@@ -302,13 +301,19 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             _tracking = YES;
             _initialTouchPoint = location;
             _initialTouchTopWindowPosition = self.topWindow.frame.origin;
-            _dismissIndex = [self indexOfWindow:self.topWindow];
-            if (window == self.topWindow) {
-                self.touchingTopWindow = YES;
+
+            if (self.status == PKWindowManagerStatusList) {
+                if (window == self.topWindow) {
+                    self.touchingTopWindow = YES;
+                    self.dismissIndex = [self indexOfWindow:self.topWindow];
+                } else {
+                    self.touchingTopWindow = NO;
+                    self.dismissIndex = 0;
+                }
             } else {
-                self.touchingTopWindow = NO;
+                self.dismissIndex = 0;
             }
-            
+
             break;
         }
             
@@ -385,7 +390,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     }
     
     if (self.isLinking) {
-
         _linkTransitionProgress = transitionProgress;
         [self.windows enumerateObjectsUsingBlock:^(PKWindow * _Nonnull window, NSUInteger idx, BOOL * _Nonnull stop) {
             CGFloat yPosition = [self positionForWindow:window progress:transitionProgress].y;
@@ -451,6 +455,16 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         }
         [self pop_removeAnimationForKey:@"inc.stamp.pk.window.stack"];
         [self stackAnimation].toValue = stack ? @(1) : @(0);
+    }
+}
+
+- (void)setStacking:(BOOL)stacking
+{
+    _stacking = stacking;
+    if (stacking) {
+        _stackTransitionProgress = 1;
+    } else {
+        _stackTransitionProgress = 0;
     }
 }
 
@@ -549,7 +563,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         case PKWindowManagerStatusDismiss:
         {
             [self setLink:NO];
-            //[self setStack:YES];
+            [self setStack:YES];
             [self animation].toValue = @(1);
             break;
         }
@@ -587,7 +601,8 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 {
     NSUInteger i = [self indexOfWindow:window];
     CGFloat progress = transitionProgress/[self progressToListStatus];
-    CGFloat toInterval = POPTransition((1 - self.stackTransitionProgress), 0, interval);
+    CGFloat stackProgress = (self.dismissIndex <= i) ? self.stackTransitionProgress : 0;
+    CGFloat toInterval = POPTransition((1 - stackProgress), 0, interval);
     CGFloat height = POPTransition(transitionProgress, 0, [UIScreen mainScreen].bounds.size.height)
     - POPTransition(progress, 0, toInterval * (self.numberOfWindowsInManager - 1 - i));
     return CGPointMake(0, height);
@@ -633,16 +648,16 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         case PKWindowManagerStatusDismiss:
         {
             
-            for (NSUInteger idx = 0; idx < self.windows.count; idx++) {
-                if (self.dismissIndex <= idx) {
-                    [self _removeWindow:[self windowForIndex:idx]];
-                }
-            }
-            
+            NSUInteger count = self.windows.count;
+            NSMutableArray *windows = self.windows.mutableCopy;
+            [windows removeObjectsInRange:NSMakeRange(self.dismissIndex, count - self.dismissIndex)];
+            self.windows = windows;
             self.status = PKWindowManagerStatusDefault;
-            self.link = YES;
-            self.linking = YES;
-            [self setStack:NO];
+
+            _link = YES;
+            _linking = YES;
+            _stack = NO;
+            self.stacking = NO;
             break;
         }
         case PKWindowManagerStatusList:
@@ -665,10 +680,10 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         case PKWindowManagerStatusDefault:
         default:
         {
-            self.dismissIndex = self.windows.count - 1;
             self.link = YES;
             self.linking = YES;
-            [self setStack:NO];
+            self.stack = NO;
+            self.stacking = NO;
             break;
         }
     }
@@ -717,7 +732,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     POPBasicAnimation *animation = [self pop_animationForKey:@"inc.stamp.pk.window.stack"];
     if (!animation) {
         animation = [POPBasicAnimation easeOutAnimation];
-        animation.duration = 0.32f;
+        animation.duration = 0.28f;
         animation.property = self.stackAnimatableProperty;
         animation.delegate = self;
         animation.completionBlock = ^(POPAnimation *anim, BOOL finished) {
