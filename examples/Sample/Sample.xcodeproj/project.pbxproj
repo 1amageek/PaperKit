@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		120632531BB98DC3006D5357 /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 120632521BB98DC3006D5357 /* ComposeViewController.m */; };
 		8CA4570B1B417DC9005F0CA5 /* BackgroundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4570A1B417DC9005F0CA5 /* BackgroundViewController.m */; };
 		8CACE72F1B67D9F300BBBE47 /* FullScreenContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CACE72E1B67D9F300BBBE47 /* FullScreenContentViewController.m */; };
 		8CB517F31B3DC14A00D32B5F /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB517F21B3DC14A00D32B5F /* ContentViewController.m */; };
@@ -31,6 +32,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		120632511BB98DC3006D5357 /* ComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeViewController.h; sourceTree = "<group>"; };
+		120632521BB98DC3006D5357 /* ComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeViewController.m; sourceTree = "<group>"; };
 		59D3F20B9D30271B2CE81701 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A92D806594A41287919DBC0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		8CA457091B417DC9005F0CA5 /* BackgroundViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundViewController.h; sourceTree = "<group>"; };
@@ -112,6 +115,8 @@
 				8CA4570A1B417DC9005F0CA5 /* BackgroundViewController.m */,
 				8CC085521B3DBDB30002A2D6 /* ViewController.h */,
 				8CC085531B3DBDB30002A2D6 /* ViewController.m */,
+				120632511BB98DC3006D5357 /* ComposeViewController.h */,
+				120632521BB98DC3006D5357 /* ComposeViewController.m */,
 				8CB517F11B3DC14A00D32B5F /* ContentViewController.h */,
 				8CB517F21B3DC14A00D32B5F /* ContentViewController.m */,
 				8CACE72D1B67D9F300BBBE47 /* FullScreenContentViewController.h */,
@@ -302,6 +307,7 @@
 				8CC085511B3DBDB30002A2D6 /* AppDelegate.m in Sources */,
 				8CA4570B1B417DC9005F0CA5 /* BackgroundViewController.m in Sources */,
 				8CC0854E1B3DBDB30002A2D6 /* main.m in Sources */,
+				120632531BB98DC3006D5357 /* ComposeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

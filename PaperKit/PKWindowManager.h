@@ -15,7 +15,6 @@ typedef NS_ENUM(NSInteger, PKWindowManagerStatus) {
     PKWindowManagerStatusDefault = 0,
     PKWindowManagerStatusNothing,
     PKWindowManagerStatusList,
-    PKWindowManagerStatusConfirm,
     PKWindowManagerStatusSingleWindowOpen,
     PKWindowManagerStatusMultipleWindowOpen,
     PKWindowManagerStatusDismiss
@@ -46,7 +45,6 @@ typedef NS_ENUM(NSInteger, PKWindowManagerStatus) {
 - (NSInteger)indexOfWindow:(PKWindow *)window;
 - (PKWindow *)windowForIndex:(NSInteger)index;
 - (PKWindow *)topWindow;
-- (PKWindowDismissTransitionStyle)topWindowDismissTranstionStyle;
 
 // Add window
 - (PKWindow *)showWindowWithRootViewController:(UIViewController *)rootViewController;

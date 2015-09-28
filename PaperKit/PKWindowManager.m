@@ -188,11 +188,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     return [self.windows lastObject];
 }
 
-- (PKWindowDismissTransitionStyle)topWindowDismissTranstionStyle
-{
-    return self.topWindow.dismissTransitionStyle;
-}
-
 #pragma mark - add window
 
 - (PKWindow *)showWindowWithRootViewController:(UIViewController *)rootViewController
@@ -313,7 +308,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             } else {
                 self.dismissIndex = 0;
             }
-
+        
             break;
         }
             
@@ -335,8 +330,8 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             
             if (!self.isSingleWindow && self.isTouchingTopWindow && self.isTracking) {
                 CGFloat lower = self.lowerProgress;
-                CGFloat upper = self.topWindowDismissTranstionStyle == PKWindowDismissTransitionStyleRequireConfirm ? CGFLOAT_MAX : self.upperProgress;
-                CGFloat k = self.topWindowDismissTranstionStyle == PKWindowDismissTransitionStyleRequireConfirm ? 10 : 5;
+                CGFloat upper = self.upperProgress;
+                CGFloat k = 5;
                 
                 if (0 <= x && x < lower) {
                     y = x;
@@ -506,11 +501,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             }
             break;
         }
-        case PKWindowManagerStatusConfirm:
-        {
-            status = PKWindowManagerStatusDefault;
-            break;
-        }
         case PKWindowManagerStatusMultipleWindowOpen:
         case PKWindowManagerStatusSingleWindowOpen:
         {
@@ -543,9 +533,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
                     status = PKWindowManagerStatusSingleWindowOpen;
                 }
                 
-                if (self.topWindowDismissTranstionStyle == PKWindowDismissTransitionStyleRequireConfirm) {
-                    status = PKWindowManagerStatusConfirm;
-                }
             } else {
                 status = PKWindowManagerStatusDefault;
             }
@@ -574,11 +561,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
                 [self setLink:YES];
                 [self linkAnimation].toValue = @([self progressToListStatus]);
             }
-            break;
-        }
-        case PKWindowManagerStatusConfirm:
-        {
-            
             break;
         }
         case PKWindowManagerStatusMultipleWindowOpen:
@@ -665,11 +647,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
             [self setStack:NO];
             break;
         }
-        case PKWindowManagerStatusConfirm:
-        {
-            
-            break;
-        }
         case PKWindowManagerStatusMultipleWindowOpen:
         case PKWindowManagerStatusSingleWindowOpen:
         {
@@ -680,10 +657,11 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
         case PKWindowManagerStatusDefault:
         default:
         {
-            self.link = YES;
-            self.linking = YES;
-            self.stack = NO;
-            self.stacking = NO;
+            _link = YES;
+            _linking = YES;
+            _stack = NO;
+            _stacking = NO;
+            [self setTransitionProgress:0];
             break;
         }
     }
@@ -767,9 +745,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 - (void)pop_animationDidStop:(POPAnimation *)anim finished:(BOOL)finished
 {
     _decelerating = NO;
-    if (finished) {
-        
-    }
 }
 
 @end

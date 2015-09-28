@@ -40,7 +40,6 @@
 
 - (void)_commonInit
 {
-    
     self.backgroundColor = [UIColor blackColor];
     self.opaque = YES;
     
@@ -64,7 +63,6 @@
     [self addGestureRecognizer:self.tapGestureRecognizer];
 }
 
-
 - (void)makeKeyAndVisible:(BOOL)animated
 {
     if (animated) {
@@ -74,7 +72,6 @@
         [super makeKeyAndVisible];
     }
 }
-
 
 #pragma mark - TapGestureRecognizer
 
@@ -102,6 +99,5 @@
     }
     return YES;
 }
-
 
 @end

@@ -24,7 +24,9 @@
     [self.window makeKeyAndVisible];
     
     [PKWindowManager managerWithBaseWindow:self.window];
-        
+    ViewController *nextViewController = [ViewController new];
+    [[PKWindowManager sharedManager] showWindowWithRootViewController:nextViewController];
+    
     return YES;
 }
 

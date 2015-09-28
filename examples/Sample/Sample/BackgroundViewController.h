@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <PaperKit.h>
 
-@interface BackgroundViewController : UIViewController
+@interface BackgroundViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic) PKWindow *window;
+@property (nonatomic) UITableView *tableView;
 
 @end

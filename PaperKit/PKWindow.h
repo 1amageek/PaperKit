@@ -8,24 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-
-typedef NS_ENUM(NSInteger, PKWindowDismissTransitionStyle) {
-    PKWindowDismissTransitionStyleLink = 0,
-    PKWindowDismissTransitionStyleUnlink,
-    PKWindowDismissTransitionStyleRequireConfirm
-};
-
 @protocol PKWindowDelegate;
 @interface PKWindow : UIWindow
 
-@property (nonatomic) PKWindowDismissTransitionStyle dismissTransitionStyle;
 @property (nonatomic, weak) id <PKWindowDelegate> manager;
 @property (nonatomic) CGFloat transitionProgress;
 @property (nonatomic) CGFloat globalProgress;
 @property (nonatomic) CGFloat interval;
 
 - (void)makeKeyAndVisible:(BOOL)animated;
-- (void)dissmis;
 
 @end
 
@@ -35,15 +26,9 @@ typedef NS_ENUM(NSInteger, PKWindowDismissTransitionStyle) {
 - (void)window:(PKWindow *)window tapGesture:(UITapGestureRecognizer *)recognizer;
 - (void)window:(PKWindow *)window panGesture:(UIPanGestureRecognizer *)recognizer;
 
+- (void)windowWillAppear;
+- (void)windowDidAppear;
+- (void)windowWillDisappear;
+- (void)windowDidDisappear;
+
 @end
-
-/*
-@protocol PKWindowDelegate <NSObject>
-@required
-- (void)windowWillAppear:(PKWindow *)window;
-- (void)windowDidAppear:(PKWindow *)window;
-- (void)windowDidDisappear:(PKWindow *)window;
-
-- (NSArray *)windowsOnBaseWindow;
-
-@end*/

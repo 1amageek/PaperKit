@@ -23,10 +23,15 @@
 
 @implementation ViewController
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _backgroundData = @[@"0",@"1",@"2"];
+    _backgroundData = @[@"0",@"1",@"2",@"3",@"4"];
     _foregroundData = @[@"0",@"1",@"2",@"3",@"4",@"5"];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
     
@@ -173,10 +178,12 @@
 - (UICollectionViewCell *)backgroundCollectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
-    CGFloat color = floorf(indexPath.item)/[self backgroundCollectionView:collectionView numberOfItemsInSection:indexPath.section];
 
-    CGFloat saturation = floorf([[UIApplication sharedApplication].windows indexOfObject:(UIWindow *)self.view.superview])/[UIApplication sharedApplication].windows.count;
-    cell.backgroundColor = [UIColor colorWithHue:color saturation:saturation brightness:1 alpha:1];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    imageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%d", (int)indexPath.item]];
+    imageView.clipsToBounds = YES;
+    cell.backgroundView = imageView;
     return cell;
 }
 
