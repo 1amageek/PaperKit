@@ -143,22 +143,22 @@
 
 - (void)categoryWillSet:(NSUInteger)currentCategory nextCategory:(NSUInteger)nextCategory
 {
-    NSLog(@"categoryWillSet %lu %lu", currentCategory, (unsigned long)nextCategory);
+    //NSLog(@"categoryWillSet %lu %lu", currentCategory, (unsigned long)nextCategory);
 }
 
 - (void)categoryDidSet:(NSUInteger)category
 {
-    NSLog(@"categoryDidSet %lu", category);
+    //NSLog(@"categoryDidSet %lu", category);
 }
 
 - (void)didSelectViewController:(PKContentViewController *)viewController
 {
-    NSLog(@"didSelectViewController %@", viewController);
+    //NSLog(@"didSelectViewController %@", viewController);
 }
 
 - (void)didEndTransitionAnimation:(BOOL)expand
 {
-    NSLog(@"didEndTransitionAnimation %d", expand);
+    //NSLog(@"didEndTransitionAnimation %d", expand);
 }
 
 - (NSInteger)backgroundCollectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -176,7 +176,6 @@
     if (section == 0) {
         return 1;
     }
-    
     return _foregroundData.count;
 }
 

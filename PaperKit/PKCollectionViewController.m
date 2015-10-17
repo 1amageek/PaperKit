@@ -104,7 +104,6 @@
 }
 
 - (void)setTransitionProgress:(CGFloat)transitionProgress {
-    
     _transitionProgress = transitionProgress;
     self.collectionView.transitionProgress = transitionProgress;
     CGFloat scale = POPTransition(transitionProgress, self.minimumZoomScale, self.maximumZoomScale);
@@ -129,7 +128,6 @@
     }
     
     // position
-    
     CGFloat height = POPTransition(progress, _fromPosition.y, expand ? [UIScreen mainScreen].bounds.size.height * (1 - self.maximumZoomScale) : [UIScreen mainScreen].bounds.size.height * (1 - self.minimumZoomScale));
     _collectionView.layer.position = CGPointMake(_collectionView.layer.position.x, height);
     
@@ -165,7 +163,6 @@
 - (void)setPagingEnabled:(BOOL)pagingEnabled
 {
     _pagingEnabled = pagingEnabled;
-    
     if (pagingEnabled) {
         self.scrollView.decelerationRate = UIScrollViewDecelerationRateFast;
     } else {
@@ -175,7 +172,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self.collectionView registerClass:[PKCollectionViewCell class] forCellWithReuseIdentifier:@"PKCollectionViewCell"];
     
     [self.view addSubview:self.scrollView];
@@ -193,7 +189,6 @@
     
     [self.collectionView addGestureRecognizer:_panGestureRecognizer];
     [self.collectionView addGestureRecognizer:_tapGestureRecognizer];
-    
 }
 
 - (void)viewWillLayoutSubviews
@@ -219,10 +214,8 @@
     [_scrollView setZoomScale:scale animated:NO];
 }
 
-
 - (NSArray *)visibleCells
 {
-    
     NSArray *allCells = [self.collectionView visibleCells];
     NSMutableArray *cells = [NSMutableArray array];
     [allCells enumerateObjectsUsingBlock:^(PKCollectionViewCell *cell, NSUInteger idx, BOOL *stop) {
@@ -232,7 +225,6 @@
             [cells addObject:cell];
         }
     }];
-    
     return cells;
 }
 
@@ -305,9 +297,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    //NSLog(@"offset %f %f %f", scrollView.contentOffset.x, self.zoomScale, (self.collectionView.bounds.size.width * self.zoomScale) - self.scrollView.bounds.size.width);
     NSArray *visibleCells = [self visibleCells];
-    
     [visibleCells enumerateObjectsUsingBlock:^(PKCollectionViewCell *cell, NSUInteger idx, BOOL *stop) {
         if (cell.transitionProgress != self.transitionProgress) {
             cell.transitionProgress = self.transitionProgress;

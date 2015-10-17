@@ -12,7 +12,7 @@
 
 @interface _PKOverlayCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic) UIViewController *viewController;
+@property (nonatomic, weak) UIViewController *viewController;
 
 @end
 
@@ -24,6 +24,12 @@
         self.backgroundColor = [UIColor clearColor];
     }
     return self;
+}
+
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+    self.viewController = nil;
 }
 @end
 
@@ -45,7 +51,6 @@
     if (CGRectContainsPoint(viewController.collectionView.frame, screenPoint)) {
         return view;
     }
-    
     return nil;
 }
 
@@ -269,12 +274,10 @@
         return (PKCollectionViewController *)cell.viewController;
     }
     
-    
     PKCollectionViewController *viewController = [PKCollectionViewController new];
     viewController.collectionView.delegate = self;
     viewController.collectionView.dataSource = self;
     [self regisiterCellToCollectionView:(PKCollectionView *)viewController.collectionView];
-    
     return viewController;
 }
 
@@ -300,7 +303,6 @@
             *stop = YES;
         }
     }];
-    
     return controller;
 }
 
@@ -410,7 +412,6 @@
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
     // background
-    
     if (self.collectionView == collectionView) {
         return;
     }
@@ -464,7 +465,7 @@
         if (![parentViewController.childViewControllers containsObject:viewController]) {
             [parentViewController addChildViewController:viewController];
             [cell addSubview:viewController.view];
-            [parentViewController didMoveToParentViewController:self];
+            [viewController didMoveToParentViewController:parentViewController];
             ((PKCollectionViewCell *)cell).viewController = viewController;
         }
         cell.transitionProgress = parentViewController.transitionProgress;
@@ -487,15 +488,15 @@
             [viewController willMoveToParentViewController:self];
             [viewController.view removeFromSuperview];
             [viewController removeFromParentViewController];
+            ((_PKOverlayCollectionViewCell *)cell).viewController = nil;
         }
     }
     
     // foreground
+    PKCollectionViewController *parentViewController = [self foregroundViewControllerAtCollectionView:collectionView];
     PKContentViewController *viewController = (PKContentViewController *)((PKCollectionViewCell *)cell).viewController;
-    if ([self.childViewControllers containsObject:viewController]) {
-        _PKOverlayCollectionViewCell *overlayCell = (_PKOverlayCollectionViewCell *)[self.overlayCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.selectedCategory inSection:0]];
-        
-        [viewController willMoveToParentViewController:overlayCell.viewController];
+    if ([parentViewController.childViewControllers containsObject:viewController]) {
+        [viewController willMoveToParentViewController:parentViewController];
         [viewController.view removeFromSuperview];
         [viewController removeFromParentViewController];
     }
