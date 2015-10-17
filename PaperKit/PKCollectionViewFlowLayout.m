@@ -90,7 +90,7 @@
 - (CGRect)preheatRect
 {
     CGRect preheatRect = [UIScreen mainScreen].bounds;
-    preheatRect = CGRectInset(preheatRect, -0.5f * CGRectGetWidth(preheatRect), 0);
+    preheatRect = CGRectInset(preheatRect, -2.0f * CGRectGetWidth(preheatRect), 0);
     return preheatRect;
 }
 
