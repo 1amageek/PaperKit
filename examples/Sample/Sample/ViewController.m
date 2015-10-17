@@ -10,8 +10,9 @@
 #import "ContentViewController.h"
 #import "FullScreenContentViewController.h"
 #import "CollectionViewController.h"
+#import "ComposeViewController.h"
 
-@interface ViewController ()
+@interface ViewController () <UIViewControllerTransitioningDelegate>
 @property (nonatomic) UIButton *reloadForegroundButton;
 @property (nonatomic) UIButton *reloadBackgroundButton;
 @property (nonatomic) UIButton *insertForegroundButton;
@@ -132,8 +133,12 @@
 
 - (void)add:(UIBarButtonItem *)buttonItem
 {
-    ViewController *nextViewController = [ViewController new];
-    [[PKWindowManager sharedManager] showWindowWithRootViewController:nextViewController];
+    //ViewController *nextViewController = [ViewController new];
+    //[[PKWindowManager sharedManager] showWindowWithRootViewController:nextViewController];
+    
+    ComposeViewController *viewController = [ComposeViewController new];
+    [self presentViewController:viewController animated:YES completion:nil];
+    
 }
 
 - (void)categoryWillSet:(NSUInteger)currentCategory nextCategory:(NSUInteger)nextCategory

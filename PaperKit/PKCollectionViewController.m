@@ -8,41 +8,6 @@
 
 #import "PKCollectionViewController.h"
 
-/*
-@interface _PKHitTestView : UIView
-
-@end
-
-@implementation _PKHitTestView
-
-- (nullable UIView *)hitTest:(CGPoint)point withEvent:(nullable UIEvent *)event
-{
-
-    UIView *view = [super hitTest:point withEvent:event];
-    if (self.subviews.count) {
-        UIView *scrollView = self.subviews.firstObject;
-        if (scrollView.subviews.count) {
-            __block UICollectionView *collectionView = nil;
-            [scrollView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * __nonnull obj, NSUInteger idx, BOOL * __nonnull stop) {
-                if ([obj isKindOfClass:[UICollectionView class]]) {
-                    collectionView = obj;
-                    *stop = YES;
-                }
-            }];
-            CGPoint convertPoint = [view convertPoint:point toView:collectionView];
-            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:[collectionView indexPathForItemAtPoint:convertPoint]];
-            if (cell) {
-                return view;
-            } else {
-                return nil;
-            }
-        }
-    }
-    return nil;
-}
-@end
-*/
-
 @interface PKCollectionViewController () <PKCollectionViewFlowLayoutDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate>
 {
     CGPoint _initialTouchLocaiton;
@@ -108,12 +73,7 @@
     
     return self;
 }
-/*
-- (void)loadView
-{
-    self.view = [[_PKHitTestView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-}
-*/
+
 - (void)setMinimumZoomScale:(CGFloat)minimumZoomScale
 {
     _minimumZoomScale = minimumZoomScale;
@@ -155,8 +115,8 @@
 - (void)animateWithProgress:(CGFloat)transitionProgress expand:(BOOL)expand
 {
     [self setTransitionProgress:transitionProgress];
+    
     CGFloat targetContentOffsetX = [self.layout targetContentOffsetForProposedContentOffset:CGPointZero].x;
-    //CGFloat toContentOffsetX = ((_fromContentOffset.x + self.scrollView.bounds.size.width/2)/self.minimumZoomScale) - self.scrollView.bounds.size.width/2;
     CGFloat progress;
     if (expand) {
         progress = (transitionProgress - _fromProgress)/(1 - _fromProgress);
@@ -175,39 +135,24 @@
     
     // contentOffset
     CGFloat fromContentOffsetX = _fromContentOffset.x;
-    //CGFloat fromContentOffsetY = _fromContentOffset.y;
+    CGFloat minimumContentOffsetX = 0;
+    CGFloat maximunContentOffsetX = 0;
+    CGFloat toContentOffsetX = fromContentOffsetX;
     
-    if (self.scrollView.contentOffset.x <= 0) {
-        targetContentOffsetX = 0;
-        CGFloat contentOffsetX = POPTransition(progress, fromContentOffsetX, targetContentOffsetX);
-        [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
-        return;
-    }
-
     if (expand) {
-        CGFloat contentOffsetX = POPTransition(progress, fromContentOffsetX, targetContentOffsetX);
-        //CGFloat contentOffsetY = POPTransition(prgress, fromContentOffsetY, 0);
-        [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
+        toContentOffsetX = targetContentOffsetX;
+        maximunContentOffsetX = (self.collectionView.bounds.size.width * self.maximumZoomScale) - self.scrollView.bounds.size.width;
     } else {
-
-        /*
-        if ((self.collectionView.bounds.size.width * self.minimumZoomScale - self.scrollView.bounds.size.width)  <= self.scrollView.contentOffset.x) {
-            
-            CGFloat offsetX = self.collectionView.bounds.size.width * self.minimumZoomScale - self.scrollView.bounds.size.width;
-            targetContentOffsetX = offsetX;
-            CGFloat contentOffsetX = POPTransition(progress, fromContentOffsetX, targetContentOffsetX);
-            [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
-            return;
-        }
-        
-        
-        // TODO
-        
-        CGFloat scale = POPTransition(progress, _fromScale, self.minimumZoomScale);
-        CGFloat offsetX = (_fromContentOffset.x + self.scrollView.bounds.size.width/2) * scale/_fromScale - self.scrollView.bounds.size.width/2;
-        [self.scrollView setContentOffset:CGPointMake(offsetX, self.scrollView.contentOffset.y) animated:NO];
-        */
+        maximunContentOffsetX = (self.collectionView.bounds.size.width * self.minimumZoomScale) - self.scrollView.bounds.size.width;
+        toContentOffsetX = toContentOffsetX / _fromScale * self.minimumZoomScale;
     }
+    
+    targetContentOffsetX = (maximunContentOffsetX < toContentOffsetX) ? maximunContentOffsetX : toContentOffsetX;
+    targetContentOffsetX = (minimumContentOffsetX > targetContentOffsetX) ? minimumContentOffsetX : targetContentOffsetX;
+    
+    CGFloat contentOffsetX = POPTransition(progress, fromContentOffsetX, targetContentOffsetX);
+    [self.scrollView setContentOffset:CGPointMake(contentOffsetX, self.scrollView.contentOffset.y) animated:NO];
+
 }
 
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath
@@ -360,7 +305,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    
+    //NSLog(@"offset %f %f %f", scrollView.contentOffset.x, self.zoomScale, (self.collectionView.bounds.size.width * self.zoomScale) - self.scrollView.bounds.size.width);
     NSArray *visibleCells = [self visibleCells];
     
     [visibleCells enumerateObjectsUsingBlock:^(PKCollectionViewCell *cell, NSUInteger idx, BOOL *stop) {

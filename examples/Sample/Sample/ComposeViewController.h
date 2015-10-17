@@ -9,7 +9,7 @@
 #import "PKViewController.h"
 #import "PKWindow.h"
 
-@interface ComposeViewController : PKContentViewController <UITextViewDelegate>
+@interface ComposeViewController : PKContentViewController <UITextViewDelegate, UIViewControllerTransitioningDelegate>
 
 @property (nonatomic) UITextView *textView;
 

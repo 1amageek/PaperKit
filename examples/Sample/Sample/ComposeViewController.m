@@ -7,9 +7,10 @@
 //
 
 #import "ComposeViewController.h"
+#import "PKTransitionController.h"
 
 @interface ComposeViewController ()
-
+@property (nonatomic) PKTransitionController *transitionController;
 @end
 
 @implementation ComposeViewController
@@ -17,6 +18,16 @@
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.modalPresentationStyle = UIModalPresentationCustom;
+        self.transitioningDelegate = self;
+    }
+    return self;
 }
 
 - (void)loadView
@@ -39,6 +50,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
 }
 
@@ -56,9 +68,37 @@
     }
 }
 
-- (PKWindowDismissTransitionStyle)preferredWindowDismissTransitionStyle
+#pragma 
+
+- (PKTransitionController *)transitionController
 {
-    return PKWindowDismissTransitionStyleUnlink;
+    if (_transitionController) {
+        return _transitionController;
+    }
+    
+    _transitionController = [[PKTransitionController alloc] initWithView:self.view];
+    return _transitionController;
 }
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
+{
+    return self.transitionController;
+}
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
+{
+    return self.transitionController;
+}
+/*
+- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id <UIViewControllerAnimatedTransitioning>)animator
+{
+    return [PKTransitionController new];
+}
+
+- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id <UIViewControllerAnimatedTransitioning>)animator
+{
+    return [PKTransitionController new];
+}*/
+
 
 @end

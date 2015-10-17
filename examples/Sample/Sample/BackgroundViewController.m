@@ -88,7 +88,7 @@
         [[PKWindowManager sharedManager] showWindowWithRootViewController:nextViewController];
     } else if (indexPath.row == 1) {
         ComposeViewController *nextViewController = [ComposeViewController new];
-        [[PKWindowManager sharedManager] showWindowWithRootViewController:nextViewController];
+        [[[PKWindowManager sharedManager] topWindow].rootViewController presentViewController:nextViewController animated:YES completion:nil];
     }
     
     [tableView cellForRowAtIndexPath:indexPath].selected = NO;
