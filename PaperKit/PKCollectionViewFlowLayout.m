@@ -87,12 +87,11 @@
     return [self.delegate sizeOfRengeInCollectionView:self.collectionView];
 }
 
-- (CGRect)rengeRect
+- (CGRect)preheatRect
 {
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width/2;
-    CGFloat rengeWidth = self.rengeSize.width/2;
-    
-    return (CGRect){CGPointMake(screenWidth - rengeWidth, 0), self.rengeSize};
+    CGRect preheatRect = [UIScreen mainScreen].bounds;
+    preheatRect = CGRectInset(preheatRect, -0.5f * CGRectGetWidth(preheatRect), 0);
+    return preheatRect;
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
@@ -100,13 +99,12 @@
     NSMutableArray *attributes = [NSMutableArray array];
     NSInteger sections = [self.collectionView numberOfSections];
     for (NSInteger section = 0; section < sections; section ++) {
-        
         NSInteger items = [self.collectionView numberOfItemsInSection:section];
-        
         for (NSInteger item = 0; item < items; item ++) {
             UICollectionViewLayoutAttributes *attribute = [self layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section]];
-            CGRect frame = [self.collectionView convertRect:attribute.frame toView:nil];
-            BOOL intersetsRect = CGRectIntersectsRect(self.rengeRect, frame);
+            UIView *view = self.collectionView.superview.superview;
+            CGRect frame = [self.collectionView convertRect:attribute.frame toView:view];
+            BOOL intersetsRect = CGRectIntersectsRect([self preheatRect], frame);
             if (intersetsRect) {
                 [attributes addObject:attribute];
             }

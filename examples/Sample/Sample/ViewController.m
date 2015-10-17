@@ -193,6 +193,7 @@
 
 - (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath onCategory:(NSUInteger)category
 {
+
     if (indexPath.section == 0) {
         return [CollectionViewController new];
     }

@@ -39,36 +39,6 @@
         _pagingEnabled = NO;
         _collectionViewBackgroundColor = [UIColor clearColor];
         
-        _collectionView = [[PKContentCollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:self.layout];
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        _collectionView.pagingEnabled = NO;
-        _collectionView.userInteractionEnabled = YES;
-        _collectionView.layer.anchorPoint = CGPointMake(0, 0);
-        _collectionView.opaque = NO;
-        _collectionView.scrollEnabled = NO;
-        _collectionView.showsHorizontalScrollIndicator = NO;
-        _collectionView.showsVerticalScrollIndicator = NO;
-        _collectionView.backgroundColor = _collectionViewBackgroundColor;
-        //_collectionView.layer.shadowPath = [UIBezierPath bezierPathWithRect:_collectionView.bounds].CGPath;
-        //_collectionView.layer.shouldRasterize = YES;
-        //_collectionView.layer.rasterizationScale = [UIScreen mainScreen].scale;
-        _collectionView.layer.shadowColor = [UIColor blackColor].CGColor;
-        _collectionView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
-        _collectionView.layer.shadowOpacity = 0.2f;
-        _collectionView.layer.shadowRadius = 8;
-        _collectionView.layer.masksToBounds = NO;
-        
-        _scrollView = [[PKContentScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        _scrollView.delaysContentTouches = NO;
-        _scrollView.userInteractionEnabled = YES;
-        _scrollView.minimumZoomScale = _minimumZoomScale * 0.5;
-        _scrollView.maximumZoomScale = _maximumZoomScale * 1.5;
-        _scrollView.bouncesZoom = YES;
-        _scrollView.delegate = self;
-        _scrollView.alwaysBounceHorizontal = YES;
-        _scrollView.pinchGestureRecognizer.enabled = NO;
-        
     }
     
     return self;
@@ -170,15 +140,65 @@
     }
 }
 
+- (PKContentCollectionView *)collectionView
+{
+    if (_collectionView) {
+        return _collectionView;
+    }
+    
+    _collectionView = [[PKContentCollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:self.layout];
+    _collectionView.delegate = self;
+    _collectionView.dataSource = self;
+    _collectionView.pagingEnabled = NO;
+    _collectionView.userInteractionEnabled = YES;
+    _collectionView.layer.anchorPoint = CGPointMake(0, 0);
+    _collectionView.opaque = NO;
+    _collectionView.scrollEnabled = NO;
+    _collectionView.showsHorizontalScrollIndicator = NO;
+    _collectionView.showsVerticalScrollIndicator = NO;
+    _collectionView.backgroundColor = _collectionViewBackgroundColor;
+    //_collectionView.layer.shadowPath = [UIBezierPath bezierPathWithRect:_collectionView.bounds].CGPath;
+    //_collectionView.layer.shouldRasterize = YES;
+    //_collectionView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    _collectionView.layer.shadowColor = [UIColor blackColor].CGColor;
+    _collectionView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
+    _collectionView.layer.shadowOpacity = 0.2f;
+    _collectionView.layer.shadowRadius = 8;
+    _collectionView.layer.masksToBounds = NO;
+    return _collectionView;
+}
+
+- (PKContentScrollView *)scrollView
+{
+    if (_scrollView) {
+        return _scrollView;
+    }
+    
+    _scrollView = [[PKContentScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    _scrollView.delaysContentTouches = NO;
+    _scrollView.userInteractionEnabled = YES;
+    _scrollView.minimumZoomScale = _minimumZoomScale * 0.5;
+    _scrollView.maximumZoomScale = _maximumZoomScale * 1.5;
+    _scrollView.bouncesZoom = YES;
+    _scrollView.delegate = self;
+    _scrollView.alwaysBounceHorizontal = YES;
+    _scrollView.pinchGestureRecognizer.enabled = NO;
+    
+    return _scrollView;
+}
+
+- (void)loadView
+{
+    [super loadView];
+    [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.collectionView];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.collectionView registerClass:[PKCollectionViewCell class] forCellWithReuseIdentifier:@"PKCollectionViewCell"];
-    
-    [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.collectionView];
-    
-    _collectionView.frame = (CGRect){CGPointZero, [self.layout calculateSize]};
-    
+    self.collectionView.frame = (CGRect){CGPointZero, [self.layout calculateSize]};
+
     _panGestureRecognizer = [[PKPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
     _panGestureRecognizer.scrollDirection = PKPanGestureRecognizerDirectionVertical;
     _panGestureRecognizer.delegate = self;
@@ -276,7 +296,7 @@
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
-    return _collectionView;
+    return self.collectionView;
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
