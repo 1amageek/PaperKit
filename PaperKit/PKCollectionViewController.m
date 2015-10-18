@@ -635,9 +635,4 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     }];
 }
 
-- (void)dealloc
-{
-    NSLog(@"%s", __PRETTY_FUNCTION__ );
-}
-
 @end

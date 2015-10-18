@@ -74,10 +74,4 @@
     }
 }
 
-- (void)dealloc
-{
-    NSLog(@"%s", __PRETTY_FUNCTION__ );
-}
-
-
 @end
