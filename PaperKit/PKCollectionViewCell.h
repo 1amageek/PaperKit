@@ -15,6 +15,6 @@
 @interface PKCollectionViewCell : UICollectionViewCell <POPAnimationDelegate>
 
 @property (nonatomic) CGFloat transitionProgress;
-@property (nonatomic, weak) PKContentViewController *viewController;
+@property (nonatomic, weak, nullable) PKContentViewController *viewController;
 
 @end

@@ -26,6 +26,9 @@
 @end
 
 @implementation PKCollectionViewController
+static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloat endValue) {
+    return startValue + (progress * (endValue - startValue));
+}
 
 - (instancetype)init
 {
@@ -629,13 +632,12 @@
         if (!cell.viewController.isDisplayingInFullScreen && expand) {
             [cell.viewController viewDidDisplayInFullScreen];
         }
-        
     }];
-    
 }
 
-static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloat endValue) {
-    return startValue + (progress * (endValue - startValue));
+- (void)dealloc
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__ );
 }
 
 @end

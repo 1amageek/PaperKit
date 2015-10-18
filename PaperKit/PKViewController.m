@@ -12,11 +12,12 @@
 
 @interface _PKOverlayCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, weak) UIViewController *viewController;
+@property (nonatomic, weak, nullable) UIViewController *viewController;
 
 @end
 
 @implementation _PKOverlayCollectionViewCell
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -31,6 +32,7 @@
     [super prepareForReuse];
     self.viewController = nil;
 }
+
 @end
 
 #pragma mark - _PKOverlayCollectionView
@@ -68,6 +70,9 @@
 @end
 
 @implementation PKViewController
+static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloat endValue) {
+    return startValue + (progress * (endValue - startValue));
+}
 
 - (instancetype)init
 {
@@ -166,7 +171,7 @@
     
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"UICollectionViewCell"];
     [self.overlayCollectionView registerClass:[_PKOverlayCollectionViewCell class] forCellWithReuseIdentifier:@"_PKOverlayCollectionViewCell"];
-    
+
 }
 
 - (PKToolbar *)toolbar
@@ -430,7 +435,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+
     // background
     if (self.collectionView == collectionView) {
         return [self backgroundCollectionView:collectionView cellForItemAtIndexPath:indexPath];
@@ -439,7 +444,6 @@
     // overlay
     if (self.overlayCollectionView == collectionView) {
         _PKOverlayCollectionViewCell *cell = (_PKOverlayCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"_PKOverlayCollectionViewCell" forIndexPath:indexPath];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             PKCollectionViewController *viewController = [self viewControllerAtIndex:indexPath.item];
             viewController.minimumZoomScale = self.minimumZoomScale;
@@ -461,7 +465,6 @@
         PKCollectionViewController *parentViewController = [self foregroundViewControllerAtCollectionView:collectionView];
         NSUInteger index = [self indexAtCollectionView:collectionView];
         PKContentViewController *viewController = [self _collectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:indexPath onCategory:index];
-        
         if (![parentViewController.childViewControllers containsObject:viewController]) {
             [parentViewController addChildViewController:viewController];
             [cell addSubview:viewController.view];
@@ -486,20 +489,24 @@
         PKCollectionViewController *viewController = (PKCollectionViewController *)((_PKOverlayCollectionViewCell *)cell).viewController;
         if ([self.childViewControllers containsObject:viewController]) {
             [viewController willMoveToParentViewController:self];
+            NSArray *cells = [viewController.collectionView visibleCells];
+            [cells enumerateObjectsUsingBlock:^(UICollectionViewCell *cell, NSUInteger idx, BOOL * __nonnull stop) {
+                [viewController.collectionView.delegate collectionView:viewController.collectionView didEndDisplayingCell:cell forItemAtIndexPath:indexPath];
+            }];
             [viewController.view removeFromSuperview];
             [viewController removeFromParentViewController];
-            ((_PKOverlayCollectionViewCell *)cell).viewController = nil;
         }
     }
     
     // foreground
-    PKCollectionViewController *parentViewController = [self foregroundViewControllerAtCollectionView:collectionView];
     PKContentViewController *viewController = (PKContentViewController *)((PKCollectionViewCell *)cell).viewController;
+    PKCollectionViewController *parentViewController = (PKCollectionViewController *)viewController.parentViewController;
     if ([parentViewController.childViewControllers containsObject:viewController]) {
         [viewController willMoveToParentViewController:parentViewController];
         [viewController.view removeFromSuperview];
         [viewController removeFromParentViewController];
     }
+    
 }
 
 - (UICollectionViewCell *)backgroundCollectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -545,10 +552,5 @@
 {
     [self scrollView:viewController.scrollView slideToAction:direction];
 }
-
-static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloat endValue) {
-    return startValue + (progress * (endValue - startValue));
-}
-
 
 @end
