@@ -243,9 +243,19 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     }
 }
 
-#pragma mark - dismiss window
+#pragma mark -
 
 - (void)dismissWindow:(PKWindow *)window
+{
+    
+}
+
+- (void)open
+{
+    
+}
+
+- (void)close
 {
     
 }

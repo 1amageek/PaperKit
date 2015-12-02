@@ -50,6 +50,10 @@ typedef NS_ENUM(NSInteger, PKWindowManagerStatus) {
 - (PKWindow *)showWindowWithRootViewController:(UIViewController *)rootViewController;
 - (PKWindow *)showWindowWithRootViewController:(UIViewController *)rootViewController animated:(BOOL)animated;
 
+// Control
+- (void)open;
+- (void)close;
+
 // Dismis window
 - (void)dismissWindow:(PKWindow *)window;
 

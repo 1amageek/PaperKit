@@ -11,6 +11,7 @@
 #import "PKContentViewController.h"
 #import "PKCollectionViewController.h"
 #import "PKPanGestureRecognizer.h"
+#import "PKTransitionController.h"
 
 @interface PKViewController : UIViewController
 

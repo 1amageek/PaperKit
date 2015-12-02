@@ -76,7 +76,7 @@
         return _transitionController;
     }
     
-    _transitionController = [[PKTransitionController alloc] initWithView:self.view];
+    _transitionController = [PKTransitionController new];
     return _transitionController;
 }
 

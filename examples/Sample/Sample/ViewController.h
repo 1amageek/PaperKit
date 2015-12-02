@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <PaperKit/PaperKit.h>
+#import "PKTransitionController.h"
 
-@interface ViewController : PKViewController
+@interface ViewController : PKViewController <UIViewControllerTransitioningDelegate>
 
+@property (nonatomic) PKTransitionController *transitionController;
 
 @end
 
