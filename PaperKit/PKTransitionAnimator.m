@@ -1,24 +1,26 @@
 //
-//  PKTransitionController.m
+//  PKTransitionAnimator.m
 //  Sample
 //
-//  Created by 1amageek on 2015/12/02.
+//  Created by 1amageek on 2015/12/03.
 //  Copyright © 2015年 Stamp inc. All rights reserved.
 //
 
-#import "PKTransitionController.h"
+#import "PKTransitionAnimator.h"
 #import <pop/POP.h>
 #import <pop/POPLayerExtras.h>
 
-@interface PKTransitionController ()
+@interface PKTransitionAnimator ()
 
 @property (nonatomic) id <UIViewControllerContextTransitioning> context;
 @property (nonatomic, weak) UIViewController *fromViewController;
 @property (nonatomic, weak) UIViewController *toViewController;
 @property (nonatomic) CGFloat transitionProgress;
+
 @end
 
-@implementation PKTransitionController
+@implementation PKTransitionAnimator
+
 static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloat endValue) {
     return startValue + (progress * (endValue - startValue));
 }
@@ -49,6 +51,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     POPLayerSetTranslationY(view.layer, originY);
     
     
+    
 }
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
@@ -74,13 +77,15 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     
-    toView.frame = CGRectMake(0, screenSize.height, screenSize.width, screenSize.height);
-    [containerView addSubview:toView];
-    
-    [self animationToValue:1 velocity:CGPointZero completion:^(BOOL finished) {
+    if (self.presenting) {
+        toView.frame = CGRectMake(0, screenSize.height, screenSize.width, screenSize.height);
+        [containerView addSubview:toView];
         
-    }];
-    
+        [self animationToValue:1 velocity:CGPointZero completion:^(BOOL finished) {
+            
+        }];
+    }
+
 }
 
 - (void)animationToValue:(CGFloat)toValue velocity:(CGPoint)velocity completion:(void (^)(BOOL finished))completion

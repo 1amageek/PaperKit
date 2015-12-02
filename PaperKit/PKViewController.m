@@ -66,6 +66,7 @@
 @property (nonatomic) UICollectionViewFlowLayout *layout;
 @property (nonatomic) _PKOverlayCollectionView *overlayCollectionView;
 
+@property (nonatomic) PKTransitionAnimator *transtionAnimator;
 
 @end
 
@@ -172,6 +173,15 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"UICollectionViewCell"];
     [self.overlayCollectionView registerClass:[_PKOverlayCollectionViewCell class] forCellWithReuseIdentifier:@"_PKOverlayCollectionViewCell"];
 
+}
+
+- (PKTransitionAnimator *)transtionAnimator
+{
+    if (_transtionAnimator) {
+        return _transtionAnimator;
+    }
+    _transtionAnimator = [PKTransitionAnimator new];
+    return _transtionAnimator;
 }
 
 - (PKToolbar *)toolbar
@@ -552,5 +562,44 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 {
     [self scrollView:viewController.scrollView slideToAction:direction];
 }
+
+#pragma mark - UIViewControllerTransitioningDelegate
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
+{
+    if ([presented isKindOfClass:[PKContentViewController class]]) {
+        
+        return self.transtionAnimator;
+    }
+    return nil;
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
+{
+    if ([dismissed isKindOfClass:[PKContentViewController class]]) {
+        self.transtionAnimator.presenting = NO;
+        return self.transtionAnimator;
+    }
+    return nil;
+}
+
+#pragma mark interactive
+
+- (id<UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id<UIViewControllerAnimatedTransitioning>)animator
+{
+    if ([animator isKindOfClass:[PKTransitionAnimator class]]) {
+        return self.transtionAnimator;
+    }
+    return nil;
+}
+
+- (id<UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator
+{
+    if ([animator isKindOfClass:[PKTransitionAnimator class]]) {
+        return self.transtionAnimator;
+    }
+    return nil;
+}
+
 
 @end

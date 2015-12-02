@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		120632531BB98DC3006D5357 /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 120632521BB98DC3006D5357 /* ComposeViewController.m */; };
-		12BA3E961C0F386400A40C95 /* PKTransitionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12BA3E951C0F386400A40C95 /* PKTransitionController.m */; };
+		126C16481C0F4961009CDA2B /* PKTransitionAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 126C16471C0F4961009CDA2B /* PKTransitionAnimator.m */; };
 		8CA4570B1B417DC9005F0CA5 /* BackgroundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4570A1B417DC9005F0CA5 /* BackgroundViewController.m */; };
 		8CACE72F1B67D9F300BBBE47 /* FullScreenContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CACE72E1B67D9F300BBBE47 /* FullScreenContentViewController.m */; };
 		8CB517F31B3DC14A00D32B5F /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB517F21B3DC14A00D32B5F /* ContentViewController.m */; };
@@ -35,8 +35,8 @@
 /* Begin PBXFileReference section */
 		120632511BB98DC3006D5357 /* ComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeViewController.h; sourceTree = "<group>"; };
 		120632521BB98DC3006D5357 /* ComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeViewController.m; sourceTree = "<group>"; };
-		12BA3E941C0F386400A40C95 /* PKTransitionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKTransitionController.h; sourceTree = "<group>"; };
-		12BA3E951C0F386400A40C95 /* PKTransitionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKTransitionController.m; sourceTree = "<group>"; };
+		126C16461C0F4961009CDA2B /* PKTransitionAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKTransitionAnimator.h; sourceTree = "<group>"; };
+		126C16471C0F4961009CDA2B /* PKTransitionAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKTransitionAnimator.m; sourceTree = "<group>"; };
 		59D3F20B9D30271B2CE81701 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A92D806594A41287919DBC0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		8CA457091B417DC9005F0CA5 /* BackgroundViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundViewController.h; sourceTree = "<group>"; };
@@ -126,8 +126,8 @@
 				8CACE72E1B67D9F300BBBE47 /* FullScreenContentViewController.m */,
 				8CC101571B762825007210EF /* CollectionViewController.h */,
 				8CC101581B762825007210EF /* CollectionViewController.m */,
-				12BA3E941C0F386400A40C95 /* PKTransitionController.h */,
-				12BA3E951C0F386400A40C95 /* PKTransitionController.m */,
+				126C16461C0F4961009CDA2B /* PKTransitionAnimator.h */,
+				126C16471C0F4961009CDA2B /* PKTransitionAnimator.m */,
 				8CC085581B3DBDB30002A2D6 /* Images.xcassets */,
 				8CC0855A1B3DBDB30002A2D6 /* LaunchScreen.xib */,
 				8CC0854B1B3DBDB30002A2D6 /* Supporting Files */,
@@ -182,6 +182,7 @@
 				8CC085451B3DBDB30002A2D6 /* Frameworks */,
 				8CC085461B3DBDB30002A2D6 /* Resources */,
 				130FF85DA165100228868D4C /* Copy Pods Resources */,
+				178321BAB1FCE2D5362D8A89 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -283,6 +284,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		178321BAB1FCE2D5362D8A89 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		775F8C5C50AD4B10FFBE68E0 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -308,11 +324,11 @@
 				8CB517F31B3DC14A00D32B5F /* ContentViewController.m in Sources */,
 				8CC101591B762825007210EF /* CollectionViewController.m in Sources */,
 				8CACE72F1B67D9F300BBBE47 /* FullScreenContentViewController.m in Sources */,
-				12BA3E961C0F386400A40C95 /* PKTransitionController.m in Sources */,
 				8CC085541B3DBDB30002A2D6 /* ViewController.m in Sources */,
 				8CC085511B3DBDB30002A2D6 /* AppDelegate.m in Sources */,
 				8CA4570B1B417DC9005F0CA5 /* BackgroundViewController.m in Sources */,
 				8CC0854E1B3DBDB30002A2D6 /* main.m in Sources */,
+				126C16481C0F4961009CDA2B /* PKTransitionAnimator.m in Sources */,
 				120632531BB98DC3006D5357 /* ComposeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -435,6 +451,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Sample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -449,6 +466,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Sample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
