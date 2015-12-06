@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		120632531BB98DC3006D5357 /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 120632521BB98DC3006D5357 /* ComposeViewController.m */; };
-		126C16481C0F4961009CDA2B /* PKTransitionAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 126C16471C0F4961009CDA2B /* PKTransitionAnimator.m */; };
 		8CA4570B1B417DC9005F0CA5 /* BackgroundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4570A1B417DC9005F0CA5 /* BackgroundViewController.m */; };
 		8CACE72F1B67D9F300BBBE47 /* FullScreenContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CACE72E1B67D9F300BBBE47 /* FullScreenContentViewController.m */; };
 		8CB517F31B3DC14A00D32B5F /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB517F21B3DC14A00D32B5F /* ContentViewController.m */; };
@@ -35,8 +34,6 @@
 /* Begin PBXFileReference section */
 		120632511BB98DC3006D5357 /* ComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeViewController.h; sourceTree = "<group>"; };
 		120632521BB98DC3006D5357 /* ComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeViewController.m; sourceTree = "<group>"; };
-		126C16461C0F4961009CDA2B /* PKTransitionAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKTransitionAnimator.h; sourceTree = "<group>"; };
-		126C16471C0F4961009CDA2B /* PKTransitionAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKTransitionAnimator.m; sourceTree = "<group>"; };
 		59D3F20B9D30271B2CE81701 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A92D806594A41287919DBC0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		8CA457091B417DC9005F0CA5 /* BackgroundViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundViewController.h; sourceTree = "<group>"; };
@@ -126,8 +123,6 @@
 				8CACE72E1B67D9F300BBBE47 /* FullScreenContentViewController.m */,
 				8CC101571B762825007210EF /* CollectionViewController.h */,
 				8CC101581B762825007210EF /* CollectionViewController.m */,
-				126C16461C0F4961009CDA2B /* PKTransitionAnimator.h */,
-				126C16471C0F4961009CDA2B /* PKTransitionAnimator.m */,
 				8CC085581B3DBDB30002A2D6 /* Images.xcassets */,
 				8CC0855A1B3DBDB30002A2D6 /* LaunchScreen.xib */,
 				8CC0854B1B3DBDB30002A2D6 /* Supporting Files */,
@@ -328,7 +323,6 @@
 				8CC085511B3DBDB30002A2D6 /* AppDelegate.m in Sources */,
 				8CA4570B1B417DC9005F0CA5 /* BackgroundViewController.m in Sources */,
 				8CC0854E1B3DBDB30002A2D6 /* main.m in Sources */,
-				126C16481C0F4961009CDA2B /* PKTransitionAnimator.m in Sources */,
 				120632531BB98DC3006D5357 /* ComposeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

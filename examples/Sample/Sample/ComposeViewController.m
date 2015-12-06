@@ -7,10 +7,9 @@
 //
 
 #import "ComposeViewController.h"
-#import "PKTransitionController.h"
 
 @interface ComposeViewController ()
-@property (nonatomic) PKTransitionController *transitionController;
+
 @end
 
 @implementation ComposeViewController
@@ -68,37 +67,6 @@
     }
 }
 
-#pragma 
-
-- (PKTransitionController *)transitionController
-{
-    if (_transitionController) {
-        return _transitionController;
-    }
-    
-    _transitionController = [PKTransitionController new];
-    return _transitionController;
-}
-
-- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
-{
-    return self.transitionController;
-}
-
-- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
-{
-    return self.transitionController;
-}
-/*
-- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id <UIViewControllerAnimatedTransitioning>)animator
-{
-    return [PKTransitionController new];
-}
-
-- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id <UIViewControllerAnimatedTransitioning>)animator
-{
-    return [PKTransitionController new];
-}*/
 
 
 @end

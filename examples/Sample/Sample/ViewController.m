@@ -221,43 +221,6 @@
     
 }
 
-#pragma mark - UIViewControllerTransitioningDelegate
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
-{
-    if ([presented isKindOfClass:[ComposeViewController class]]) {
-        self.transitionController = [PKTransitionController new];
-        return self.transitionController;
-    }
-    return nil;
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
-{
-    if ([dismissed isKindOfClass:[ComposeViewController class]]) {
-        return self.transitionController;
-    }
-    return nil;
-}
-
-#pragma mark interactive
-
-- (id<UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id<UIViewControllerAnimatedTransitioning>)animator
-{
-    if ([animator isKindOfClass:[PKTransitionController class]]) {
-        return self.transitionController;
-    }
-    return nil;
-}
-
-- (id<UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator
-{
-    if ([animator isKindOfClass:[PKTransitionController class]]) {
-        return self.transitionController;
-    }
-    return nil;
-}
-
 
 
 @end
