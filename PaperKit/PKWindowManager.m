@@ -72,13 +72,6 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     NSLog(@"Initialization must be managerWithBaseWindow:");
     abort();
     return nil;
-    /*
-    self = [super init];
-    if (self) {
-        [self _commonInit];
-    }
-    return self;
-     */
 }
 
 + (PKWindowManager *)managerWithBaseWindow:(UIWindow *)window
@@ -259,6 +252,29 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 {
     
 }
+
+#pragma mark - PKWindowDelegate
+
+- (void)windowWillAppear
+{
+    
+}
+
+- (void)windowDidAppear
+{
+    
+}
+
+- (void)windowWillDisappear
+{
+    
+}
+
+- (void)windowDidDisappear
+{
+    
+}
+
 
 #pragma mark - gesture
 

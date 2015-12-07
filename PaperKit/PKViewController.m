@@ -568,7 +568,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
 {
     if ([presented isKindOfClass:[PKContentViewController class]]) {
-        
+        self.transtionAnimator.presenting = YES;
         return self.transtionAnimator;
     }
     return nil;
