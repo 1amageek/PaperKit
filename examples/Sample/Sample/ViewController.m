@@ -195,7 +195,7 @@
 
 - (PKContentViewController *)foregroundCollectionView:(PKCollectionView *)collectionView contentViewControllerForAtIndexPath:(NSIndexPath *)indexPath onCategory:(NSUInteger)category
 {
-    return [FullScreenContentViewController new];
+
     if (indexPath.section == 0) {
         return [CollectionViewController new];
     }
