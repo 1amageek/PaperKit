@@ -13,6 +13,7 @@
 @interface PKTransitionAnimator ()
 
 @property (nonatomic) id <UIViewControllerContextTransitioning> context;
+@property (nonatomic) UIView *overlayView;
 @property (nonatomic, weak) UIViewController *fromViewController;
 @property (nonatomic, weak) UIViewController *toViewController;
 @property (nonatomic, weak) UIViewController *presentedViewController;
@@ -33,11 +34,34 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 {
     self = [super init];
     if (self) {
+        _confirmToCancel = YES;
+        _confirmViewHeight = 80;
+        _agreeToCancel = NO;
         _presenting = NO;
         _transitionProgress = 0;
         _previousProgress = 0;
     }
     return self;
+}
+
+- (CGFloat)upperProgress
+{
+    return 1 - (self.confirmViewHeight / [UIScreen mainScreen].bounds.size.height) * 1.2;
+}
+
+- (CGFloat)lowerProgress
+{
+    return 1 - (self.confirmViewHeight / [UIScreen mainScreen].bounds.size.height);
+}
+
+- (UIView *)overlayView
+{
+    if (_overlayView) {
+        return _overlayView;
+    }
+    _overlayView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    _overlayView.backgroundColor = [UIColor blackColor];
+    return _overlayView;
 }
 
 - (UIPanGestureRecognizer *)panGestureRecognizer
@@ -53,29 +77,55 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 {
     CGPoint translation = [recognizer translationInView:nil];
     CGPoint velocity = [recognizer velocityInView:nil];
-    
+
     switch (recognizer.state) {
         case UIGestureRecognizerStateBegan:{
             
             [self pop_removeAllAnimations];
             _previousProgress = self.transitionProgress;
             if (!self.context) {
-                [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+                if (self.confirmToCancel) {
+                    if (self.agreeToCancel) {
+                        [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+                    }
+                } else {
+                    [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+                }
             }
             break;
         }
         case UIGestureRecognizerStateChanged:{
-            CGFloat delta = translation.y / [UIScreen mainScreen].bounds.size.height;
-            if (self.transitionProgress <= 0 || self.transitionProgress >= 1) {
-                delta = delta / 5;
+            
+            CGFloat x = translation.y / [UIScreen mainScreen].bounds.size.height;
+            CGFloat y = x;
+            
+            if (!self.context) {
+                CGFloat lower = self.lowerProgress;
+                CGFloat upper = self.upperProgress;
+                CGFloat k = 5;
+                
+                if (0 <= x && x < lower) {
+                    y = x;
+                }
+                
+                if (lower <= x && x < upper) {
+                    y = 1/k * x + lower * (1 - 1/k);
+                }
+                
+                if (upper <= x) {
+                    y = x + (1/k - 1) * (upper - lower);
+                }
             }
-            [self setTransitionProgress:_previousProgress - delta];
+            
+            [self setTransitionProgress:_previousProgress - y];
             break;
         }
         case UIGestureRecognizerStateFailed:
         case UIGestureRecognizerStateEnded:{
             
-            [self endInteractiveTransition:(self.presenting ? (velocity.y <= 0) : (velocity.y >= 0)) velocity:velocity];
+            BOOL didComplete = self.presenting ? (velocity.y <= 0) : (velocity.y >= 0);
+            
+            [self endInteractiveTransition:didComplete velocity:velocity];
             
             break;
         }
@@ -88,43 +138,69 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
 {
     _transitionProgress = transitionProgress;
     
-    if (!self.context) {
-        return;
-    }
-    
     UIView *view;
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     
-    if (self.presenting) {
-        view = self.toViewController.view;
-    } else {
-        view = self.fromViewController.view;
-    }
-    
-    CGFloat originY = POPTransition(transitionProgress, screenSize.height, 0);
-    if (view) {
+    if (self.context) {
+        if (self.presenting) {
+            view = self.toViewController.view;
+        } else {
+            view = self.fromViewController.view;
+        }
+        if (!view) {
+            return;
+        }
+        CGFloat originY = POPTransition(transitionProgress, screenSize.height, 0);
         view.frame = CGRectMake(0, originY, view.bounds.size.width, view.bounds.size.height);
+
+        CGFloat overlayAlpha = POPTransition(transitionProgress, 0, 1);
+        self.overlayView.alpha = overlayAlpha;
+        
+    } else {
+        view = self.presentedViewController.view;
+        
+        CGFloat originY = POPTransition(transitionProgress, screenSize.height, 0);
+        view.frame = CGRectMake(0, originY, view.bounds.size.width, view.bounds.size.height);
+        
     }
 }
 
 - (void)endInteractiveTransition:(BOOL)didComplete velocity:(CGPoint)velocity
 {
-    if (didComplete) {
-        [self animationToValue:self.presenting velocity:velocity completion:^(BOOL finished) {
-            if (finished) {
-                [self.context finishInteractiveTransition];
-                [self.context completeTransition:YES];
-                self.context = nil;
-            }
-        }];
+    if (self.context) {
+        if (didComplete) {
+            [self animationToValue:self.presenting velocity:velocity completion:^(BOOL finished) {
+                if (finished) {
+                    [self.context finishInteractiveTransition];
+                    [self.context completeTransition:YES];
+                    self.context = nil;
+                    self.agreeToCancel = NO;
+                }
+            }];
+        } else {
+            [self animationToValue:!self.presenting velocity:velocity completion:^(BOOL finished) {
+                if (finished) {
+                    [self.context cancelInteractiveTransition];
+                    [self.context completeTransition:NO];
+                    self.context = nil;
+                    self.agreeToCancel = NO;
+                }
+            }];
+        }
     } else {
-        [self animationToValue:!self.presenting velocity:velocity completion:^(BOOL finished) {
-            if (finished) {
-                [self.context cancelInteractiveTransition];
-                [self.context completeTransition:NO];
-                self.context = nil;
-            }
-        }];
+        if (didComplete) {
+            [self animationToValue:1 - (self.confirmViewHeight / [UIScreen mainScreen].bounds.size.height) velocity:velocity completion:^(BOOL finished) {
+                if (finished) {
+                    self.agreeToCancel = YES;
+                }
+            }];
+        } else {
+            [self animationToValue:1 velocity:velocity completion:^(BOOL finished) {
+                if (finished) {
+                    self.agreeToCancel = NO;
+                }
+            }];
+        }
     }
 }
 
@@ -154,6 +230,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     if (self.presenting) {
         self.presentedViewController = self.toViewController;
         [toView addGestureRecognizer:self.panGestureRecognizer];
+        [containerView addSubview:self.overlayView];
         [containerView addSubview:toView];
         toView.frame = CGRectMake(0, screenSize.height, screenSize.width, screenSize.height);
         [self animationToValue:1 velocity:CGPointZero completion:^(BOOL finished) {
@@ -161,6 +238,7 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
                 [transitionContext finishInteractiveTransition];
                 [transitionContext completeTransition:YES];
                 self.context = nil;
+                self.presenting = NO;
             }
         }];
     }

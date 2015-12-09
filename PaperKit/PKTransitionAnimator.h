@@ -11,5 +11,8 @@
 @interface PKTransitionAnimator : NSObject <UIViewControllerAnimatedTransitioning, UIViewControllerInteractiveTransitioning>
 
 @property (nonatomic) BOOL presenting;
+@property (nonatomic) BOOL confirmToCancel;
+@property (nonatomic) BOOL agreeToCancel;
+@property (nonatomic) CGFloat confirmViewHeight;
 
 @end
