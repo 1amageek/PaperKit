@@ -193,9 +193,15 @@ static inline CGFloat POPTransition(CGFloat progress, CGFloat startValue, CGFloa
     return _toolbar;
 }
 
+- (void)scrollToCategory:(NSUInteger)category animated:(BOOL)animated
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:category inSection:0];
+    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:animated];
+    [self setSelectedCategory:category];
+}
+
 - (void)setSelectedCategory:(NSUInteger)selectedCategory
 {
-    
     [self categoryWillSet:_selectedCategory nextCategory:selectedCategory];
     _selectedCategory = selectedCategory;
     

@@ -27,6 +27,11 @@
 @property (nonatomic) PKToolbar *toolbar;
 
 /*
+ Change cateogry
+ */
+- (void)scrollToCategory:(NSUInteger)category animated:(BOOL)animated;
+
+/*
  This methods is called when it appears to have background view cell changes. 
  */
 - (void)categoryWillSet:(NSUInteger)currentCategory nextCategory:(NSUInteger)nextCategory;

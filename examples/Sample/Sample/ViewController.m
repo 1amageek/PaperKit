@@ -18,6 +18,9 @@
 @property (nonatomic) UIButton *insertForegroundButton;
 @property (nonatomic) UIButton *showCellsButton;
 
+@property (nonatomic) UIButton *backgroundScrollLeft;
+@property (nonatomic) UIButton *backgroundScrollRight;
+
 @property (nonatomic) NSArray *backgroundData;
 @property (nonatomic) NSArray *foregroundData;
 @end
@@ -36,12 +39,15 @@
     _foregroundData = @[@"0",@"1",@"2",@"3",@"4",@"5"];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
     
+    
+    CGFloat height = 180;
+    
     _showCellsButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [_showCellsButton setTitle:@"show visibleCells" forState:UIControlStateNormal];
     [_showCellsButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
     [_showCellsButton sizeToFit];
     _showCellsButton.tintColor = [UIColor whiteColor];
-    _showCellsButton.center = CGPointMake(self.view.center.x, self.view.center.x - 90);
+    _showCellsButton.center = CGPointMake(self.view.center.x, height - 90);
     [self.view addSubview:_showCellsButton];
     
 
@@ -50,7 +56,7 @@
     [_reloadForegroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
     [_reloadForegroundButton sizeToFit];
     _reloadForegroundButton.tintColor = [UIColor whiteColor];
-    _reloadForegroundButton.center = CGPointMake(self.view.center.x, self.view.center.x - 60);
+    _reloadForegroundButton.center = CGPointMake(self.view.center.x, height - 60);
     [self.view addSubview:_reloadForegroundButton];
     
     _reloadBackgroundButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -58,7 +64,7 @@
     [_reloadBackgroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
     [_reloadBackgroundButton sizeToFit];
     _reloadBackgroundButton.tintColor = [UIColor whiteColor];
-    _reloadBackgroundButton.center = CGPointMake(self.view.center.x, self.view.center.x - 30);
+    _reloadBackgroundButton.center = CGPointMake(self.view.center.x, height - 30);
     [self.view addSubview:_reloadBackgroundButton];
     
     _insertForegroundButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -66,8 +72,24 @@
     [_insertForegroundButton addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
     [_insertForegroundButton sizeToFit];
     _insertForegroundButton.tintColor = [UIColor whiteColor];
-    _insertForegroundButton.center = CGPointMake(self.view.center.x, self.view.center.x);
+    _insertForegroundButton.center = CGPointMake(self.view.center.x, height);
     [self.view addSubview:_insertForegroundButton];
+    
+    _backgroundScrollLeft = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_backgroundScrollLeft setTitle:@"Background scroll to Left" forState:UIControlStateNormal];
+    [_backgroundScrollLeft addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
+    [_backgroundScrollLeft sizeToFit];
+    _backgroundScrollLeft.tintColor = [UIColor whiteColor];
+    _backgroundScrollLeft.center = CGPointMake(self.view.center.x, height + 30);
+    [self.view addSubview:_backgroundScrollLeft];
+    
+    _backgroundScrollRight = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_backgroundScrollRight setTitle:@"Background scroll to Right" forState:UIControlStateNormal];
+    [_backgroundScrollRight addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
+    [_backgroundScrollRight sizeToFit];
+    _backgroundScrollRight.tintColor = [UIColor whiteColor];
+    _backgroundScrollRight.center = CGPointMake(self.view.center.x, height + 60);
+    [self.view addSubview:_backgroundScrollRight];
     
 
     
@@ -127,6 +149,18 @@
             [self.view setNeedsLayout];
         }];
         
+    }
+    
+    if (button == _backgroundScrollRight) {
+        NSInteger category = self.selectedCategory + 1;
+        category = MIN(_backgroundData.count - 1, category);
+        [self scrollToCategory:category animated:YES];
+    }
+    
+    if (button == _backgroundScrollLeft) {
+        NSInteger category = self.selectedCategory - 1;
+        category = MAX(0, category);
+        [self scrollToCategory:category animated:YES];
     }
     
 }
