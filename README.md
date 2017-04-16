@@ -34,7 +34,7 @@ header](https://developer.apple.com/library/ios/documentation/swift/conceptual/b
 if you're using Swift:
 
 ```objective-c
-#import <PaperKit/PaperKit.h>
+# import <PaperKit/PaperKit.h>
 ```
 
 Inherit the PKViewController
